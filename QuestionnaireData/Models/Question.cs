@@ -70,6 +70,16 @@ namespace QuestionnaireData.Models
             }
         }
 
+        /// <summary>
+        /// Create a json string from the question.
+        /// </summary>
+        /// <param name="formatting">Indicates how the output should be formatted.</param>
+        /// <returns>The serialized question.</returns>
+        public string ToJson(Formatting formatting)
+        {
+            return JsonConvert.SerializeObject(this, formatting);
+        }
+
         // override object.Equals
         public override bool Equals(object obj)
         {
