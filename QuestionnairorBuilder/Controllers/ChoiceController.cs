@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using QuestionnaireData.Models;
+using QuestionnairorBuilder.Services;
 
 namespace QuestionnairorBuilder.Controllers
 {
@@ -15,30 +16,42 @@ namespace QuestionnairorBuilder.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody]Questionnaire questionnaireData, Question questionData)
+        public IActionResult Add([FromServices]IQuestionnaireService service, Guid questionnaireId, Guid questionId)
         {
-            TempData["model"] = null;
-            if (questionnaireData == null || questionnaireData.Questions == null)
-                return RedirectToAction("Index", "Builder");
-            //Question question = modelData.Questions.Where<Question>(q => q.Id == questionId).FirstOrDefault();
-            //if (question == null) question = new Question();
-            questionData.Choices.Add(new Choice(0));
-            TempData["model"] = questionnaireData.ToJson(Newtonsoft.Json.Formatting.None);
-            return RedirectToAction("Index", "Builder");
+            if (questionnaireId == null || questionnaireId == Guid.Empty || !service.ModelData.ContainsKey(questionnaireId))
+            {
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Add", questionnaireId, data = questionId });
+            }
+            Questionnaire modelData = service.ModelData[questionnaireId];
+            Question question = modelData.Questions.Where<Question>(q => q.Id == questionId).FirstOrDefault();
+            if (modelData.Questions == null || question == null || questionId == null || questionId == Guid.Empty)
+            {
+                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Add", questionnaireId, data = questionId });
+            }
+            question.Choices.Add(new Choice(0));
+            return RedirectToAction("Index", "Builder", new { questionnaireId });
         }
 
         [HttpPost]
-        public IActionResult Remove([FromBody]Questionnaire questionnaireData, Question questionData)
+        public IActionResult Remove([FromServices]IQuestionnaireService service, Guid questionnaireId, Guid questionId)
         {
-            TempData["model"] = null;
-            if (questionnaireData == null || questionnaireData.Questions == null)
-                return RedirectToAction("Index");
-            //Question question = questionnaireData.Questions.Where<Question>(q => q.Id == questionId).FirstOrDefault();
-            //if (question == null) question = new Question();
-            if (questionData.Choices.Count > 0)
-                questionData.Choices.RemoveAt(questionData.Choices.Count - 1);
-            TempData["model"] = questionnaireData.ToJson(Newtonsoft.Json.Formatting.None);
-            return RedirectToAction("Index", "Builder");
+            if (questionnaireId == null || questionnaireId == Guid.Empty || !service.ModelData.ContainsKey(questionnaireId))
+            {
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Remove", questionnaireId, data = questionId });
+            }
+            Questionnaire modelData = service.ModelData[questionnaireId];
+            Question question = modelData.Questions.Where<Question>(q => q.Id == questionId).FirstOrDefault();
+            if (modelData.Questions == null || question == null || questionId == null || questionId == Guid.Empty)
+            {
+                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Remove", questionnaireId, data = questionId });
+            }
+            if (question.Choices.Count > 0)
+                question.Choices.RemoveAt(question.Choices.Count - 1);
+            else
+            {
+                return BadRequest(new { error = "No choices to remove", controller = "Choice", action = "Remove", questionnaireId, data = questionId });
+            }
+            return RedirectToAction("Index", "Builder", new { questionnaireId });
         }
     }
 }

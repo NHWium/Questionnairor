@@ -1,6 +1,7 @@
 ﻿@model QuestionnaireData.Models.Question
 @{
     ViewData["Title"] = "Question";
+    var questionnaireId = ViewData["QuestionnaireId"];
 }
 @Html.EditorFor(m => m.Id)
 @Html.EditorFor(m => m.Text)
@@ -11,13 +12,13 @@
 }
 else
 {
-    <input type="submit" value="-" formaction="@Url.Action("Remove", "Choice", new { questionDate = @Model })" />
+    <input type="submit" value="-" formaction="@Url.Action("Remove", "Choice", new { questionnaireId, questionId = @Model.Id })" />
 }
 @foreach (var choice in Model.Choices)
 {
     <input type="radio" />
     @await Html.PartialAsync("ChoicePartialView", choice)
 }
-<input type="submit" value="+" formaction="@Url.Action("Add", "Choice", new { questionDate = @Model })" />
+<input type="submit" value="+" formaction="@Url.Action("Add", "Choice", new { questionnaireId, questionId = @Model.Id })" />
 <br />
 <br />
