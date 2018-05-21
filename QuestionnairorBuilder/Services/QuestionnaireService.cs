@@ -8,11 +8,11 @@ namespace QuestionnairorBuilder.Services
 {
     public class QuestionnaireService: IQuestionnaireService
     {
-        public Questionnaire Model { get; set; }
+        public Dictionary<Guid, Questionnaire> ModelData { get; set; }
 
         public QuestionnaireService()
         {
-            Model = new Questionnaire();
+            ModelData = new Dictionary<Guid,Questionnaire>();
         }
     }
 }

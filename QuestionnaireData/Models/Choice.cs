@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,19 +15,23 @@ namespace QuestionnaireData.Models
         /// <summary>
         /// Value of the choice. Used to identify the choice, so should be unique.
         /// </summary>
+        [BindRequired]
         public int Value { get; set; } = 0;
         /// <summary>
         /// Visual text of choice.
         /// </summary>
+        [BindRequired]
         public string Text { get; set; } = "";
-        /// <summary>
-        /// One or more responses, triggered by this choice.
-        /// </summary>
-        public List<Response> Responses { get; set; } = new List<Response>();
         /// <summary>
         /// This choice is the default question, selected at start.
         /// </summary>
+        [BindRequired]
         public bool IsDefault { get; set; } = false;
+        /// <summary>
+        /// One or more responses, triggered by this choice.
+        /// </summary>
+        [BindRequired]
+        public List<Response> Responses { get; set; } = new List<Response>();
         
         /// <summary>
         /// A possible choice in a multiple-choice question.

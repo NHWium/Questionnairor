@@ -1,0 +1,7 @@
+﻿@model QuestionnaireData.Models.Response
+@{
+    ViewData["Title"] = "Response";
+}
+@Html.HiddenFor(m => m.Id)
+@Html.EditorFor(m => m.Feedback)
+@Html.EditorFor(m => m.MinimumChoices)

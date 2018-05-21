@@ -2,38 +2,17 @@
 
 @{
     ViewData["Title"] = "Index";
-    var json = @Model.ToJson(Newtonsoft.Json.Formatting.Indented);
+    ViewData["QuestionnaireId"] = Model.Id;
+    var json = Model.ToJson(Newtonsoft.Json.Formatting.Indented);
 }
 
 <h2>Index</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(FormMethod.Post, new { modelData = Model }))
 {
-    @foreach (var question in Model.Questions)
-    {
-        <div>
-            <input type="text" value="@question.Id" />
-            <input type="text" value="@question.Text" />
-        </div>
-        <div>
-            @if (question.Choices.Count > 0)
-            {
-                <input type="submit" value="-" formaction="@Url.Action("RemoveChoice", new { id = question.Id })" />
-            }
-            else
-            {
-                <input type="submit" value="-" disabled="disabled" />
-            }
-            @foreach (var choice in question.Choices)
-            {
-                <input type="radio" />
-                <input type="text" value="@choice.Value" style="width:20px;" />
-                <input type="text" value="@choice.Text" style="width:20px;" />
-                <input type="checkbox" checked="@choice.IsDefault" style="width:20px;" />
-            }
-            <input type="submit" value="+" formaction="@Url.Action("AddChoice", new { id = question.Id })" />
-        </div>
-    }
+    <div>
+        @await Html.PartialAsync("QuestionnairePartialView", Model)
+    </div>
     <input id="json" type="hidden" value="@json" />
-    <input type="submit" value="Add Question" formaction="@Url.Action("AddQuestion")" />
+    <input id="questionnaireId" type="hidden" value="@Model.Id" />
 }

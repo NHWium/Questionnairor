@@ -1,0 +1,15 @@
+﻿@model QuestionnaireData.Models.Choice
+@{
+    ViewData["Title"] = "Choice";
+}
+@Html.EditorFor(m => m.Value)
+@Html.EditorFor(m => m.Text)
+@Html.EditorFor(m => m.IsDefault)
+@if (Model.Responses.Count == 0)
+{
+    @Html.Hidden("Responses", "")
+}
+@foreach (var response in Model.Responses)
+{
+    @await Html.PartialAsync("Response", response)
+}

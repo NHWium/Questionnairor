@@ -1,9 +1,11 @@
 ﻿using QuestionnaireData.Models;
+using System;
+using System.Collections.Generic;
 
 namespace QuestionnairorBuilder.Services
 {
     public interface IQuestionnaireService
     {
-        Questionnaire Model { get; set; }
+        Dictionary<Guid, Questionnaire> ModelData { get; set; }
     }
 }

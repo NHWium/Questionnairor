@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +15,17 @@ namespace QuestionnaireData.Models
         /// <summary>
         /// A global id to identify this question.
         /// </summary>
+        [BindRequired]
         public Guid Id { get; set; } = Guid.NewGuid();
         /// <summary>
         /// The text to display.
         /// </summary>
+        [BindRequired]
         public string Text { get; set; } = "";
         /// <summary>
         /// The choices in the multiple-choice question.
         /// </summary>
+        [BindRequired]
         public List<Choice> Choices { get; set; } = new List<Choice>();
 
         /// <summary>
@@ -39,6 +43,7 @@ namespace QuestionnaireData.Models
         /// <param name="defaultValue">Default value in the multiple-choice question.</param>
         public Question(string text, int minimumValue, int maximumValue, int defaultValue)
         {
+            Id = Guid.NewGuid();
             Text = text;
             Choices = new List<Choice>();
             for (int i = minimumValue; i < maximumValue; i++)

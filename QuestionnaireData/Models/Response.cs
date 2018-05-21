@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,14 +14,17 @@ namespace QuestionnaireData.Models
         /// <summary>
         /// A global id to identify this response.
         /// </summary>
+        [BindRequired]
         public Guid Id { get; set; } = Guid.NewGuid();
         /// <summary>
         /// The number of times this response must be chosen before it triggers. 
         /// </summary>
+        [BindRequired]
         public int MinimumChoices { get; set; } = 1;
         /// <summary>
         /// The text to display as the responce once this triggers.
         /// </summary>
+        [BindRequired]
         public string Feedback { get; set; } = "";
 
         /// <summary>

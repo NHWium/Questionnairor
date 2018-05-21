@@ -110,10 +110,10 @@ namespace QuestionnairorTests
         }
 
         [Theory]
-        [InlineData("{\"Value\":0,\"Text\":\"Test\",\"Responses\":[],\"IsDefault\":false}", 0, "Test", false, null, null, null, null, null, null)]
-        [InlineData("{\"Value\":7,\"Text\":\"\",\"Responses\":[],\"IsDefault\":true}", 7, "", true, null, null, null, null, null, null)]
-        [InlineData("{\"Value\":0,\"Text\":\"Test\",\"Responses\":[{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":2,\"Feedback\":\"Test\"}],\"IsDefault\":false}", 0, "Test", false, 2, "Test", null, null, null, null)]
-        [InlineData("{\"Value\":5,\"Text\":\"Test\",\"Responses\":[{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":1,\"Feedback\":\"Test1\"},{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":2,\"Feedback\":\"Test2\"},{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":3,\"Feedback\":\"Test3\"}],\"IsDefault\":false}", 5, "Test", false, 1, "Test1", 2, "Test2", 3, "Test3")]
+        [InlineData("{\"Value\":0,\"Text\":\"Test\",\"IsDefault\":false,\"Responses\":[]}", 0, "Test", false, null, null, null, null, null, null)]
+        [InlineData("{\"Value\":7,\"Text\":\"\",\"IsDefault\":true,\"Responses\":[]}", 7, "", true, null, null, null, null, null, null)]
+        [InlineData("{\"Value\":0,\"Text\":\"Test\",\"IsDefault\":false,\"Responses\":[{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":2,\"Feedback\":\"Test\"}]}", 0, "Test", false, 2, "Test", null, null, null, null)]
+        [InlineData("{\"Value\":5,\"Text\":\"Test\",\"IsDefault\":false,\"Responses\":[{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":1,\"Feedback\":\"Test1\"},{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":2,\"Feedback\":\"Test2\"},{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":3,\"Feedback\":\"Test3\"}]}", 5, "Test", false, 1, "Test1", 2, "Test2", 3, "Test3")]
         public void ChoiceToJson(string expected, int value, string text, bool isDefault, int? minimumChoices1, string feedback1, int? minimumChoices2, string feedback2, int? minimumChoices3, string feedback3)
         {
             Choice json = new Choice(value)
@@ -200,8 +200,8 @@ namespace QuestionnairorTests
         [Theory]
         [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"\",\"Choices\":[]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", null, null, null, null, null, null, null, null, null)]
         [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"Test\",\"Choices\":[]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", null, null, null, null, null, null, null, null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"Test\",\"Choices\":[{\"Value\":7,\"Text\":\"ChoiceText1\",\"Responses\":[],\"IsDefault\":true}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", 7, "ChoiceText1", true, null, null, null, null, null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"Test\",\"Choices\":[{\"Value\":7,\"Text\":\"ChoiceText1\",\"Responses\":[],\"IsDefault\":true},{\"Value\":5,\"Text\":\"ChoiceText2\",\"Responses\":[],\"IsDefault\":false},{\"Value\":3,\"Text\":\"\",\"Responses\":[],\"IsDefault\":false}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", 7, "ChoiceText1", true, 5, "ChoiceText2", false, 3, "", false)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"Test\",\"Choices\":[{\"Value\":7,\"Text\":\"ChoiceText1\",\"IsDefault\":true,\"Responses\":[]}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", 7, "ChoiceText1", true, null, null, null, null, null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"Test\",\"Choices\":[{\"Value\":7,\"Text\":\"ChoiceText1\",\"IsDefault\":true,\"Responses\":[]},{\"Value\":5,\"Text\":\"ChoiceText2\",\"IsDefault\":false,\"Responses\":[]},{\"Value\":3,\"Text\":\"\",\"IsDefault\":false,\"Responses\":[]}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", 7, "ChoiceText1", true, 5, "ChoiceText2", false, 3, "", false)]
         public void QuestionToJson(string expected, string id, string text, int? choiceValue1, string choiceText1, bool? choiceIsDefault1, int? choiceValue2, string choiceText2, bool? choiceIsDefault2, int? choiceValue3, string choiceText3, bool? choiceIsDefault3)
         {
             Question json = new Question()
@@ -344,9 +344,9 @@ namespace QuestionnairorTests
         }
 
         [Theory]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Questions\":[],\"Introduction\":\"Test\"}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", null, null, null, null, null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Questions\":[{\"Id\":\"28301f4a-1b91-4c81-a4e8-56f370b3d30a\",\"Text\":\"Test1\",\"Choices\":[]},{\"Id\":\"da14f817-9080-4e85-8715-14c6e734f02b\",\"Text\":\"Test2\",\"Choices\":[]}],\"Introduction\":\"\"}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "28301f4a-1b91-4c81-a4e8-56f370b3d30a", "Test1", "da14f817-9080-4e85-8715-14c6e734f02b", "Test2", null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Questions\":[{\"Id\":\"28301f4a-1b91-4c81-a4e8-56f370b3d30a\",\"Text\":\"Test1\",\"Choices\":[]},{\"Id\":\"da14f817-9080-4e85-8715-14c6e734f02b\",\"Text\":\"Test2\",\"Choices\":[]},{\"Id\":\"edc7ba05-14a1-4397-ae73-77ee2db3fd76\",\"Text\":\"\",\"Choices\":[]}],\"Introduction\":\"\"}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "28301f4a-1b91-4c81-a4e8-56f370b3d30a", "Test1", "da14f817-9080-4e85-8715-14c6e734f02b", "Test2", "edc7ba05-14a1-4397-ae73-77ee2db3fd76", "")]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Introduction\":\"Test\",\"Questions\":[]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", null, null, null, null, null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Introduction\":\"\",\"Questions\":[{\"Id\":\"28301f4a-1b91-4c81-a4e8-56f370b3d30a\",\"Text\":\"Test1\",\"Choices\":[]},{\"Id\":\"da14f817-9080-4e85-8715-14c6e734f02b\",\"Text\":\"Test2\",\"Choices\":[]}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "28301f4a-1b91-4c81-a4e8-56f370b3d30a", "Test1", "da14f817-9080-4e85-8715-14c6e734f02b", "Test2", null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Introduction\":\"\",\"Questions\":[{\"Id\":\"28301f4a-1b91-4c81-a4e8-56f370b3d30a\",\"Text\":\"Test1\",\"Choices\":[]},{\"Id\":\"da14f817-9080-4e85-8715-14c6e734f02b\",\"Text\":\"Test2\",\"Choices\":[]},{\"Id\":\"edc7ba05-14a1-4397-ae73-77ee2db3fd76\",\"Text\":\"\",\"Choices\":[]}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "28301f4a-1b91-4c81-a4e8-56f370b3d30a", "Test1", "da14f817-9080-4e85-8715-14c6e734f02b", "Test2", "edc7ba05-14a1-4397-ae73-77ee2db3fd76", "")]
         public void QuestionnaireToJson(string expected, string id, string introduction, string questionId1, string questionText1, string questionId2, string questionText2, string questionId3, string questionText3)
         {
             Questionnaire json = new Questionnaire()

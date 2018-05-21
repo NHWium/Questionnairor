@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +15,18 @@ namespace QuestionnaireData.Models
         /// <summary>
         /// A global id to identify this questionnaire.
         /// </summary>
+        [BindRequired]
         public Guid Id { get; set; } = Guid.NewGuid();
-        /// <summary>
-        /// List of questions on this page.
-        /// </summary>
-        public List<Question> Questions { get; set; } = new List<Question>();
         /// <summary>
         /// General text at the top of page.
         /// </summary>
+        [BindRequired]
         public string Introduction { get; set; } = "";
+        /// <summary>
+        /// List of questions on this page.
+        /// </summary>
+        [BindRequired]
+        public List<Question> Questions { get; set; } = new List<Question>();
 
         /// <summary>
         /// Create a questionnaire from provided json.
