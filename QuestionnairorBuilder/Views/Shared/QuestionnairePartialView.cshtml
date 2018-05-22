@@ -1,20 +1,9 @@
 ﻿@model QuestionnaireData.Models.Questionnaire
-@{
-    ViewData["Title"] = "Questionnaire";
-}
-<input name="Id" type="text" value="@Model.Id" />
-<input name="Introduction" type="text" value="@Model.Introduction" />
-<br />
-<br />
-<div>
-    @if (Model.Questions.Count == 0)
-    {
-        @Html.Hidden("Questions", "")
-    }
-    @foreach (var question in Model.Questions)
-    {
-        @await Html.PartialAsync("QuestionPartialView", question)
-    }
-</div>
-<input type="submit" value="Add Question" formaction="@Url.Action("Add", "Question", new { questionnaireId = @Model.Id })" />
 
+<div>
+    <input type="text" readonly="readonly" value="@Model.Title" />
+    <input type="text" readonly="readonly" value="Includes @Model.Questions.Count questions." />
+
+    @Html.ActionLink("Edit", "Edit", "Questionnaire", new { id = Model.Id })
+    @Html.ActionLink("Delete", "Delete", "Questionnaire", new { id = Model.Id })
+</div>

@@ -1,0 +1,31 @@
+﻿@model QuestionnaireData.Models.Question
+
+@{
+    ViewData["Title"] = "Add";
+}
+
+<h2>Add</h2>
+<h4>Question</h4>
+<hr />
+@using (Html.BeginForm("Add", "Question", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.Id)
+    <div class="Editor Left">
+        @Html.LabelFor(m => m.Title)
+    </div>
+    <div class="Editor Right">
+        @Html.EditorFor(m => m.Title)
+    </div>
+    <div class="Editor Left">
+        @Html.LabelFor(m => m.Text)
+    </div>
+    <div class="Editor Right">
+        @Html.TextAreaFor(m => m.Text)
+    </div>
+    <br />
+    <input type="submit" value="Add Question" formaction="@Url.Action("Add", "Question", new { id = ViewData["Id"], @Model.Title, @Model.Text })" />
+}
+<div>
+    @Html.ActionLink("Back to List", "Edit", "Questionnaire", new { id = ViewData["Id"] })
+</div>
+

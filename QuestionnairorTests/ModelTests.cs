@@ -8,6 +8,13 @@ namespace QuestionnairorTests
 {
     public class ModelTests
     {
+        private readonly ITestOutputHelper output;
+
+        public ModelTests(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
+
         [Theory]
         [InlineData("{}", 1, "")]
         [InlineData("Illegal data", 1, "Not Loaded")]
@@ -149,27 +156,29 @@ namespace QuestionnairorTests
         }
 
         [Theory]
-        [InlineData("{}", "")]
-        [InlineData("Illegal data", "Not Loaded")]
-        [InlineData("{\"Text\":\"Test\"}", "Test")]
-        public void QuestionFromJsonWithoutId(string json, string text)
+        [InlineData("{}", "", "")]
+        [InlineData("Illegal data", "Not Loaded", "Not Loaded")]
+        [InlineData("{\"Text\":\"Test\"}", "", "Test")]
+        public void QuestionFromJsonWithoutId(string json, string title, string text)
         {
             Question expected = new Question()
                 .Id(Guid.Empty)
+                .Title(title)
                 .Text(text);
             Assert.Equal<Question>(expected, Question.FromJson(json).Id(Guid.Empty));
         }
 
         [Theory]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\"}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", null, null, null, null, null, null, null, null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"Test\"}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", null, null, null, null, null, null, null, null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"Test\",\"Choices\":[]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", null, null, null, null, null, null, null, null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"Test\",\"Choices\":[{\"Value\":7,\"Text\":\"ChoiceText1\",\"IsDefault\":true}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", 7, "ChoiceText1", true, null, null, null, null, null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"Test\",\"Choices\":[{\"Value\":7,\"Text\":\"ChoiceText1\",\"IsDefault\":true},{\"Value\":5,\"Text\":\"ChoiceText2\"},{\"Value\":3}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", 7, "ChoiceText1", true, 5, "ChoiceText2", false, 3, "", false)]
-        public void QuestionFromJsonWithId(string json, string id, string text, int? choiceValue1, string choiceText1, bool? choiceIsDefault1, int? choiceValue2, string choiceText2, bool? choiceIsDefault2, int? choiceValue3, string choiceText3, bool? choiceIsDefault3)
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\"}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "", null, null, null, null, null, null, null, null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"Test\",\"Text\":\"Test\"}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", "Test", null, null, null, null, null, null, null, null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"Test\",\"Choices\":[]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "Test", null, null, null, null, null, null, null, null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"Test\",\"Choices\":[{\"Value\":7,\"Text\":\"ChoiceText1\",\"IsDefault\":true}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "Test", 7, "ChoiceText1", true, null, null, null, null, null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"TitleTest\",\"Text\":\"Test\",\"Choices\":[{\"Value\":7,\"Text\":\"ChoiceText1\",\"IsDefault\":true},{\"Value\":5,\"Text\":\"ChoiceText2\"},{\"Value\":3}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "TitleTest", "Test", 7, "ChoiceText1", true, 5, "ChoiceText2", false, 3, "", false)]
+        public void QuestionFromJsonWithId(string json, string id, string title, string text, int? choiceValue1, string choiceText1, bool? choiceIsDefault1, int? choiceValue2, string choiceText2, bool? choiceIsDefault2, int? choiceValue3, string choiceText3, bool? choiceIsDefault3)
         {
             Question expected = new Question()
                 .Id(new Guid(id))
+                .Title(title)
                 .Text(text);
             List<Choice> l = new List<Choice>() { };
             if (choiceValue1 != null && choiceText1 != null && choiceIsDefault1 != null)
@@ -198,14 +207,15 @@ namespace QuestionnairorTests
         }
 
         [Theory]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"\",\"Choices\":[]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", null, null, null, null, null, null, null, null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"Test\",\"Choices\":[]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", null, null, null, null, null, null, null, null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"Test\",\"Choices\":[{\"Value\":7,\"Text\":\"ChoiceText1\",\"IsDefault\":true,\"Responses\":[]}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", 7, "ChoiceText1", true, null, null, null, null, null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Text\":\"Test\",\"Choices\":[{\"Value\":7,\"Text\":\"ChoiceText1\",\"IsDefault\":true,\"Responses\":[]},{\"Value\":5,\"Text\":\"ChoiceText2\",\"IsDefault\":false,\"Responses\":[]},{\"Value\":3,\"Text\":\"\",\"IsDefault\":false,\"Responses\":[]}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", 7, "ChoiceText1", true, 5, "ChoiceText2", false, 3, "", false)]
-        public void QuestionToJson(string expected, string id, string text, int? choiceValue1, string choiceText1, bool? choiceIsDefault1, int? choiceValue2, string choiceText2, bool? choiceIsDefault2, int? choiceValue3, string choiceText3, bool? choiceIsDefault3)
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"\",\"Text\":\"\",\"Choices\":[]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "", null, null, null, null, null, null, null, null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"TitleTest\",\"Text\":\"Test\",\"Choices\":[]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "TitleTest", "Test", null, null, null, null, null, null, null, null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"\",\"Text\":\"Test\",\"Choices\":[{\"Value\":7,\"Text\":\"ChoiceText1\",\"IsDefault\":true,\"Responses\":[]}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "Test", 7, "ChoiceText1", true, null, null, null, null, null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"TitleTest\",\"Text\":\"Test\",\"Choices\":[{\"Value\":7,\"Text\":\"ChoiceText1\",\"IsDefault\":true,\"Responses\":[]},{\"Value\":5,\"Text\":\"ChoiceText2\",\"IsDefault\":false,\"Responses\":[]},{\"Value\":3,\"Text\":\"\",\"IsDefault\":false,\"Responses\":[]}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "TitleTest", "Test", 7, "ChoiceText1", true, 5, "ChoiceText2", false, 3, "", false)]
+        public void QuestionToJson(string expected, string id, string title, string text, int? choiceValue1, string choiceText1, bool? choiceIsDefault1, int? choiceValue2, string choiceText2, bool? choiceIsDefault2, int? choiceValue3, string choiceText3, bool? choiceIsDefault3)
         {
             Question json = new Question()
                 .Id(new Guid(id))
+                .Title(title)
                 .Text(text);
             List<Choice> l = new List<Choice>() { };
             if (choiceValue1 != null && choiceText1 != null && choiceIsDefault1 != null)
@@ -246,13 +256,15 @@ namespace QuestionnairorTests
         }
 
         [Theory]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Introduction\":\"Test\"}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", null, null, null, null, null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Questions\":[{\"Id\":\"28301F4A-1B91-4C81-A4E8-56F370B3D30A\",\"Text\":\"Test1\"},{\"Id\":\"DA14F817-9080-4E85-8715-14C6E734F02B\",\"Text\":\"Test2\"}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "28301F4A-1B91-4C81-A4E8-56F370B3D30A", "Test1", "DA14F817-9080-4E85-8715-14C6E734F02B", "Test2", null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Questions\":[{\"Id\":\"28301F4A-1B91-4C81-A4E8-56F370B3D30A\",\"Text\":\"Test1\"},{\"Id\":\"DA14F817-9080-4E85-8715-14C6E734F02B\",\"Text\":\"Test2\"},{\"Id\":\"EDC7BA05-14A1-4397-AE73-77EE2DB3FD76\"}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "28301F4A-1B91-4C81-A4E8-56F370B3D30A", "Test1", "DA14F817-9080-4E85-8715-14C6E734F02B", "Test2", "EDC7BA05-14A1-4397-AE73-77EE2DB3FD76", "")]
-        public void QuestionnaireFromJsonWithId(string json, string id, string introduction, string questionId1, string questionText1, string questionId2, string questionText2, string questionId3, string questionText3)
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Introduction\":\"Test\"}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "Test", null, null, null, null, null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"Test\"}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", "", null, null, null, null, null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Questions\":[{\"Id\":\"28301F4A-1B91-4C81-A4E8-56F370B3D30A\",\"Text\":\"Test1\"},{\"Id\":\"DA14F817-9080-4E85-8715-14C6E734F02B\",\"Text\":\"Test2\"}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "", "28301F4A-1B91-4C81-A4E8-56F370B3D30A", "Test1", "DA14F817-9080-4E85-8715-14C6E734F02B", "Test2", null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"Test\",\"Introduction\":\"Test\",\"Questions\":[{\"Id\":\"28301F4A-1B91-4C81-A4E8-56F370B3D30A\",\"Text\":\"Test1\"},{\"Id\":\"DA14F817-9080-4E85-8715-14C6E734F02B\",\"Text\":\"Test2\"},{\"Id\":\"EDC7BA05-14A1-4397-AE73-77EE2DB3FD76\"}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", "Test", "28301F4A-1B91-4C81-A4E8-56F370B3D30A", "Test1", "DA14F817-9080-4E85-8715-14C6E734F02B", "Test2", "EDC7BA05-14A1-4397-AE73-77EE2DB3FD76", "")]
+        public void QuestionnaireFromJsonWithId(string json, string id, string title, string introduction, string questionId1, string questionText1, string questionId2, string questionText2, string questionId3, string questionText3)
         {
             Questionnaire expected = new Questionnaire()
                 .Id(new Guid(id))
+                .Title(title)
                 .Introduction(introduction);
             List<Question> l = new List<Question>() { };
             if (questionId1 != null && questionText1 != null)
@@ -283,8 +295,8 @@ namespace QuestionnairorTests
         [Fact]
         public void QuestionnaireFromJsonWithComplicatedQuestions()
         {
-            string json = "{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\", \"Introduction\":\"Test\", \"Questions\":[" +
-                          "   {\"Id\":\"177f9de3-3db4-4acd-9de7-66932a08a978\", \"Text\":\"Q1Test\", \"Choices\":[" +
+            string json = "{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\", \"Title\":\"Test\", \"Introduction\":\"Test\", \"Questions\":[" +
+                          "   {\"Id\":\"177f9de3-3db4-4acd-9de7-66932a08a978\", \"Title\": \"Q1Test\", \"Text\":\"Q1Test\", \"Choices\":[" +
                           "       {\"Value\":3, \"Text\":\"C1Test\", \"IsDefault\":\"false\", \"Responses\":[" +
                           "           {\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"MinimumChoices\":2, \"Feedback\":\"FeedbackTest1\"},{\"Id\":\"28301f4a-1b91-4c81-a4e8-56f370b3d30a\", \"MinimumChoices\":3}" +
                           "       ]}," +
@@ -327,6 +339,7 @@ namespace QuestionnairorTests
                 .Responses(new List<Response>() { r5 });
             Question q1 = new Question()
                 .Id(new Guid("177f9de3-3db4-4acd-9de7-66932a08a978"))
+                .Title("Q1Test")
                 .Text("Q1Test")
                 .Choices(new List<Choice>() { c1, c2 });
             Question q2 = new Question()
@@ -337,6 +350,7 @@ namespace QuestionnairorTests
                 .Text("Q3Test");
             Questionnaire expected = new Questionnaire()
                 .Id(new Guid("73129183-ce7b-48ef-820f-b96af9ab82c2"))
+                .Title("Test")
                 .Introduction("Test")
                 .Questions(new List<Question>() { q1, q2, q3 });
 
@@ -344,19 +358,21 @@ namespace QuestionnairorTests
         }
 
         [Theory]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Introduction\":\"Test\",\"Questions\":[]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", null, null, null, null, null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Introduction\":\"\",\"Questions\":[{\"Id\":\"28301f4a-1b91-4c81-a4e8-56f370b3d30a\",\"Text\":\"Test1\",\"Choices\":[]},{\"Id\":\"da14f817-9080-4e85-8715-14c6e734f02b\",\"Text\":\"Test2\",\"Choices\":[]}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "28301f4a-1b91-4c81-a4e8-56f370b3d30a", "Test1", "da14f817-9080-4e85-8715-14c6e734f02b", "Test2", null, null)]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Introduction\":\"\",\"Questions\":[{\"Id\":\"28301f4a-1b91-4c81-a4e8-56f370b3d30a\",\"Text\":\"Test1\",\"Choices\":[]},{\"Id\":\"da14f817-9080-4e85-8715-14c6e734f02b\",\"Text\":\"Test2\",\"Choices\":[]},{\"Id\":\"edc7ba05-14a1-4397-ae73-77ee2db3fd76\",\"Text\":\"\",\"Choices\":[]}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "28301f4a-1b91-4c81-a4e8-56f370b3d30a", "Test1", "da14f817-9080-4e85-8715-14c6e734f02b", "Test2", "edc7ba05-14a1-4397-ae73-77ee2db3fd76", "")]
-        public void QuestionnaireToJson(string expected, string id, string introduction, string questionId1, string questionText1, string questionId2, string questionText2, string questionId3, string questionText3)
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"Test\",\"Introduction\":\"Test\",\"Questions\":[]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test", "Test", null, null, null, null, null, null, null, null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"\",\"Introduction\":\"\",\"Questions\":[{\"Id\":\"28301f4a-1b91-4c81-a4e8-56f370b3d30a\",\"Title\":\"\",\"Text\":\"Test1\",\"Choices\":[]},{\"Id\":\"da14f817-9080-4e85-8715-14c6e734f02b\",\"Title\":\"\",\"Text\":\"Test2\",\"Choices\":[]}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "", "", "28301f4a-1b91-4c81-a4e8-56f370b3d30a", "", "Test1", "da14f817-9080-4e85-8715-14c6e734f02b", "", "Test2", null, null, null)]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"Test3\",\"Introduction\":\"\",\"Questions\":[{\"Id\":\"28301f4a-1b91-4c81-a4e8-56f370b3d30a\",\"Title\":\"\",\"Text\":\"Test1\",\"Choices\":[]},{\"Id\":\"da14f817-9080-4e85-8715-14c6e734f02b\",\"Title\":\"\",\"Text\":\"Test2\",\"Choices\":[]},{\"Id\":\"edc7ba05-14a1-4397-ae73-77ee2db3fd76\",\"Title\":\"Test3\",\"Text\":\"\",\"Choices\":[]}]}", "73129183-ce7b-48ef-820f-b96af9ab82c2", "Test3", "", "28301f4a-1b91-4c81-a4e8-56f370b3d30a", "", "Test1", "da14f817-9080-4e85-8715-14c6e734f02b", "", "Test2", "edc7ba05-14a1-4397-ae73-77ee2db3fd76", "Test3", "")]
+        public void QuestionnaireToJson(string expected, string id, string title, string introduction, string questionId1, string questionTitle1, string questionText1, string questionId2, string questionTitle2, string questionText2, string questionId3, string questionTitle3, string questionText3)
         {
             Questionnaire json = new Questionnaire()
                 .Id(new Guid(id))
+                .Title(title)
                 .Introduction(introduction);
             List<Question> l = new List<Question>() { };
             if (questionId1 != null && questionText1 != null)
             {
                 Question q = new Question()
                     .Id(new Guid(questionId1))
+                    .Title(questionTitle1)
                     .Text(questionText1);
                 l.Add(q);
             }
@@ -364,6 +380,7 @@ namespace QuestionnairorTests
             {
                 Question q = new Question()
                     .Id(new Guid(questionId2))
+                    .Title(questionTitle2)
                     .Text(questionText2);
                 l.Add(q);
             }
@@ -371,6 +388,7 @@ namespace QuestionnairorTests
             {
                 Question q = new Question()
                     .Id(new Guid(questionId3))
+                    .Title(questionTitle3)
                     .Text(questionText3);
                 l.Add(q);
             }

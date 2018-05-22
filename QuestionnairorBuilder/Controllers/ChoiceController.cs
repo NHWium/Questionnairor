@@ -10,48 +10,148 @@ namespace QuestionnairorBuilder.Controllers
 {
     public class ChoiceController : Controller
     {
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Add(Guid id, Guid questionId, [FromServices]IQuestionnaireService service)
         {
-            return View();
+            if (!service.ValidId(id))
+            {
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Add/Get", id, data = questionId });
+            }
+            Question question = service.GetQuestion(id, questionId);
+            if (question == null)
+            {
+                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Add/Get", id, data = questionId });
+            }
+            Choice modelData = new Choice(question.Choices.Count);
+            ViewData["Id"] = id;
+            ViewData["QuestionId"] = questionId;
+            return View(modelData);
         }
 
         [HttpPost]
-        public IActionResult Add([FromServices]IQuestionnaireService service, Guid questionnaireId, Guid questionId)
+        public IActionResult AddEmpty(Guid id, Guid questionId, [FromServices]IQuestionnaireService service)
         {
-            if (questionnaireId == null || questionnaireId == Guid.Empty || !service.ModelData.ContainsKey(questionnaireId))
-            {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Add", questionnaireId, data = questionId });
-            }
-            Questionnaire modelData = service.ModelData[questionnaireId];
-            Question question = modelData.Questions.Where<Question>(q => q.Id == questionId).FirstOrDefault();
-            if (modelData.Questions == null || question == null || questionId == null || questionId == Guid.Empty)
-            {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Add", questionnaireId, data = questionId });
-            }
-            question.Choices.Add(new Choice(0));
-            return RedirectToAction("Index", "Builder", new { questionnaireId });
+            return RedirectToAction("Add", "Choice", new { id, questionId });
         }
 
         [HttpPost]
-        public IActionResult Remove([FromServices]IQuestionnaireService service, Guid questionnaireId, Guid questionId)
+        public IActionResult Add(Guid id, Guid questionId, int? value, string text, bool? isDefault, [FromServices] IQuestionnaireService service)
         {
-            if (questionnaireId == null || questionnaireId == Guid.Empty || !service.ModelData.ContainsKey(questionnaireId))
+            if (!service.ValidId(id))
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Remove", questionnaireId, data = questionId });
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Add", id, data = "" });
             }
-            Questionnaire modelData = service.ModelData[questionnaireId];
-            Question question = modelData.Questions.Where<Question>(q => q.Id == questionId).FirstOrDefault();
-            if (modelData.Questions == null || question == null || questionId == null || questionId == Guid.Empty)
+            Question question = service.GetQuestion(id, questionId);
+            if (question == null)
             {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Remove", questionnaireId, data = questionId });
+                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Add", id, data = "" });
             }
-            if (question.Choices.Count > 0)
-                question.Choices.RemoveAt(question.Choices.Count - 1);
-            else
+            if (!value.HasValue || !ModelState.IsValid)
             {
-                return BadRequest(new { error = "No choices to remove", controller = "Choice", action = "Remove", questionnaireId, data = questionId });
+                return RedirectToAction("Add", "Choice", new { id, questionId = question.Id });
             }
-            return RedirectToAction("Index", "Builder", new { questionnaireId });
+            Choice choice = new Choice((int)value).Text(text);
+            if (isDefault.HasValue) choice.IsDefault((bool)isDefault);
+            question.Choices.Add(choice);
+            return RedirectToAction("Edit", "Choice", new { id, questionId = question.Id });
         }
+
+        [HttpGet]
+        public IActionResult Edit(Guid id, Guid questionId, int value, [FromServices]IQuestionnaireService service)
+        {
+            if (!service.ValidId(id))
+            {
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Edit/Get", id, data = questionId });
+            }
+            Question question = service.GetQuestion(id, questionId);
+            if (question == null)
+            {
+                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Edit/Get", id, data = questionId });
+            }
+            Choice choice = service.GetChoice(id, questionId, value);
+            if (choice == null)
+            {
+                return BadRequest(new { error = "Illegal choice", controller = "Choice", action = "Edit/Get", id, data = value });
+            }
+            ViewData["Id"] = id;
+            ViewData["QuestionId"] = questionId;
+            ViewData["ChoiceValue"] = value;
+            return View(choice);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Guid id, Guid questionId, int value, int? changedValue, string text, bool isDefault, [FromServices]IQuestionnaireService service)
+        {
+            if (!service.ValidId(id))
+            {
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Edit", id, data = questionId });
+            }
+            Question question = service.GetQuestion(id, questionId);
+            if (question == null)
+            {
+                return BadRequest(new { error = "Illegal question identifier", controller = "Question", action = "Edit", id, data = questionId });
+            }
+            Choice choice = service.GetChoice(id, questionId, value);
+            if (choice == null)
+            {
+                return BadRequest(new { error = "Illegal choice", controller = "Choice", action = "Edit/Get", id, data = value });
+            }
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Edit", "Choice", new { id, questionId, value });
+            }
+            if (changedValue == 5) //TODO: check for unique
+            {
+                return RedirectToAction("Edit", "Choice", new { id, questionId, value });
+            }
+            choice.Value(value).Text(text).IsDefault(isDefault);
+            return RedirectToAction("Edit", "Question", new { id, questionId });
+        }
+
+        [HttpGet]
+        public IActionResult Delete(Guid id, Guid questionId, int value, [FromServices]IQuestionnaireService service)
+        {
+            if (!service.ValidId(id))
+            {
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Delete/Get", id, data = "" });
+            }
+            Question question = service.GetQuestion(id, questionId);
+            if (question == null)
+            {
+                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Delete/Get", id, data = questionId });
+            }
+            Choice choice = service.GetChoice(id, questionId, value);
+            if (choice == null)
+            {
+                return BadRequest(new { error = "Illegal choice", controller = "Choice", action = "Delete/Get", id, data = value });
+            }
+            ViewData["Id"] = id;
+            ViewData["QuestionId"] = questionId;
+            ViewData["ChoiceValue"] = value;
+            return View(choice);
+        }
+
+        [HttpPost]
+        [HttpDelete]
+        public IActionResult Delete(Guid id, Guid questionId, int value, bool confirm, [FromServices]IQuestionnaireService service)
+        {
+            if (!service.ValidId(id))
+            {
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Delete", id, data = questionId });
+            }
+            Question question = service.GetQuestion(id, questionId);
+            if (question == null)
+            {
+                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Delete", id, data = questionId });
+            }
+            Choice choice = service.GetChoice(id, questionId, value);
+            if (choice == null)
+            {
+                return BadRequest(new { error = "Illegal choice", controller = "Choice", action = "Delete", id, data = value });
+            }
+            question.Choices.Remove(choice);
+            return RedirectToAction("Edit", "Question", new { id, questionId });
+        }
+
     }
 }

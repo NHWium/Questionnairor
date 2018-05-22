@@ -1,0 +1,36 @@
+﻿@model QuestionnaireData.Models.Response
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Delete</h2>
+<h4>Response</h4>
+<hr />
+@using (Html.BeginForm("Delete", "Response", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.Id)
+    <div class="Editor Left">
+        @Html.LabelFor(m => m.Feedback)
+    </div>
+    <div class="Editor Right">
+        @Html.EditorFor(m => m.Feedback, new { @readonly = "readonly" })
+    </div>
+    <div class="Editor Left">
+        @Html.LabelFor(m => m.MinimumChoices)
+    </div>
+    <div class="Editor Right">
+        @Html.EditorFor(m => m.MinimumChoices, new { @readonly = "readonly" })
+    </div>
+    <p>
+        Please confirm permanent deletion of this response.
+    </p>
+    <br />
+    <div>
+        <input type="submit" value="Delete Choice" formaction="@Url.Action("Delete", "Response", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id })" />
+    </div>
+}
+<div>
+    @Html.ActionLink("Back to List", "Edit", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })
+</div>
+

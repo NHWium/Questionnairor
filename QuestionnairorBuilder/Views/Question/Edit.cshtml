@@ -1,0 +1,42 @@
+﻿@model QuestionnaireData.Models.Question
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+<h4>Question</h4>
+<hr />
+@using (Html.BeginForm("Edit", "Question", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.Id)
+    <div class="Editor Left">
+        @Html.LabelFor(m => m.Title)
+    </div>
+    <div class="Editor Right">
+        @Html.EditorFor(m => m.Title)
+    </div>
+    <div class="Editor Left">
+        @Html.LabelFor(m => m.Text)
+    </div>
+    <div class="Editor Right">
+        @Html.TextAreaFor(m => m.Text)
+    </div>
+    <br />
+    <input type="submit" value="Edit Question" formaction="@Url.Action("Edit", "Question", new { id = ViewData["Id"], questionId = Model.Id, @Model.Title, @Model.Text })" />
+    <hr />
+    <h4>Choices</h4>
+    foreach (var choice in Model.Choices)
+    {
+        @await Html.PartialAsync("ChoicePartialView", choice)
+    }
+    <br />
+    <div>
+        <input type="submit" value="Add Choice" formaction="@Url.Action("AddEmpty", "Choice", new { id = ViewData["Id"], questionId = Model.Id })" />
+    </div>
+}
+<hr />
+<div>
+    @Html.ActionLink("Back to List", "Edit", "Questionnaire", new { id = ViewData["Id"] })
+</div>
+

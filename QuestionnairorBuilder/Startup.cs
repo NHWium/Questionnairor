@@ -32,7 +32,7 @@ namespace QuestionnairorBuilder
             {
                 routes.MapRoute(
                     name: "Default",
-                    template: "{controller=Builder}/{action=Index}/{id?}"
+                    template: "{controller=Questionnaire}/{action=Index}/{id?}"
                 );
             });
         }

@@ -1,15 +1,10 @@
 ﻿@model QuestionnaireData.Models.Choice
-@{
-    ViewData["Title"] = "Choice";
-}
-@Html.EditorFor(m => m.Value)
-@Html.EditorFor(m => m.Text)
-@Html.EditorFor(m => m.IsDefault)
-@if (Model.Responses.Count == 0)
-{
-    @Html.Hidden("Responses", "")
-}
-@foreach (var response in Model.Responses)
-{
-    @await Html.PartialAsync("Response", response)
-}
+
+<div>
+    <input type="text" readonly="readonly" value="@Model.Value" />
+    <input type="text" readonly="readonly" value="@Model.Text" />
+    <input type="text" readonly="readonly" value="Includes @Model.Responses.Count responses." />
+
+    @Html.ActionLink("Edit", "Edit", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], @Model.Value })
+    @Html.ActionLink("Delete", "Delete", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], @Model.Value })
+</div>

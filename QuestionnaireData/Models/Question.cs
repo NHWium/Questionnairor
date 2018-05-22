@@ -10,13 +10,18 @@ namespace QuestionnaireData.Models
     /// <summary>
     /// A multiple-choice question.
     /// </summary>
-    public class Question
+    public class Question : IEquatable<Question>
     {
         /// <summary>
         /// A global id to identify this question.
         /// </summary>
         [BindRequired]
         public Guid Id { get; set; } = Guid.NewGuid();
+        /// <summary>
+        /// A title text.
+        /// </summary>
+        [BindRequired]
+        public string Title { get; set; } = "";
         /// <summary>
         /// The text to display.
         /// </summary>
@@ -41,9 +46,10 @@ namespace QuestionnaireData.Models
         /// <param name="minimumValue">Minimum value in the multiple-choice question.</param>
         /// <param name="maximumValue">Maximum value in the multiple-choice question.</param>
         /// <param name="defaultValue">Default value in the multiple-choice question.</param>
-        public Question(string text, int minimumValue, int maximumValue, int defaultValue)
+        public Question(string title, string text, int minimumValue, int maximumValue, int defaultValue)
         {
             Id = Guid.NewGuid();
+            Title = Title;
             Text = text;
             Choices = new List<Choice>();
             for (int i = minimumValue; i < maximumValue; i++)
@@ -71,7 +77,9 @@ namespace QuestionnaireData.Models
                 Console.Error.WriteLine(e.Message);
                 Console.Error.WriteLine(e.StackTrace);
                 return new Question()
-                    .Text("Not Loaded");
+                    .Title("Not Loaded")
+                    .Text("Not Loaded")
+                    .Id(Guid.Empty);
             }
         }
 
@@ -85,22 +93,36 @@ namespace QuestionnaireData.Models
             return JsonConvert.SerializeObject(this, formatting);
         }
 
+        public bool Equals(Question q)
+        {
+            if (q is null) return false;
+            if (Id == null && q.Id != null) return false;
+            if (Id != null && q.Id == null) return false;
+            if (Title == null && q.Title != null) return false;
+            if (Title != null && q.Title == null) return false;
+            if (Text == null && q.Text != null) return false;
+            if (Text != null && q.Text == null) return false;
+            if (Choices == null && q.Choices != null) return false;
+            if (Choices != null && q.Choices == null) return false;
+            return  (Id == null || Id.Equals(q.Id)) && 
+                    (Title == null || Title.Equals(q.Title)) && 
+                    (Text == null || Text.Equals(q.Text)) && 
+                    (Choices == null || Choices.SequenceEqual(q.Choices));
+        }
+
         // override object.Equals
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            Question q = (Question)obj;
-            return (Id.Equals(q.Id)) && (Text.Equals(q.Text)) && (Choices.SequenceEqual(q.Choices));
+            if (obj is null) return false;
+            if (ReferenceEquals(true, obj)) return true;
+            if (GetType() != obj.GetType()) return false;
+            return Equals(obj as Question);
         }
 
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            return Id.GetHashCode() * Text.GetHashCode() * Choices.GetHashCode();
+            return (Id.GetHashCode() * 13 + Title.GetHashCode() * 2089 + Text.GetHashCode() * 2617 + Choices.GetHashCode() * 6163) ^ 13;
         }
     }
     /**
@@ -112,6 +134,12 @@ namespace QuestionnaireData.Models
         public static Question Id(this Question o, Guid value)
         {
             o.Id = value;
+            return o;
+        }
+        /// <param name="value">A title text.</param>
+        public static Question Title(this Question o, string value)
+        {
+            o.Title = value;
             return o;
         }
         /// <param name="value">The text to display.</param>

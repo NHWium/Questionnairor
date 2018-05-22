@@ -9,7 +9,7 @@ namespace QuestionnaireData.Models
     /// <summary>
     /// Feedback to a questionnaire. Once triggered a text can be shown.
     /// </summary>
-    public class Response
+    public class Response : IEquatable<Response>
     {
         /// <summary>
         /// A global id to identify this response.
@@ -59,18 +59,27 @@ namespace QuestionnaireData.Models
             return JsonConvert.SerializeObject(this, formatting);
         }
 
+        public bool Equals(Response r)
+        {
+            if (r is null) return false;
+            if (Id == null && r.Id != null) return false;
+            if (Id != null && r.Id == null) return false;
+            if (Feedback == null && r.Feedback != null) return false;
+            if (Feedback != null && r.Feedback == null) return false;
+            return  (Id == null || Id.Equals(r.Id)) &&
+                    (MinimumChoices == r.MinimumChoices) &&
+                    (Feedback == null || Feedback.Equals(r.Feedback));
+        }
+
         // override object.Equals
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            Response r = (Response)obj;
-            return (Id.Equals(r.Id)) && (MinimumChoices == r.MinimumChoices) && (Feedback.Equals(r.Feedback));
+            if (obj is null) return false;
+            if (ReferenceEquals(true, obj)) return true;
+            if (GetType() != obj.GetType()) return false;
+            return Equals(obj as Response);
         }
-
+        
         // override object.GetHashCode
         public override int GetHashCode()
         {

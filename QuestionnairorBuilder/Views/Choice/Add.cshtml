@@ -1,0 +1,36 @@
+﻿@model QuestionnaireData.Models.Choice
+
+@{
+    ViewData["Title"] = "Add";
+}
+
+<h2>Add</h2>
+<h4>Choice</h4>
+<hr />
+@using (Html.BeginForm("Add", "Choice", FormMethod.Post))
+{
+    <div class="Editor Left">
+        @Html.LabelFor(m => m.Value)
+    </div>
+    <div class="Editor Right">
+        @Html.EditorFor(m => m.Value)
+    </div>
+    <div class="Editor Left">
+        @Html.LabelFor(m => m.Text)
+    </div>
+    <div class="Editor Right">
+        @Html.EditorFor(m => m.Text)
+    </div>
+    <div class="Editor Left">
+        @Html.LabelFor(m => m.IsDefault)
+    </div>
+    <div class="Editor Right">
+        @Html.EditorFor(m => m.IsDefault)
+    </div>
+    <br />
+    <input type="submit" value="Add Choice" formaction="@Url.Action("Add", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], @Model.Value, @Model.Text, @Model.IsDefault })" />
+}
+<div>
+    @Html.ActionLink("Back to List", "Edit", "Question", new { id = ViewData["Id"], questionId = ViewData["QuestionId"] })
+</div>
+

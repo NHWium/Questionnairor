@@ -1,0 +1,44 @@
+﻿@model QuestionnaireData.Models.Choice
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+<h4>Choice</h4>
+<hr />
+@using (Html.BeginForm("Edit", "Choice", FormMethod.Post))
+{
+    <div class="Editor Left">
+        @Html.LabelFor(m => m.Value)
+    </div>
+    <div class="Editor Right">
+        @Html.EditorFor(m => m.Value)
+    </div>
+    <div class="Editor Left">
+        @Html.LabelFor(m => m.Text)
+    </div>
+    <div class="Editor Right">
+        @Html.EditorFor(m => m.Text)
+    </div>
+    <div class="Editor Left">
+        @Html.LabelFor(m => m.IsDefault)
+    </div>
+    <div class="Editor Right">
+        @Html.EditorFor(m => m.IsDefault)
+    </div>
+    <input type="submit" value="Edit Choice" formaction="@Url.Action("Edit", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], changedValue = @Model.Value, @Model.Text, @Model.IsDefault })" />
+    <hr />
+    <h4>Responses</h4>
+    foreach (var response in Model.Responses)
+    {
+    }
+    <br />
+    <div>
+        <input type="submit" value="Add Response" formaction="@Url.Action("AddEmpty", "Response", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })" />
+    </div>
+}
+<div>
+    @Html.ActionLink("Back to List", "Edit", "Question", new { id = ViewData["Id"], questionId = ViewData["QuestionId"] })
+</div>
+

@@ -1,24 +1,9 @@
 ﻿@model QuestionnaireData.Models.Question
-@{
-    ViewData["Title"] = "Question";
-    var questionnaireId = ViewData["QuestionnaireId"];
-}
-@Html.EditorFor(m => m.Id)
-@Html.EditorFor(m => m.Text)
-<br />
-@if (Model.Choices.Count == 0)
-{
-    @Html.Hidden("Choices", "")
-}
-else
-{
-    <input type="submit" value="-" formaction="@Url.Action("Remove", "Choice", new { questionnaireId, questionId = @Model.Id })" />
-}
-@foreach (var choice in Model.Choices)
-{
-    <input type="radio" />
-    @await Html.PartialAsync("ChoicePartialView", choice)
-}
-<input type="submit" value="+" formaction="@Url.Action("Add", "Choice", new { questionnaireId, questionId = @Model.Id })" />
-<br />
-<br />
+
+<div>
+    <input type="text" readonly="readonly" value="@Model.Title" />
+    <input type="text" readonly="readonly" value="Includes @Model.Choices.Count choices." />
+
+    @Html.ActionLink("Edit", "Edit", "Question", new { id = ViewData["Id"], questionId = Model.Id })
+    @Html.ActionLink("Delete", "Delete", "Question", new { id = ViewData["Id"], questionId = Model.Id })
+</div>

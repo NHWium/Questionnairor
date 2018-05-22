@@ -10,7 +10,7 @@ namespace QuestionnaireData.Models
     /// <summary>
     /// A possible choice in a multiple-choice question.
     /// </summary>
-    public class Choice
+    public class Choice : IEquatable<Choice>
     {
         /// <summary>
         /// Value of the choice. Used to identify the choice, so should be unique.
@@ -74,22 +74,35 @@ namespace QuestionnaireData.Models
             return JsonConvert.SerializeObject(this, formatting);
         }
 
+        public bool Equals(Choice c)
+        {
+            if (c is null) return false;
+            if (Text == null && c.Text != null) return false;
+            if (Text != null && c.Text == null) return false;
+            if (Responses == null && c.Responses != null) return false;
+            if (Responses != null && c.Responses == null) return false;
+            return  (Value == c.Value) &&
+                    (Text == null || Text.Equals(c.Text)) &&
+                    (IsDefault == c.IsDefault) &&
+                    (Responses == null || Responses.SequenceEqual(c.Responses));
+        }
+
         // override object.Equals
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            Choice c = (Choice)obj;
-            return (Value == c.Value) && (Text.Equals(c.Text)) && (IsDefault == c.IsDefault) && (Responses.SequenceEqual(c.Responses));
+            if (obj is null) return false;
+            if (ReferenceEquals(true, obj)) return true;
+            if (GetType() != obj.GetType()) return false;
+            return Equals(obj as Choice);
         }
 
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            return (Text.GetHashCode() * Responses.GetHashCode()) ^ (Value + 1);
+            if (IsDefault)
+                return (Text.GetHashCode() ^ Responses.GetHashCode()) ^ (Value + 1) + 7643;
+            else
+                return (Text.GetHashCode() ^ Responses.GetHashCode()) ^ (Value + 1) + 6791;
         }
 
     }
