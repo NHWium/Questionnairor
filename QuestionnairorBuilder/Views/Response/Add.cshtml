@@ -23,7 +23,7 @@
         @Html.EditorFor(m => m.MinimumChoices)
     </div>
     <br />
-    <input type="submit" value="Add Choice" formaction="@Url.Action("Add", "Response", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id, Model.MinimumChoices, Model.Feedback })" />
+    <input type="submit" value="Add Response" formaction="@Url.Action("Add", "Response", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id, Model.MinimumChoices, Model.Feedback })" />
 }
 <div>
     @Html.ActionLink("Back to List", "Edit", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })

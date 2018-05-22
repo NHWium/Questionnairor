@@ -168,7 +168,7 @@ namespace QuestionnairorBuilder.Controllers
             ViewData["Id"] = id;
             ViewData["QuestionId"] = questionId;
             ViewData["ChoiceValue"] = value;
-            return View(choice);
+            return View(response);
         }
 
         [HttpPost]
@@ -199,7 +199,7 @@ namespace QuestionnairorBuilder.Controllers
                 return BadRequest(new { error = "Illegal response", controller = "Response", action = "Delete/Get", id, data = responseId });
             }
             choice.Responses.Remove(response);
-            return RedirectToAction("Edit", "Question", new { id, questionId });
+            return RedirectToAction("Edit", "Choice", new { id, questionId });
         }
 
         [HttpPost]

@@ -32,6 +32,7 @@
     <h4>Responses</h4>
     foreach (var response in Model.Responses)
     {
+        @await Html.PartialAsync("ResponsePartialView", response)
     }
     <br />
     <div>
