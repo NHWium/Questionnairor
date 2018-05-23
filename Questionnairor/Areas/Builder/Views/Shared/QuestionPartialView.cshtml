@@ -5,5 +5,5 @@
     <input type="text" readonly="readonly" value="Includes @Model.Choices.Count choices." />
 
     @Html.ActionLink("Edit", "Edit", "Question", new { id = ViewData["Id"], questionId = Model.Id })
-    @Html.ActionLink("Delete", "Delete", "Question", new { id = ViewData["Id"], questionId = Model.Id })
+    @Html.ActionLink("Delete", "Remove", "Question", new { id = ViewData["Id"], questionId = Model.Id })
 </div>

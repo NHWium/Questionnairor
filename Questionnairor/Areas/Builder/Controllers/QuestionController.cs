@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Questionnairor.Extensions;
 using Questionnairor.Models;
 using Questionnairor.Services;
 
@@ -11,12 +13,12 @@ namespace Questionnairor.Areas.Builder.Controllers
     [Area("Builder")]
     public class QuestionController : Controller
     {
-        [HttpGet]
+        [HttpGet, HttpPost]
         public IActionResult Add(Guid id, Guid questionId, [FromServices]IQuestionnaireService service)
         {
             if (!service.ValidId(id))
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Add/Get", id, data = questionId });
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Add", id, data = questionId });
             }
             Question question = service.GetQuestion(id, questionId);
             if (question == null)
@@ -28,25 +30,18 @@ namespace Questionnairor.Areas.Builder.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddEmpty(Guid id, [FromServices]IQuestionnaireService service)
+        public IActionResult Create(Guid id, Question modelData, [FromServices] IQuestionnaireService service)
         {
-            return RedirectToAction("Add", "Question", new { id });
-        }
-
-        [HttpPost]
-        public IActionResult Add(Guid id, string title, string text, [FromServices] IQuestionnaireService service)
-        {
+            if (!ModelState.IsValid)
+            {
+                ViewData["Id"] = id;
+                return View("Add", modelData);
+            }
             if (!service.ValidId(id))
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Add", id, data = "" });
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Add", id, data = modelData.ToJson(Formatting.None) });
             }
-            if (string.IsNullOrEmpty(title) || !ModelState.IsValid)
-            {
-                return RedirectToAction("Add", "Question", new { id });
-            }
-            Question question = new Question()
-                .Title(title)
-                .Text(text);
+            Question question = new Question().Id(modelData.Id).Title(modelData.Title).Text(modelData.Text);
             service.QuestionnaireData[id].Questions.Add(question);
             return RedirectToAction("Edit", "Question", new { id, questionId = question.Id });
         }
@@ -56,67 +51,68 @@ namespace Questionnairor.Areas.Builder.Controllers
         {
             if (!service.ValidId(id))
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Edit/Get", id, data = questionId });
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Edit", id, data = questionId });
             }
             Question question = service.GetQuestion(id, questionId);
             if (question == null)
             {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Question", action = "Edit/Get", id, data = questionId });
+                return BadRequest(new { error = "Illegal question identifier", controller = "Question", action = "Edit", id, data = questionId });
             }
             ViewData["Id"] = id;
             ViewData["QuestionId"] = questionId;
             return View(question);
         }
 
-        [HttpPost]
-        public IActionResult Edit(Guid id, Guid questionId, string title, string text, [FromServices]IQuestionnaireService service)
+        [HttpPost, HttpPatch]
+        public IActionResult Update(Guid id, Question modelData, [FromServices]IQuestionnaireService service)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewData["Id"] = id;
+                ViewData["QuestionId"] = modelData.Id;
+                return View("Edit", modelData);
+            }
+            if (!service.ValidId(id))
+            {
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Update", id, data = modelData.ToJson(Formatting.None) });
+            }
+            Question question = service.GetQuestion(id, modelData.Id);
+            if (question == null)
+            {
+                return BadRequest(new { error = "Illegal question identifier", controller = "Question", action = "Update", id, data = modelData.ToJson(Formatting.None) });
+            }
+            question.Title(modelData.Title).Text(modelData.Text);
+            return RedirectToAction("Edit", "Question", new { id, questionId = modelData.Id });
+        }
+
+        [HttpGet]
+        public IActionResult Remove(Guid id, Guid questionId, [FromServices]IQuestionnaireService service)
         {
             if (!service.ValidId(id))
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Edit", id, data = questionId });
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Remove", id, data = "" });
             }
             Question question = service.GetQuestion(id, questionId);
             if (question == null)
             {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Question", action = "Edit", id, data = questionId });
+                return BadRequest(new { error = "Illegal question identifier", controller = "Question", action = "Remove", id, data = questionId });
             }
-            if (string.IsNullOrEmpty(title) || !ModelState.IsValid)
-            {
-                return RedirectToAction("Edit", "Question", new { id, questionId });
-            }
-            question.Title(title).Text(text);
-            return RedirectToAction("Edit", "Questionnaire", new { id });
+            ViewData["Id"] = id;
+            ViewData["QuestionId"] = questionId;
+            return View(question);
         }
 
-
-        [HttpGet]
-        public IActionResult Delete(Guid id, Guid questionId, [FromServices]IQuestionnaireService service)
+        [HttpPost, HttpDelete]
+        public IActionResult Delete(Guid id, Guid questionId, bool confirm, [FromServices]IQuestionnaireService service)
         {
             if (!service.ValidId(id))
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Delete", id, data = questionId });
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Delete", id, data = "" });
             }
             Question question = service.GetQuestion(id, questionId);
             if (question == null)
             {
                 return BadRequest(new { error = "Illegal question identifier", controller = "Question", action = "Delete", id, data = questionId });
-            }
-            ViewData["Id"] = id;
-            return View(question);
-        }
-
-        [HttpPost]
-        [HttpDelete]
-        public IActionResult Delete(Guid id, Guid questionId, bool confirm, [FromServices]IQuestionnaireService service)
-        {
-            if (!service.ValidId(id))
-            {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Edit", id, data = questionId });
-            }
-            Question question = service.GetQuestion(id, questionId);
-            if (question == null)
-            {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Question", action = "Edit", id, data = questionId });
             }
             service.QuestionnaireData[id].Questions.Remove(question);
             return RedirectToAction("Edit", "Questionnaire", new { id });

@@ -5,6 +5,6 @@
     <input type="text" readonly="readonly" value="@Model.Text" />
     <input type="text" readonly="readonly" value="Includes @Model.Responses.Count responses." />
 
-    @Html.ActionLink("Edit", "Edit", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], @Model.Value })
-    @Html.ActionLink("Delete", "Delete", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], @Model.Value })
+    @Html.ActionLink("Edit", "Edit", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = @Model.Value })
+    @Html.ActionLink("Delete", "Remove", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = @Model.Value })
 </div>

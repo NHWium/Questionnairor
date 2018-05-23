@@ -22,8 +22,7 @@ namespace Questionnairor.Models
         /// A title text.
         /// </summary>
         [BindRequired]
-        [Required]
-        [StringLength(60, MinimumLength = 5)]
+        [Required, StringLength(60, MinimumLength = 5)]
         public string Title { get; set; } = "";
         /// <summary>
         /// General text at the top of page.

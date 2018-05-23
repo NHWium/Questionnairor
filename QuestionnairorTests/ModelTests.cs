@@ -1,3 +1,4 @@
+using Questionnairor.Extensions;
 using Questionnairor.Models;
 using System;
 using System.Collections.Generic;
@@ -65,7 +66,7 @@ namespace QuestionnairorTests
         [InlineData("{\"Value\":5,\"Text\":\"Test\",\"Responses\":[{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":1,\"Feedback\":\"Test1\"},{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":2,\"Feedback\":\"Test2\"},{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":3,\"Feedback\":\"Test3\"}]}", 5, "Test", false, 1, "Test1", 2, "Test2", 3, "Test3")]
         public void ChoiceFromJson(string json, int value, string text, bool isDefault, int? minimumChoices1, string feedback1, int? minimumChoices2, string feedback2, int? minimumChoices3, string feedback3)
         {
-            Choice expected = new Choice(value)
+            Choice expected = new Choice().Value(value)
                 .Text(text)
                 .IsDefault(isDefault);
             List<Response> l = new List<Response>() {};
@@ -101,7 +102,7 @@ namespace QuestionnairorTests
         public void ChoiceFromJsonWithComplicatedResponses()
         {
             string json = "{\"Value\":0,\"Text\":\"Test\",\"Responses\":[{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"MinimumChoices\":2,\"Feedback\":\"FeedbackTest\"}, {\"Id\":\"28301F4A-1B91-4C81-A4E8-56F370B3D30A\",\"MinimumChoices\":3}]}";
-            Choice expected = new Choice(0)
+            Choice expected = new Choice().Value(0)
                 .Text("Test")
                 .IsDefault(false);
             Response r1 = new Response()
@@ -123,7 +124,7 @@ namespace QuestionnairorTests
         [InlineData("{\"Value\":5,\"Text\":\"Test\",\"IsDefault\":false,\"Responses\":[{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":1,\"Feedback\":\"Test1\"},{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":2,\"Feedback\":\"Test2\"},{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":3,\"Feedback\":\"Test3\"}]}", 5, "Test", false, 1, "Test1", 2, "Test2", 3, "Test3")]
         public void ChoiceToJson(string expected, int value, string text, bool isDefault, int? minimumChoices1, string feedback1, int? minimumChoices2, string feedback2, int? minimumChoices3, string feedback3)
         {
-            Choice json = new Choice(value)
+            Choice json = new Choice().Value(value)
                 .Text(text)
                 .IsDefault(isDefault);
             List<Response> l = new List<Response>() { };
@@ -183,21 +184,21 @@ namespace QuestionnairorTests
             List<Choice> l = new List<Choice>() { };
             if (choiceValue1 != null && choiceText1 != null && choiceIsDefault1 != null)
             {
-                Choice c = new Choice((int)choiceValue1)
+                Choice c = new Choice().Value((int)choiceValue1)
                     .Text(choiceText1)
                     .IsDefault((bool)choiceIsDefault1);
                 l.Add(c);
             }
             if (choiceValue2 != null && choiceText2 != null && choiceIsDefault2 != null)
             {
-                Choice c = new Choice((int)choiceValue2)
+                Choice c = new Choice().Value((int)choiceValue2)
                     .Text(choiceText2)
                     .IsDefault((bool)choiceIsDefault2);
                 l.Add(c);
             }
             if (choiceValue3 != null && choiceText3 != null && choiceIsDefault3 != null)
             {
-                Choice c = new Choice((int)choiceValue3)
+                Choice c = new Choice().Value((int)choiceValue3)
                     .Text(choiceText3)
                     .IsDefault((bool)choiceIsDefault3);
                 l.Add(c);
@@ -220,21 +221,21 @@ namespace QuestionnairorTests
             List<Choice> l = new List<Choice>() { };
             if (choiceValue1 != null && choiceText1 != null && choiceIsDefault1 != null)
             {
-                Choice c = new Choice((int)choiceValue1)
+                Choice c = new Choice().Value((int)choiceValue1)
                     .Text(choiceText1)
                     .IsDefault((bool)choiceIsDefault1);
                 l.Add(c);
             }
             if (choiceValue2 != null && choiceText2 != null && choiceIsDefault2 != null)
             {
-                Choice c = new Choice((int)choiceValue2)
+                Choice c = new Choice().Value((int)choiceValue2)
                     .Text(choiceText2)
                     .IsDefault((bool)choiceIsDefault2);
                 l.Add(c);
             }
             if (choiceValue3 != null && choiceText3 != null && choiceIsDefault3 != null)
             {
-                Choice c = new Choice((int)choiceValue3)
+                Choice c = new Choice().Value((int)choiceValue3)
                     .Text(choiceText3)
                     .IsDefault((bool)choiceIsDefault3);
                 l.Add(c);
@@ -327,14 +328,14 @@ namespace QuestionnairorTests
                 .Id(new Guid("73129183-ce7b-48ef-820f-b96af9ab82c2"))
                 .MinimumChoices(9)
                 .Feedback("FeedbackTest3");
-            Choice c1 = new Choice(3)
+            Choice c1 = new Choice().Value(3)
                 .Text("C1Test")
                 .Responses(new List<Response>() { r1, r2 });
-            Choice c2 = new Choice(5)
+            Choice c2 = new Choice().Value(5)
                 .Text("C2Test")
                 .IsDefault(true)
                 .Responses(new List<Response>() { r3, r4 });
-            Choice c3 = new Choice(7)
+            Choice c3 = new Choice().Value(7)
                 .Text("C3Test")
                 .Responses(new List<Response>() { r5 });
             Question q1 = new Question()
@@ -394,6 +395,31 @@ namespace QuestionnairorTests
             }
             json.Questions(l);
             Assert.Equal(expected, json.ToJson(Newtonsoft.Json.Formatting.None));
+        }
+
+        [Fact]
+        public void AddUniqueCannotAddSameElementTwice()
+        {
+            string element1 = "Test";
+            string element2 = "AnotherString";
+            List<string> list = new List<string>();
+            Assert.True(list.AddUnique(element1));
+            Assert.True(list.AddUnique(element2));
+            Assert.False(list.AddUnique(element2));
+            Assert.False(list.AddUnique(element1));
+        }
+
+        [Fact]
+        public void AddUniqueChoiceCannotAddSameElementTwice()
+        {
+            Choice element1 = new Choice().Value(5).Text("Test1");
+            Choice element2 = new Choice().Value(5).Text("Test2");
+            Choice element3 = new Choice().Value(3).Text("Test1");
+            List<Choice> list = new List<Choice>();
+            Assert.True(list.AddUniqueChoice(element1));
+            Assert.False(list.AddUniqueChoice(element2));
+            Assert.True(list.AddUniqueChoice(element3));
+            Assert.False(list.AddUniqueChoice(element3));
         }
     }
 }

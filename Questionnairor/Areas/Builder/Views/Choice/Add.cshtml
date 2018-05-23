@@ -4,32 +4,43 @@
     ViewData["Title"] = "Add";
 }
 
-<h2>Add</h2>
-<h4>Choice</h4>
+<h2>Choice</h2>
+<h4>Add</h4>
 <hr />
-@using (Html.BeginForm("Add", "Choice", FormMethod.Post))
+@using (Html.BeginForm("Create", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"] }, FormMethod.Post))
 {
+    @Html.ValidationSummary(false)
     <div class="Editor Left">
         @Html.LabelFor(m => m.Value)
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.Value)
+        <br />
+        @Html.ValidationMessageFor(m => m.Value)
     </div>
     <div class="Editor Left">
         @Html.LabelFor(m => m.Text)
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.Text)
+        <br />
+        @Html.ValidationMessageFor(m => m.Text)
     </div>
     <div class="Editor Left">
         @Html.LabelFor(m => m.IsDefault)
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.IsDefault)
+        <br />
+        @Html.ValidationMessageFor(m => m.IsDefault)
     </div>
+    @Html.HiddenFor(m => m.Responses)
     <br />
-    <input type="submit" value="Add Choice" formaction="@Url.Action("Add", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], @Model.Value, @Model.Text, @Model.IsDefault })" />
+    <div>
+        <input type="submit" value="Add Choice" />
+    </div>
 }
+<hr />
 <div>
     @Html.ActionLink("Back to List", "Edit", "Question", new { id = ViewData["Id"], questionId = ViewData["QuestionId"] })
 </div>

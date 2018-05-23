@@ -1,13 +1,13 @@
 ﻿@model Questionnairor.Models.Questionnaire
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Remove";
 }
 
 <h2>Questionnaire</h2>
-<h4>Edit</h4>
+<h4>Remove</h4>
 <hr />
-@using (Html.BeginForm("Update", "Questionnaire", FormMethod.Post))
+@using (Html.BeginForm("Delete", "Questionnaire", new { id = Model.Id, confirm = true }, FormMethod.Post))
 {
     @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
@@ -15,21 +15,19 @@
         @Html.LabelFor(m => m.Title)
     </div>
     <div class="Editor Right">
-        @Html.EditorFor(m => m.Title)
-        <br />
-        @Html.ValidationMessageFor(m => m.Title)
+        @Html.EditorFor(m => m.Title, new { @readonly = "readonly" })
     </div>
     <div class="Editor Left">
         @Html.LabelFor(m => m.Introduction)
     </div>
     <div class="Editor Right">
-        @Html.TextAreaFor(m => m.Introduction)
-        <br />
-        @Html.ValidationMessageFor(m => m.Introduction)
+        @Html.TextAreaFor(m => m.Introduction, new { @readonly = "readonly" })
     </div>
-    <br />
+    <p>
+        Please confirm permanent deletion of this questionnaire.
+    </p>
     <div>
-        <input type="submit" value="Edit Questionnaire" />
+        <input type="submit" value="Delete Questionnaire" />
     </div>
     <hr />
     <h4>Questions</h4>

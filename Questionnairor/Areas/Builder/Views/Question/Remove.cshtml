@@ -4,11 +4,12 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Delete</h2>
-<h4>Question</h4>
+<h2>Question</h2>
+<h4>Delete</h4>
 <hr />
-@using (Html.BeginForm("Delete", "Question", FormMethod.Post))
+@using (Html.BeginForm("Delete", "Question", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], confirm = true }, FormMethod.Post))
 {
+    @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
     <div class="Editor Left">
         @Html.LabelFor(m => m.Title)
@@ -25,9 +26,22 @@
     <p>
         Please confirm permanent deletion of this question.
     </p>
+    <div>
+        <input type="submit" value="Delete Question" />
+    </div>
+    <hr />
+    <h4>Choices</h4>
+    foreach (var choice in Model.Choices)
+    {
+        @await Html.PartialAsync("ChoicePartialView", choice)
+    }
+    @if (Model.Choices.Count == 0)
+    {
+        @Html.HiddenFor(m => m.Choices)
+    }
     <br />
     <div>
-        <input type="submit" value="Delete Question" formaction="@Url.Action("Delete", "Question", new { id = ViewData["Id"], questionId = @Model.Id, confirm = true })" />
+        <input type="submit" value="Add Choice" formaction="@Url.Action("Add", "Choice", new { id = ViewData["Id"], questionId = Model.Id })" />
     </div>
 }
 <hr />

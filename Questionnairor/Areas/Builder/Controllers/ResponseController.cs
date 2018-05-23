@@ -11,7 +11,7 @@ namespace Questionnairor.Areas.Builder.Controllers
     [Area("Builder")]
     public class ResponseController : Controller
     {
-        [HttpGet]
+        [HttpGet, HttpPost]
         public IActionResult Add(Guid id, Guid questionId, int value, [FromServices]IQuestionnaireService service)
         {
             if (!service.ValidId(id))
@@ -36,13 +36,7 @@ namespace Questionnairor.Areas.Builder.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddEmpty(Guid id, Guid questionId, int value, [FromServices]IQuestionnaireService service)
-        {
-            return RedirectToAction("Add", "Response", new { id, questionId, value });
-        }
-
-        [HttpPost]
-        public IActionResult Add(Guid id, Guid questionId, int value, int? minimumChoices, string feedback, [FromServices] IQuestionnaireService service)
+        public IActionResult Create(Guid id, Guid questionId, int value, int? minimumChoices, string feedback, [FromServices] IQuestionnaireService service)
         {
             if (!service.ValidId(id))
             {

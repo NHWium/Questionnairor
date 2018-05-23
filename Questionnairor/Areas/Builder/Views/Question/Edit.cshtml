@@ -4,35 +4,46 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit</h2>
-<h4>Question</h4>
+<h2>Question</h2>
+<h4>Edit</h4>
 <hr />
-@using (Html.BeginForm("Edit", "Question", FormMethod.Post))
+@using (Html.BeginForm("Update", "Question", new { id = ViewData["Id"] }, FormMethod.Post))
 {
+    @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
     <div class="Editor Left">
         @Html.LabelFor(m => m.Title)
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.Title)
+        <br />
+        @Html.ValidationMessageFor(m => m.Title)
     </div>
     <div class="Editor Left">
         @Html.LabelFor(m => m.Text)
     </div>
     <div class="Editor Right">
         @Html.TextAreaFor(m => m.Text)
+        <br />
+        @Html.ValidationMessageFor(m => m.Text)
     </div>
     <br />
-    <input type="submit" value="Edit Question" formaction="@Url.Action("Edit", "Question", new { id = ViewData["Id"], questionId = Model.Id, @Model.Title, @Model.Text })" />
+    <div>
+        <input type="submit" value="Edit Question" />
+    </div>
     <hr />
     <h4>Choices</h4>
     foreach (var choice in Model.Choices)
     {
         @await Html.PartialAsync("ChoicePartialView", choice)
     }
+    @if (Model.Choices.Count == 0)
+    {
+        @Html.HiddenFor(m => m.Choices)
+    }
     <br />
     <div>
-        <input type="submit" value="Add Choice" formaction="@Url.Action("AddEmpty", "Choice", new { id = ViewData["Id"], questionId = Model.Id })" />
+        <input type="submit" value="Add Choice" formaction="@Url.Action("Add", "Choice", new { id = ViewData["Id"], questionId = Model.Id })" />
     </div>
 }
 <hr />

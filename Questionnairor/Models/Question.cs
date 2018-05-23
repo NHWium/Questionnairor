@@ -22,8 +22,7 @@ namespace Questionnairor.Models
         /// A title text.
         /// </summary>
         [BindRequired]
-        [Required]
-        [StringLength(60, MinimumLength = 5)]
+        [Required, StringLength(60, MinimumLength = 5)]
         public string Title { get; set; } = "";
         /// <summary>
         /// The text to display.
@@ -35,33 +34,6 @@ namespace Questionnairor.Models
         /// </summary>
         [BindRequired]
         public List<Choice> Choices { get; set; } = new List<Choice>();
-
-        /// <summary>
-        /// A blank multiple-choice question.
-        /// </summary>
-        public Question()
-        {
-        }
-        /// <summary>
-        /// A multiple-choice question from minimum to maximum.
-        /// </summary>
-        /// <param name="text">The text to display.</param>
-        /// <param name="minimumValue">Minimum value in the multiple-choice question.</param>
-        /// <param name="maximumValue">Maximum value in the multiple-choice question.</param>
-        /// <param name="defaultValue">Default value in the multiple-choice question.</param>
-        public Question(string title, string text, int minimumValue, int maximumValue, int defaultValue)
-        {
-            Id = Guid.NewGuid();
-            Title = Title;
-            Text = text;
-            Choices = new List<Choice>();
-            for (int i = minimumValue; i < maximumValue; i++)
-            {
-                Choice choice = new Choice(i);
-                if (i == defaultValue) choice.IsDefault = true;
-                Choices.Add(choice);
-            }
-        }
 
         /// <summary>
         /// Create a question from provided json.
@@ -126,6 +98,16 @@ namespace Questionnairor.Models
         public override int GetHashCode()
         {
             return (Id.GetHashCode() * 13 + Title.GetHashCode() * 2089 + Text.GetHashCode() * 2617 + Choices.GetHashCode() * 6163) ^ 13;
+        }
+
+        /// <summary>
+        /// Does the value exist in the list of choices.
+        /// </summary>
+        /// <param name="value">The value to test again.</param>
+        /// <returns>True if value exists.</returns>
+        public bool ChoiceValueExists(int value)
+        {
+            return Choices.Any(c => c.Value == value);
         }
     }
     /**

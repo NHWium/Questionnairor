@@ -17,7 +17,7 @@ namespace Questionnairor.Models
         /// Value of the choice. Used to identify the choice, so should be unique.
         /// </summary>
         [BindRequired]
-        [Required]
+        [Range(0,1000000)]
         public int Value { get; set; } = 0;
         /// <summary>
         /// Visual text of choice.
@@ -36,15 +36,6 @@ namespace Questionnairor.Models
         public List<Response> Responses { get; set; } = new List<Response>();
         
         /// <summary>
-        /// A possible choice in a multiple-choice question.
-        /// </summary>
-        /// <param name="value">Value of the choice. Used to identify the choice, so should be unique.</param>
-        public Choice(int value)
-        {
-            Value = value;
-        }
-
-        /// <summary>
         /// Create a choice from provided json.
         /// </summary>
         /// <param name="json">The json data</param>
@@ -60,7 +51,7 @@ namespace Questionnairor.Models
                 Console.Error.WriteLine("### JSON ERROR ###:");
                 Console.Error.WriteLine(e.Message);
                 Console.Error.WriteLine(e.StackTrace);
-                return new Choice(0)
+                return new Choice().Value(0)
                     .Text("Not Loaded")
                     .IsDefault(true);
             }

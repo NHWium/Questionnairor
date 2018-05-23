@@ -4,41 +4,56 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit</h2>
-<h4>Choice</h4>
+<h2>Choice</h2>
+<h4>Edit</h4>
 <hr />
-@using (Html.BeginForm("Edit", "Choice", FormMethod.Post))
+@using (Html.BeginForm("Update", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], oldValue = ViewData["ChoiceValue"] }, FormMethod.Post))
 {
+    @Html.ValidationSummary(false)
     <div class="Editor Left">
         @Html.LabelFor(m => m.Value)
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.Value)
+        <br />
+        @Html.ValidationMessageFor(m => m.Value)
     </div>
     <div class="Editor Left">
         @Html.LabelFor(m => m.Text)
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.Text)
+        <br />
+        @Html.ValidationMessageFor(m => m.Text)
     </div>
     <div class="Editor Left">
         @Html.LabelFor(m => m.IsDefault)
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.IsDefault)
+        <br />
+        @Html.ValidationMessageFor(m => m.IsDefault)
     </div>
-    <input type="submit" value="Edit Choice" formaction="@Url.Action("Edit", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], changedValue = @Model.Value, @Model.Text, @Model.IsDefault })" />
+    <br />
+    <div>
+        <input type="submit" value="Edit Choice" />
+    </div>
     <hr />
     <h4>Responses</h4>
     foreach (var response in Model.Responses)
     {
         @await Html.PartialAsync("ResponsePartialView", response)
     }
+    @if (Model.Responses.Count == 0)
+    {
+        @Html.HiddenFor(m => m.Responses)
+    }
     <br />
     <div>
-        <input type="submit" value="Add Response" formaction="@Url.Action("AddEmpty", "Response", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })" />
+        <input type="submit" value="Add Response" formaction="@Url.Action("Add", "Response", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })" />
     </div>
 }
+<hr />
 <div>
     @Html.ActionLink("Back to List", "Edit", "Question", new { id = ViewData["Id"], questionId = ViewData["QuestionId"] })
 </div>

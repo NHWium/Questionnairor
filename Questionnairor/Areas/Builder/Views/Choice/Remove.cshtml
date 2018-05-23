@@ -4,11 +4,12 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Delete</h2>
-<h4>Choice</h4>
+<h2>Choice</h2>
+<h4>Delete</h4>
 <hr />
-@using (Html.BeginForm("Delete", "Choice", FormMethod.Post))
+@using (Html.BeginForm("Delete", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], confirm = true }, FormMethod.Post))
 {
+    @Html.ValidationSummary(false)
     <div class="Editor Left">
         @Html.LabelFor(m => m.Value)
     </div>
@@ -32,9 +33,24 @@
     </p>
     <br />
     <div>
-        <input type="submit" value="Delete Choice" formaction="@Url.Action("Delete", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = @Model.Value, confirm = true })" />
+        <input type="submit" value="Delete Choice" />
+    </div>
+    <hr />
+    <h4>Responses</h4>
+    foreach (var response in Model.Responses)
+    {
+        @await Html.PartialAsync("ResponsePartialView", response)
+    }
+    @if (Model.Responses.Count == 0)
+    {
+        @Html.HiddenFor(m => m.Responses)
+    }
+    <br />
+    <div>
+        <input type="submit" value="Add Response" formaction="@Url.Action("Add", "Response", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })" />
     </div>
 }
+<hr />
 <div>
     @Html.ActionLink("Back to List", "Edit", "Question", new { id = ViewData["Id"], questionId = ViewData["QuestionId"] })
 </div>

@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuestionnaireData", "QuestionnaireData\QuestionnaireData.csproj", "{9C4BD2F5-55E9-40B4-A3F6-CE0111F0DCB3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuestionnairorUnitTests", "QuestionnairorTests\QuestionnairorUnitTests.csproj", "{DCDF65AC-8DE3-4BB0-A9B7-429329497F45}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Questionnairor", "Questionnairor\Questionnairor.csproj", "{AFC5BD8D-F97C-479A-A2CE-E3DB2DB3EFDE}"
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9C4BD2F5-55E9-40B4-A3F6-CE0111F0DCB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C4BD2F5-55E9-40B4-A3F6-CE0111F0DCB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C4BD2F5-55E9-40B4-A3F6-CE0111F0DCB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C4BD2F5-55E9-40B4-A3F6-CE0111F0DCB3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DCDF65AC-8DE3-4BB0-A9B7-429329497F45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DCDF65AC-8DE3-4BB0-A9B7-429329497F45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCDF65AC-8DE3-4BB0-A9B7-429329497F45}.Release|Any CPU.ActiveCfg = Release|Any CPU
