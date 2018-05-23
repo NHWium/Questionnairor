@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QuestionnaireData\QuestionnaireData.csproj" />
     <ProjectReference Include="..\Questionnairor\Questionnairor.csproj" />
   </ItemGroup>
 

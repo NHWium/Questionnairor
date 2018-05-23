@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
-namespace QuestionnaireData.Models
+namespace Questionnairor.Models
 {
     /// <summary>
     /// A questionnaire of multiple choice questions.

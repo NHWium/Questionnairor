@@ -1,4 +1,4 @@
-﻿@model QuestionnaireData.Models.Questionnaire
+﻿@model Questionnairor.Models.Questionnaire
 
 @{
     ViewData["Title"] = "Add";
@@ -9,18 +9,22 @@
 <hr />
 @using (Html.BeginForm("Add", "Questionnaire", FormMethod.Post))
 {
-    @Html.HiddenFor(m => m.Id)
-    <div class="Editor Left">
-        @Html.LabelFor(m => m.Title)
-    </div>
-    <div class="Editor Right">
-        @Html.EditorFor(m => m.Title)
-    </div>
-    <div class="Editor Left">
-        @Html.LabelFor(m => m.Introduction)
-    </div>
-    <div class="Editor Right">
-        @Html.TextAreaFor(m => m.Introduction)
+    <div asp-validation-summary="ModelOnly" class="text-danger">
+        @Html.HiddenFor(m => m.Id)
+        <div class="Editor Left">
+            @Html.LabelFor(m => m.Title)
+        </div>
+        <div class="Editor Right">
+            @Html.EditorFor(m => m.Title)
+            @Html.ValidationMessageFor(m => m.Title)
+        </div>
+        <div class="Editor Left">
+            @Html.LabelFor(m => m.Introduction)
+        </div>
+        <div class="Editor Right">
+            @Html.TextAreaFor(m => m.Introduction)
+            @Html.ValidationMessageFor(m => m.Introduction)
+        </div>
     </div>
     <br />
     <input type="submit" value="Add Questionnaire" formaction="@Url.Action("Add", "Questionnaire", new { @Model.Title, @Model.Introduction })" />

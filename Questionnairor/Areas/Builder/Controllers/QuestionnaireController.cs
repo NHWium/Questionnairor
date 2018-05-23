@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using QuestionnaireData.Models;
+using Questionnairor.Models;
 using Questionnairor.Services;
 
 namespace Questionnairor.Areas.Builder.Controllers
@@ -27,7 +27,7 @@ namespace Questionnairor.Areas.Builder.Controllers
         [HttpPost]
         public IActionResult Add(string title, string introduction, [FromServices]IQuestionnaireService service)
         {
-            if (string.IsNullOrEmpty(title) || !ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return RedirectToAction("Add", "Questionnaire");
             Questionnaire modelData;
             Guid id = Guid.NewGuid();

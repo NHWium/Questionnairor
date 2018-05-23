@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace QuestionnaireData.Models
+namespace Questionnairor.Models
 {
     /// <summary>
     /// Feedback to a questionnaire. Once triggered a text can be shown.

@@ -1,4 +1,4 @@
-﻿@model QuestionnaireData.Models.Questionnaire
+﻿@model Questionnairor.Models.Questionnaire
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,6 +10,9 @@
 @using (Html.BeginForm("Edit", "Questionnaire", FormMethod.Post))
 {
     @Html.HiddenFor(m => m.Id)
+    <div class="Editor Center">
+        @Html.ValidationMessageFor(m => m.Title)
+    </div>
     <div class="Editor Left">
         @Html.LabelFor(m => m.Title)
     </div>

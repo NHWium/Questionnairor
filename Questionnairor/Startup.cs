@@ -37,7 +37,7 @@ namespace Questionnairor
 
                 routes.MapRoute(
                     name: "Default",
-                    template: "{controller=Home}/{action=Index}/{id?}"
+                    template: "{area=Builder}/{controller=Home}/{action=Index}/{id?}"
                 );
             });
         }
