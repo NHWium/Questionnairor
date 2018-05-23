@@ -7,7 +7,7 @@
 <h2>Question</h2>
 <h4>Add</h4>
 <hr />
-@using (Html.BeginForm("Create", "Question", new { id = ViewData["Id"] }, FormMethod.Post))
+@using (Html.BeginForm("Create", "Question", new { questionnaireId = ViewData["Id"] }, FormMethod.Post))
 {
     @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
@@ -35,6 +35,6 @@
 }
 <hr />
 <div>
-    @Html.ActionLink("Back to List", "Edit", "Questionnaire", new { id = ViewData["Id"] })
+    @Html.ActionLink("Back to List", "Edit", "Questionnaire", new { questionnaireId = ViewData["Id"] })
 </div>
 

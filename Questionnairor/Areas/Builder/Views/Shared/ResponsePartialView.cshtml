@@ -3,6 +3,6 @@
 <div>
     <input type="text" readonly="readonly" value="@Model.Feedback" />
 
-    @Html.ActionLink("Edit", "Edit", "Response", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id })
-    @Html.ActionLink("Delete", "Delete", "Response", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id })
+    @Html.ActionLink("Edit", "Edit", "Response", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id })
+    @Html.ActionLink("Delete", "Remove", "Response", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id })
 </div>

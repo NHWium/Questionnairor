@@ -90,5 +90,24 @@ namespace Questionnairor.Services
             else
                 return null;
         }
+
+        public Response GetResponse(Guid responseId)
+        {
+            return ResponseData.Values.ToList<Response>()
+                .FirstOrDefault(response => response.Id.Equals(responseId));
+        }
+
+        public int RemoveAllResponse(Response response)
+        {
+            var i = 0;
+            i += QuestionnaireData.Values
+                .SelectMany(questionnaire => questionnaire.Questions)
+                .SelectMany(question => question.Choices)
+                .SelectMany(choice => choice.Responses).ToList<Response>()
+                .RemoveAll(r => r.Equals(response));
+            i += ResponseData.Values.ToList<Response>()
+                .RemoveAll(r => r.Equals(response));
+            return i;
+        }
     }
 }

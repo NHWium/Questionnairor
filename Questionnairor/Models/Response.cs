@@ -26,8 +26,7 @@ namespace Questionnairor.Models
         /// The text to display as the responce once this triggers.
         /// </summary>
         [BindRequired]
-        [Required]
-        [StringLength(1024, MinimumLength = 5)]
+        [Required, StringLength(1024, MinimumLength = 10)]
         public string Feedback { get; set; } = "";
 
         /// <summary>

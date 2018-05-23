@@ -17,5 +17,7 @@ namespace Questionnairor.Services
         bool UnusedId(Guid id);
         bool ValidResponse(Guid id);
         bool UnusedResponse(Guid id);
+        Response GetResponse(Guid responseId);
+        int RemoveAllResponse(Response response);
     }
 }

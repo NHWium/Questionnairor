@@ -7,7 +7,7 @@
 <h2>Questionnaire</h2>
 <h4>Remove</h4>
 <hr />
-@using (Html.BeginForm("Delete", "Questionnaire", new { id = Model.Id, confirm = true }, FormMethod.Post))
+@using (Html.BeginForm("Delete", "Questionnaire", new { questionnaireId = Model.Id, confirm = true }, FormMethod.Post))
 {
     @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
@@ -41,7 +41,7 @@
     }
     <br />
     <div>
-        <input type="submit" value="Add Question" formaction="@Url.Action("Add", "Question", new { Model.Id })" />
+        <input type="submit" value="Add Question" formaction="@Url.Action("Add", "Question", new { questionnaireId = Model.Id })" />
     </div>
 }
 <hr />

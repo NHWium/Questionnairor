@@ -4,10 +4,10 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Delete</h2>
-<h4>Response</h4>
+<h2>Response</h2>
+<h4>Delete</h4>
 <hr />
-@using (Html.BeginForm("Delete", "Response", FormMethod.Post))
+@using (Html.BeginForm("Delete", "Response", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id }, FormMethod.Post))
 {
     @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
@@ -15,7 +15,7 @@
         @Html.LabelFor(m => m.Feedback)
     </div>
     <div class="Editor Right">
-        @Html.EditorFor(m => m.Feedback, new { @readonly = "readonly" })
+        @Html.TextAreaFor(m => m.Feedback, new { @readonly = "readonly" })
     </div>
     <div class="Editor Left">
         @Html.LabelFor(m => m.MinimumChoices)
@@ -28,10 +28,11 @@
     </p>
     <br />
     <div>
-        <input type="submit" value="Delete Response" formaction="@Url.Action("Delete", "Response", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id })" />
+        <input type="submit" value="Delete Response" />
     </div>
 }
+<hr />
 <div>
-    @Html.ActionLink("Back to List", "Edit", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })
+    @Html.ActionLink("Back to List", "Edit", "Choice", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })
 </div>
 

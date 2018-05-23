@@ -35,7 +35,7 @@ namespace Questionnairor.Areas.Builder.Controllers
             {
                 return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Questionnaire", action = "Add", modelData.Id, data = modelData.ToJson(Formatting.None) });
             }
-            return RedirectToAction("Edit", "Questionnaire", new { modelData.Id });
+            return RedirectToAction("Edit", "Questionnaire", new { questionnaireId = modelData.Id });
         }
 
         [HttpPost]
@@ -50,18 +50,18 @@ namespace Questionnairor.Areas.Builder.Controllers
             {
                 return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Questionnaire", action = "Load", questionnaireId = modelData.Id, data = modelData.ToJson(Formatting.None) });
             }
-            return RedirectToAction("Edit", "Questionnaire", new { modelData.Id });
+            return RedirectToAction("Edit", "Questionnaire", new { questionnaireId = modelData.Id });
         }
 
         [HttpGet]
-        public IActionResult Edit(Guid id, [FromServices]IQuestionnaireService service)
+        public IActionResult Edit(Guid questionnaireId, [FromServices]IQuestionnaireService service)
         {
-            if (!service.ValidId(id))
+            if (!service.ValidId(questionnaireId))
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Questionnaire", action = "Edit", id, data = "" });
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Questionnaire", action = "Edit", questionnaireId, data = "" });
             }
-            Questionnaire modelData = service.QuestionnaireData[id];
-            ViewData["Id"] = id;
+            Questionnaire modelData = service.QuestionnaireData[questionnaireId];
+            ViewData["Id"] = questionnaireId;
             return View(modelData);
         }
 
@@ -78,28 +78,28 @@ namespace Questionnairor.Areas.Builder.Controllers
                 return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Questionnaire", action = "Update", modelData.Id, data = modelData.ToJson(Formatting.None) });
             }
             service.QuestionnaireData[modelData.Id].Title(modelData.Title).Introduction(modelData.Introduction);
-            return RedirectToAction("Edit", "Questionnaire", new { id = modelData.Id });
+            return RedirectToAction("Edit", "Questionnaire", new { questionnaireId = modelData.Id });
         }
 
         [HttpGet]
-        public IActionResult Remove(Guid id, [FromServices]IQuestionnaireService service)
+        public IActionResult Remove(Guid questionnaireId, [FromServices]IQuestionnaireService service)
         {
-            if (!service.ValidId(id))
+            if (!service.ValidId(questionnaireId))
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Questionnaire", action = "Remove", id, data = "" });
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Questionnaire", action = "Remove", questionnaireId, data = "" });
             }
-            ViewData["Id"] = id;
-            return View("Remove", service.QuestionnaireData[id]);
+            ViewData["Id"] = questionnaireId;
+            return View("Remove", service.QuestionnaireData[questionnaireId]);
         }
 
         [HttpPost, HttpDelete]
-        public IActionResult Delete(Guid id, bool confirm, [FromServices]IQuestionnaireService service)
+        public IActionResult Delete(Guid questionnaireId, bool confirm, [FromServices]IQuestionnaireService service)
         {
-            if (!service.ValidId(id))
+            if (!service.ValidId(questionnaireId))
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Questionnaire", action = "Delete", id, data = "" });
+                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Questionnaire", action = "Delete", questionnaireId, data = "" });
             }
-            service.QuestionnaireData.Remove(id);
+            service.QuestionnaireData.Remove(questionnaireId);
             return RedirectToAction("Index", "Home");
         }
     }

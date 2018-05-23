@@ -43,7 +43,7 @@
     }
     <br />
     <div>
-        <input type="submit" value="Add Question" formaction="@Url.Action("Add", "Question", new { Model.Id })" />
+        <input type="submit" value="Add Question" formaction="@Url.Action("Add", "Question", new { questionnaireId = Model.Id })" />
     </div>
 }
 <hr />

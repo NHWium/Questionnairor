@@ -4,10 +4,10 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit</h2>
-<h4>Response</h4>
+<h2>Response</h2>
+<h4>Edit</h4>
 <hr />
-@using (Html.BeginForm("Edit", "Response", FormMethod.Post))
+@using (Html.BeginForm("Update", "Response", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] }, FormMethod.Post))
 {
     @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
@@ -15,18 +15,25 @@
         @Html.LabelFor(m => m.Feedback)
     </div>
     <div class="Editor Right">
-        @Html.EditorFor(m => m.Feedback)
+        @Html.TextAreaFor(m => m.Feedback)
+        <br />
+        @Html.ValidationMessageFor(m => m.Feedback)
     </div>
     <div class="Editor Left">
         @Html.LabelFor(m => m.MinimumChoices)
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.MinimumChoices)
+        <br />
+        @Html.ValidationMessageFor(m => m.MinimumChoices)
     </div>
     <br />
-    <input type="submit" value="Edit Response" formaction="@Url.Action("Edit", "Response", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id, Model.MinimumChoices, Model.Feedback })" />
+    <div>
+        <input type="submit" value="Edit Response" />
+    </div>
 }
+<hr />
 <div>
-    @Html.ActionLink("Back to List", "Edit", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })
+    @Html.ActionLink("Back to List", "Edit", "Choice", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })
 </div>
 

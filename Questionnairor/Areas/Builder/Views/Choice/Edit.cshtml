@@ -7,7 +7,7 @@
 <h2>Choice</h2>
 <h4>Edit</h4>
 <hr />
-@using (Html.BeginForm("Update", "Choice", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], oldValue = ViewData["ChoiceValue"] }, FormMethod.Post))
+@using (Html.BeginForm("Update", "Choice", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], oldValue = ViewData["ChoiceValue"] }, FormMethod.Post))
 {
     @Html.ValidationSummary(false)
     <div class="Editor Left">
@@ -15,7 +15,6 @@
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.Value)
-        <br />
         @Html.ValidationMessageFor(m => m.Value)
     </div>
     <div class="Editor Left">
@@ -23,16 +22,11 @@
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.Text)
-        <br />
         @Html.ValidationMessageFor(m => m.Text)
     </div>
     <div class="Editor Left">
         @Html.LabelFor(m => m.IsDefault)
-    </div>
-    <div class="Editor Right">
         @Html.EditorFor(m => m.IsDefault)
-        <br />
-        @Html.ValidationMessageFor(m => m.IsDefault)
     </div>
     <br />
     <div>
@@ -50,11 +44,12 @@
     }
     <br />
     <div>
-        <input type="submit" value="Add Response" formaction="@Url.Action("Add", "Response", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })" />
+        <input type="submit" value="Add Response" formaction="@Url.Action("Add", "Response", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })" />
+        @Html.DropDownListFor(m => m.Responses, new SelectList(Model.Responses, "Id", "Feedback"))
     </div>
 }
 <hr />
 <div>
-    @Html.ActionLink("Back to List", "Edit", "Question", new { id = ViewData["Id"], questionId = ViewData["QuestionId"] })
+    @Html.ActionLink("Back to List", "Edit", "Question", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"] })
 </div>
 

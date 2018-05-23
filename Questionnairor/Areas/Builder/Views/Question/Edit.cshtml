@@ -7,7 +7,7 @@
 <h2>Question</h2>
 <h4>Edit</h4>
 <hr />
-@using (Html.BeginForm("Update", "Question", new { id = ViewData["Id"] }, FormMethod.Post))
+@using (Html.BeginForm("Update", "Question", new { questionnaireId = ViewData["Id"] }, FormMethod.Post))
 {
     @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
@@ -43,11 +43,11 @@
     }
     <br />
     <div>
-        <input type="submit" value="Add Choice" formaction="@Url.Action("Add", "Choice", new { id = ViewData["Id"], questionId = Model.Id })" />
+        <input type="submit" value="Add Choice" formaction="@Url.Action("Add", "Choice", new { questionnaireId = ViewData["Id"], questionId = Model.Id })" />
     </div>
 }
 <hr />
 <div>
-    @Html.ActionLink("Back to List", "Edit", "Questionnaire", new { id = ViewData["Id"] })
+    @Html.ActionLink("Back to List", "Edit", "Questionnaire", new { questionnaireId = ViewData["Id"] })
 </div>
 
