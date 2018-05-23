@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace QuestionnairorBuilder.Services
+namespace Questionnairor.Services
 {
     public interface IQuestionnaireService
     {

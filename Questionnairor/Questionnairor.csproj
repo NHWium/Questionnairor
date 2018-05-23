@@ -5,11 +5,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <Folder Include="Areas\Builder\Data\" />
+    <Folder Include="Areas\Builder\Models\" />
+    <Folder Include="Areas\Viewer\Data\" />
+    <Folder Include="Areas\Viewer\Models\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Views\" />
+    <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\scripts\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QuestionnaireData\QuestionnaireData.csproj" />
   </ItemGroup>
 
 </Project>

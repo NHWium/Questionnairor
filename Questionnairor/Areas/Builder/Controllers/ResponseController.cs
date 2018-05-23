@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using QuestionnaireData.Models;
-using QuestionnairorBuilder.Services;
+using Questionnairor.Services;
 
-namespace QuestionnairorBuilder.Controllers
+namespace Questionnairor.Areas.Builder.Controllers
 {
+    [Area("Builder")]
     public class ResponseController : Controller
     {
         [HttpGet]

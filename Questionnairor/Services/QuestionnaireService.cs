@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using QuestionnaireData.Models;
 
-namespace QuestionnairorBuilder.Services
+namespace Questionnairor.Services
 {
     public class QuestionnaireService : IQuestionnaireService
     {

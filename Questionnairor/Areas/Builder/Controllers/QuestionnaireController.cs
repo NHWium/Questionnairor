@@ -4,19 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using QuestionnaireData.Models;
-using QuestionnairorBuilder.Extensions;
-using QuestionnairorBuilder.Services;
+using Questionnairor.Services;
 
-namespace QuestionnairorBuilder.Controllers
+namespace Questionnairor.Areas.Builder.Controllers
 {
+    [Area("Builder")]
     public class QuestionnaireController : Controller
     {
-        [HttpGet]
-        public IActionResult Index([FromServices]IQuestionnaireService service)
-        {
-            return View(service.QuestionnaireData);
-        }
-
         [HttpGet]
         public IActionResult Add([FromServices]IQuestionnaireService service)
         {
@@ -67,7 +61,7 @@ namespace QuestionnairorBuilder.Controllers
             {
                 return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Questionnaire", action = "Load", questionnaireId = modelData.Id, data = modelData.ToJson(Newtonsoft.Json.Formatting.None) });
             }
-            return RedirectToAction("Index", "Questionnaire");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -94,7 +88,7 @@ namespace QuestionnairorBuilder.Controllers
                 return RedirectToAction("Edit", "Questionnaire", new { id });
             }
             service.QuestionnaireData[id].Title(title).Introduction(introduction);
-            return RedirectToAction("Index", "Questionnaire");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -116,7 +110,7 @@ namespace QuestionnairorBuilder.Controllers
                 return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Questionnaire", action = "Delete", id, data = "" });
             }
             service.QuestionnaireData.Remove(id);
-            return RedirectToAction("Index", "Questionnaire");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

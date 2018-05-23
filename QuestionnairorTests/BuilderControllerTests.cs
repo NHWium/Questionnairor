@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using QuestionnairorBuilder.Controllers;
-using QuestionnairorBuilder.Services;
+using Questionnairor.Areas.Builder.Controllers;
+using Questionnairor.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,20 +9,20 @@ using Xunit.Abstractions;
 
 namespace QuestionnairorUnitTests
 {
-    public class ControllerTests
+    public class BuilderControllerTests
     {
         private readonly ITestOutputHelper output;
 
-        public ControllerTests(ITestOutputHelper output)
+        public BuilderControllerTests(ITestOutputHelper output)
         {
             this.output = output;
         }
 
         [Fact]
-        public async Task QuestionnaireIndexReturnsViewWithModel()
+        public async Task HomeIndexReturnsViewWithModel()
         {
             IQuestionnaireService service = new QuestionnaireService();
-            QuestionnaireController controller = new QuestionnaireController();
+            HomeController controller = new HomeController();
             var result = controller.Index(service);
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal(service.QuestionnaireData, viewResult.Model);

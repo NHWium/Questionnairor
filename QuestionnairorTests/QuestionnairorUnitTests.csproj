@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\QuestionnaireData\QuestionnaireData.csproj" />
-    <ProjectReference Include="..\QuestionnairorBuilder\QuestionnairorBuilder.csproj" />
+    <ProjectReference Include="..\Questionnairor\Questionnairor.csproj" />
   </ItemGroup>
 
 </Project>
