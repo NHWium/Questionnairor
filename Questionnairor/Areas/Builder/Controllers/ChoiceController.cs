@@ -13,17 +13,19 @@ namespace Questionnairor.Areas.Builder.Controllers
     [Area("Builder")]
     public class ChoiceController : Controller
     {
-        [HttpGet, HttpPost]
-        public IActionResult Add(Guid questionnaireId, Guid questionId, [FromServices]IQuestionnaireService service)
+        [HttpGet]
+        public IActionResult Add(Guid questionId, [FromServices]IQuestionnaireService service)
         {
-            if (!service.ValidId(questionnaireId))
+            if (!service.IsValid())
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Add", questionnaireId, data = "" });
+                if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal questionnaire", controller = "Choice", action = "Add", id = questionId, data = service.Data.ToJson(Formatting.None) });
             }
-            Question question = service.GetQuestion(questionnaireId, questionId);
+            Question question = service.Data.GetQuestion(questionId);
             if (question == null)
             {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Add", questionnaireId, data = questionId });
+                if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal question", controller = "Choice", action = "Add", id = questionId, data = service.Data.ToJson(Formatting.None) });
             }
             int i = question.Choices.Count;
             while (question.ChoiceValueExists(i))
@@ -31,141 +33,153 @@ namespace Questionnairor.Areas.Builder.Controllers
                 i++;
             }
             Choice choice = new Choice().Value(i);
-            ViewData["Id"] = questionnaireId;
             ViewData["QuestionId"] = questionId;
             return View(choice);
         }
 
         [HttpPost]
-        public IActionResult Create(Guid questionnaireId, Guid questionId, Choice modelData, [FromServices] IQuestionnaireService service)
+        public IActionResult Create(Guid questionId, Choice modelData, [FromServices] IQuestionnaireService service)
         {
             if (!ModelState.IsValid)
             {
-                ViewData["Id"] = questionnaireId;
                 ViewData["QuestionId"] = questionId;
                 return View("Add", modelData);
             }
-            if (!service.ValidId(questionnaireId))
+            if (!service.IsValid())
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Create", questionnaireId, data = modelData.ToJson(Formatting.None) });
+                if (modelData == null) modelData = new Choice();
+                return BadRequest(new { error = "Illegal questionnaire", controller = "Choice", action = "Create", id = questionId, data = modelData.ToJson(Formatting.None) });
             }
-            Question question = service.GetQuestion(questionnaireId, questionId);
+            Question question = service.Data.GetQuestion(questionId);
             if (question == null)
             {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Create", questionnaireId, data = modelData.ToJson(Formatting.None) });
+                if (modelData == null) modelData = new Choice();
+                return BadRequest(new { error = "Illegal question", controller = "Choice", action = "Create", id = questionId, data = modelData.ToJson(Formatting.None) });
             }
             if (question.ChoiceValueExists(modelData.Value))
             {
                 ModelState.AddModelError(nameof(modelData.Value), "Each choice in a question must have an unique value.");
-                ViewData["Id"] = questionnaireId;
                 ViewData["QuestionId"] = questionId;
                 return View("Add", modelData);
             }
             Choice choice = new Choice().Value(modelData.Value).Text(modelData.Text).IsDefault(modelData.IsDefault);
             question.Choices.Add(choice);
-            return RedirectToAction("Edit", "Choice", new { questionnaireId, questionId = question.Id });
+            service.Set(HttpContext);
+            return RedirectToAction("Edit", "Choice", new { questionId, value = modelData.Value });
         }
 
         [HttpGet]
-        public IActionResult Edit(Guid questionnaireId, Guid questionId, int value, [FromServices]IQuestionnaireService service)
+        public IActionResult Edit(Guid questionId, int value, [FromServices]IQuestionnaireService service)
         {
-            if (!service.ValidId(questionnaireId))
+            if (!service.IsValid())
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Edit", questionnaireId, data = questionId });
+                if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal questionnaire", controller = "Choice", action = "Edit", id = value, data = service.Data.ToJson(Formatting.None) });
             }
-            Question question = service.GetQuestion(questionnaireId, questionId);
+            Question question = service.Data.GetQuestion(questionId);
             if (question == null)
             {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Edit", questionnaireId, data = questionId });
+                if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Edit", id = value, data = service.Data.ToJson(Formatting.None) });
             }
-            Choice choice = service.GetChoice(questionnaireId, questionId, value);
+            Choice choice = question.GetChoice(value);
             if (choice == null)
             {
-                return BadRequest(new { error = "Illegal choice", controller = "Choice", action = "Edit", questionnaireId, data = value });
+                if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal choice", controller = "Choice", action = "Edit", id = value, data = service.Data.ToJson(Formatting.None) });
             }
-            ViewData["Id"] = questionnaireId;
             ViewData["QuestionId"] = questionId;
-            ViewData["ChoiceValue"] = value;
             return View(choice);
         }
 
         [HttpPost, HttpPatch]
-        public IActionResult Update(Guid questionnaireId, Guid questionId, int oldValue, Choice modelData, [FromServices]IQuestionnaireService service)
+        public IActionResult Update(Guid questionId, int oldValue, Choice modelData, [FromServices]IQuestionnaireService service)
         {
-            if (!ModelState.IsValid)
+            if (!service.IsValid())
             {
-                ViewData["Id"] = questionnaireId;
-                ViewData["QuestionId"] = questionId;
-                ViewData["ChoiceValue"] = oldValue;
-                return View("Edit", modelData);
+                if (modelData == null) modelData = new Choice();
+                return BadRequest(new { error = "Illegal questionnaire", controller = "Choice", action = "Update", id = oldValue, data = modelData.ToJson(Formatting.None) });
             }
-            if (!service.ValidId(questionnaireId))
-            {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Update", questionnaireId, data = modelData.ToJson(Formatting.None) });
-            }
-            Question question = service.GetQuestion(questionnaireId, questionId);
+            Question question = service.Data.GetQuestion(questionId);
             if (question == null)
             {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Update", questionnaireId, data = modelData.ToJson(Formatting.None) });
+                if (modelData == null) modelData = new Choice();
+                return BadRequest(new { error = "Illegal question", controller = "Choice", action = "Update", id = oldValue, data = modelData.ToJson(Formatting.None) });
             }
             if (oldValue != modelData.Value && question.ChoiceValueExists(modelData.Value))
             {
                 ModelState.AddModelError(nameof(modelData.Value), "Each choice in a question must have an unique value.");
-                ViewData["Id"] = questionnaireId;
                 ViewData["QuestionId"] = questionId;
                 return View("Add", modelData);
             }
-            Choice choice = service.GetChoice(questionnaireId, questionId, oldValue);
+            if (!ModelState.IsValid)
+            {
+                ViewData["QuestionId"] = questionId;
+                modelData.Value = oldValue;
+                return View("Edit", modelData);
+            }
+            Choice choice = question.GetChoice(oldValue);
             if (choice == null)
             {
-                return BadRequest(new { error = "Illegal choice", controller = "Choice", action = "Update", questionnaireId, data = modelData.ToJson(Formatting.None) });
+                return BadRequest(new { error = "Illegal choice", controller = "Choice", action = "Update", id = oldValue, data = service.Data.ToJson(Formatting.None) });
             }
             choice.Value(modelData.Value).Text(modelData.Text).IsDefault(modelData.IsDefault);
-            return RedirectToAction("Edit", "Choice", new { questionnaireId, questionId, value = modelData.Value });
+            service.Set(HttpContext);
+            return RedirectToAction("Edit", "Choice", new { questionId, value = modelData.Value });
         }
 
         [HttpGet]
-        public IActionResult Remove(Guid questionnaireId, Guid questionId, int value, [FromServices]IQuestionnaireService service)
+        public IActionResult Remove(Guid questionId, int value, [FromServices]IQuestionnaireService service)
         {
-            if (!service.ValidId(questionnaireId))
+            if (!service.IsValid())
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Remove", questionnaireId, data = "" });
+                if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal questionnaire", controller = "Choice", action = "Remove", id = value, data = service.Data.ToJson(Formatting.None) });
             }
-            Question question = service.GetQuestion(questionnaireId, questionId);
+            Question question = service.Data.GetQuestion(questionId);
             if (question == null)
             {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Remove", questionnaireId, data = questionId });
+                if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal question", controller = "Choice", action = "Remove", id = value, data = service.Data.ToJson(Formatting.None) });
             }
-            Choice choice = service.GetChoice(questionnaireId, questionId, value);
+            Choice choice = question.GetChoice(value);
             if (choice == null)
             {
-                return BadRequest(new { error = "Illegal choice", controller = "Choice", action = "Remove", questionnaireId, data = value });
+                if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal choice", controller = "Choice", action = "Remove", id = value, data = service.Data.ToJson(Formatting.None) });
             }
-            ViewData["Id"] = questionnaireId;
             ViewData["QuestionId"] = questionId;
-            ViewData["ChoiceValue"] = value;
             return View(choice);
         }
 
         [HttpPost, HttpDelete]
-        public IActionResult Delete(Guid questionnaireId, Guid questionId, int value, bool confirm, [FromServices]IQuestionnaireService service)
+        public IActionResult Delete(Guid questionId, Choice modelData, [FromServices]IQuestionnaireService service)
         {
-            if (!service.ValidId(questionnaireId))
+            if (!ModelState.IsValid)
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Choice", action = "Delete", questionnaireId, data = "" });
+                ViewData["QuestionId"] = questionId;
+                return View("Remove", modelData);
             }
-            Question question = service.GetQuestion(questionnaireId, questionId);
+            if (!service.IsValid())
+            {
+                if (modelData == null) modelData = new Choice();
+                return BadRequest(new { error = "Illegal questionnaire", controller = "Choice", action = "Delete", id = modelData.Value, data = modelData.ToJson(Formatting.None) });
+            }
+            Question question = service.Data.GetQuestion(questionId);
             if (question == null)
             {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Choice", action = "Delete", questionnaireId, data = questionId });
+                if (modelData == null) modelData = new Choice();
+                return BadRequest(new { error = "Illegal question", controller = "Choice", action = "Delete", id = modelData.Value, data = modelData.ToJson(Formatting.None) });
             }
-            Choice choice = service.GetChoice(questionnaireId, questionId, value);
+            Choice choice = question.GetChoice(modelData.Value);
             if (choice == null)
             {
-                return BadRequest(new { error = "Illegal choice", controller = "Choice", action = "Delete", questionnaireId, data = value });
+                if (modelData == null) modelData = new Choice();
+                return BadRequest(new { error = "Illegal choice", controller = "Choice", action = "Delete", id = modelData.Value, data = modelData.ToJson(Formatting.None) });
             }
-            question.Choices.Remove(choice);
-            return RedirectToAction("Edit", "Question", new { questionnaireId, questionId });
+            question.Choices.Remove(modelData);
+            service.Set(HttpContext);
+            return RedirectToAction("Edit", "Question", new { questionId });
         }
 
     }

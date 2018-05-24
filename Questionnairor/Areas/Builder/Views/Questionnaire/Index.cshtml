@@ -1,4 +1,4 @@
-﻿@model Dictionary<Guid, Questionnairor.Models.Questionnaire>
+﻿@model Questionnairor.Models.Questionnaire
 
 @{
     ViewData["Title"] = "Questionnaire";
@@ -40,13 +40,18 @@
         document.getElementById('jsonData').addEventListener('change', textEdit, false);
     </script>
     <hr />
-    foreach (var questionnaire in Model.Values)
+    @if (Model != null && Model.Id != Guid.Empty)
     {
-        @await Html.PartialAsync("QuestionnairePartialView", questionnaire)
+        @await Html.PartialAsync("QuestionnairePartialView", Model)
     }
     <br />
     <div>
-        <input type="submit" value="Add Questionnaire" formaction="@Url.Action("Add", "Questionnaire")" />
+        <a href="@Url.Action("Add", "Questionnaire")"><input type="button" value="Create New Questionnaire" /></a>
+        @if (Model != null && Model.Id != Guid.Empty)
+    {
+        <a href="@Url.Action("Edit", "Questionnaire")"><input type="button" value="Edit Questionnaire" /></a>
+        <a href="@Url.Action("Remove", "Questionnaire")"><input type="button" value="Delete Questionnaire" /></a>
+}
     </div>
 }
 

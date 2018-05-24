@@ -109,6 +109,25 @@ namespace Questionnairor.Models
         {
             return Choices.Any(c => c.Value == value);
         }
+
+        /// <summary>
+        /// Get a specific choice based on value.
+        /// </summary>
+        /// <param name="questionId">The id of the choice to get.</param>
+        /// <returns>The found choice or null.</returns>
+        public Choice GetChoice(int value)
+        {
+            try
+            {
+                //Use First instead of FirstOrDefault in a try,catch - we do not want default value but null if not found.
+                return Choices.First<Choice>(c => c.Value == value);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
     }
     /**
      * A extension class, allowing linq-like data building.

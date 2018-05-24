@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Questionnairor.Areas.Builder.Controllers;
 using Questionnairor.Services;
 using System;
@@ -19,13 +20,14 @@ namespace QuestionnairorUnitTests
         }
 
         [Fact]
-        public async Task HomeIndexReturnsViewWithModel()
+        public async Task QuestionnaireIndexReturnsViewWithModel()
         {
+            HttpContext httpContext = new DefaultHttpContext();
             IQuestionnaireService service = new QuestionnaireService();
-            HomeController controller = new HomeController();
+            QuestionnaireController controller = new QuestionnaireController();
             var result = controller.Index(service);
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal(service.QuestionnaireData, viewResult.Model);
+            Assert.Equal(service.Data, viewResult.Model);
             Assert.IsNotType<RedirectToActionResult>(result);
             //            Assert.Equal("Questionnaire", redirectToActionResult.ControllerName);
             //            Assert.Equal("Index", redirectToActionResult.ActionName);

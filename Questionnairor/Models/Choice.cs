@@ -98,6 +98,23 @@ namespace Questionnairor.Models
                 return (Text.GetHashCode() ^ Responses.GetHashCode()) ^ (Value + 1) + 6791;
         }
 
+        /// <summary>
+        /// Get a specific response based on id.
+        /// </summary>
+        /// <param name="questionId">The id of the response to get.</param>
+        /// <returns>The found response or null.</returns>
+        public Response GetResponse(Guid responseId)
+        {
+            try
+            {
+                //Use First instead of FirstOrDefault in a try,catch - we do not want default value but null if not found.
+                return Responses.First<Response>(r => r.Id == responseId);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
     /**
      * A extension class, allowing linq-like data building.

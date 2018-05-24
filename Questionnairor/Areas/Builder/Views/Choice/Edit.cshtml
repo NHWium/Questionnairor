@@ -2,12 +2,13 @@
 
 @{
     ViewData["Title"] = "Edit";
+    ViewData["ChoiceValue"] = Model.Value;
 }
 
 <h2>Choice</h2>
 <h4>Edit</h4>
 <hr />
-@using (Html.BeginForm("Update", "Choice", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], oldValue = ViewData["ChoiceValue"] }, FormMethod.Post))
+@using (Html.BeginForm("Update", "Choice", new { questionId = ViewData["QuestionId"], oldValue = Model.Value }, FormMethod.Post))
 {
     @Html.ValidationSummary(false)
     <div class="Editor Left">
@@ -31,6 +32,8 @@
     <br />
     <div>
         <input type="submit" value="Edit Choice" />
+        <a href="@Url.Action("Remove", "Choice", new { questionId = ViewData["QuestionId"], value = Model.Value })"><input type="button" value="Delete Choice" /></a>
+        <a href="@Url.Action("Add", "Choice", new { questionId = ViewData["QuestionId"] })"><input type="button" value="Add New Choice" /></a>
     </div>
     <hr />
     <h4>Responses</h4>
@@ -38,18 +41,16 @@
     {
         @await Html.PartialAsync("ResponsePartialView", response)
     }
-    @if (Model.Responses.Count == 0)
-    {
-        @Html.HiddenFor(m => m.Responses)
-    }
+    @Html.HiddenFor(m => m.Responses)
     <br />
     <div>
-        <input type="submit" value="Add Response" formaction="@Url.Action("Add", "Response", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })" />
-        @Html.DropDownListFor(m => m.Responses, new SelectList(Model.Responses, "Id", "Feedback"))
+        <a href="@Url.Action("Add", "Response", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })"><input type="button" value="Add New Response" /></a>
+        @await Component.InvokeAsync("ResponseList", new { questionId = ViewData["QuestionId"] })
     </div>
 }
 <hr />
 <div>
-    @Html.ActionLink("Back to List", "Edit", "Question", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"] })
+    @Html.ActionLink("Back to Questionnaire", "Edit", "Questionnaire")
+    @Html.ActionLink("Back to Question", "Edit", "Question", new { questionId = ViewData["QuestionId"] })
 </div>
 

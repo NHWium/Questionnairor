@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace QuestionnairorTests
+namespace QuestionnairorUnitTests
 {
     public class ModelTests
     {
@@ -157,6 +157,16 @@ namespace QuestionnairorTests
         }
 
         [Theory]
+        [InlineData(false, "28301f4a-1b91-4c81-a4e8-56f370b3d30a", "{\"Value\":0,\"Text\":\"Test\",\"IsDefault\":false,\"Responses\":[]}")]
+        [InlineData(true, "28301f4a-1b91-4c81-a4e8-56f370b3d30a", "{\"Value\":0,\"Text\":\"Test\",\"IsDefault\":false,\"Responses\":[{\"Id\":\"28301f4a-1b91-4c81-a4e8-56f370b3d30a\",\"MinimumChoices\":2,\"Feedback\":\"Test\"}]}")]
+        [InlineData(true, "28301f4a-1b91-4c81-a4e8-56f370b3d30a", "{\"Value\":5,\"Text\":\"Test\",\"IsDefault\":false,\"Responses\":[{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":1,\"Feedback\":\"Test1\"},{\"Id\":\"28301f4a-1b91-4c81-a4e8-56f370b3d30a\",\"MinimumChoices\":2,\"Feedback\":\"Test2\"},{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":3,\"Feedback\":\"Test3\"}]}")]
+        public void ChoiceGetResponse(bool expectation, string responseId, string modelData)
+        {
+            Choice choice = Choice.FromJson(modelData);
+            Assert.Equal(expectation, choice.GetResponse(new Guid(responseId)) != null);
+        }
+
+        [Theory]
         [InlineData("{}", "", "")]
         [InlineData("Illegal data", "Not Loaded", "Not Loaded")]
         [InlineData("{\"Text\":\"Test\"}", "", "Test")]
@@ -242,6 +252,16 @@ namespace QuestionnairorTests
             }
             json.Choices(l);
             Assert.Equal(expected, json.ToJson(Newtonsoft.Json.Formatting.None));
+        }
+
+        [Theory]
+        [InlineData(false, 7, "{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"TitleTest\",\"Text\":\"Test\",\"Choices\":[]}")]
+        [InlineData(true, 7, "{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"\",\"Text\":\"Test\",\"Choices\":[{\"Value\":7,\"Text\":\"ChoiceText1\",\"IsDefault\":true,\"Responses\":[]}]}")]
+        [InlineData(true, 5, "{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"TitleTest\",\"Text\":\"Test\",\"Choices\":[{\"Value\":7,\"Text\":\"ChoiceText1\",\"IsDefault\":true,\"Responses\":[]},{\"Value\":5,\"Text\":\"ChoiceText2\",\"IsDefault\":false,\"Responses\":[]},{\"Value\":3,\"Text\":\"\",\"IsDefault\":false,\"Responses\":[]}]}")]
+        public void QuestionGetChoice(bool expectation, int value, string modelData)
+        {
+            Question question = Question.FromJson(modelData);
+            Assert.Equal(expectation, question.GetChoice(value) != null);
         }
 
         [Theory]
@@ -396,6 +416,18 @@ namespace QuestionnairorTests
             json.Questions(l);
             Assert.Equal(expected, json.ToJson(Newtonsoft.Json.Formatting.None));
         }
+
+        [Theory]
+        [InlineData(false, "28301f4a-1b91-4c81-a4e8-56f370b3d30a", "{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"Test\",\"Introduction\":\"Test\",\"Questions\":[]}")]
+        [InlineData(true, "28301f4a-1b91-4c81-a4e8-56f370b3d30a", "{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"\",\"Introduction\":\"\",\"Questions\":[{\"Id\":\"28301f4a-1b91-4c81-a4e8-56f370b3d30a\",\"Title\":\"\",\"Text\":\"Test1\",\"Choices\":[]},{\"Id\":\"da14f817-9080-4e85-8715-14c6e734f02b\",\"Title\":\"\",\"Text\":\"Test2\",\"Choices\":[]}]}")]
+        [InlineData(true, "edc7ba05-14a1-4397-ae73-77ee2db3fd76", "{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"Title\":\"Test3\",\"Introduction\":\"\",\"Questions\":[{\"Id\":\"28301f4a-1b91-4c81-a4e8-56f370b3d30a\",\"Title\":\"\",\"Text\":\"Test1\",\"Choices\":[]},{\"Id\":\"da14f817-9080-4e85-8715-14c6e734f02b\",\"Title\":\"\",\"Text\":\"Test2\",\"Choices\":[]},{\"Id\":\"edc7ba05-14a1-4397-ae73-77ee2db3fd76\",\"Title\":\"Test3\",\"Text\":\"\",\"Choices\":[]}]}")]
+        public void QuestionnaireGetQuestion(bool expectation, string questionId, string modelData)
+        {
+            Questionnaire questionnaire = Questionnaire.FromJson(modelData);
+            Assert.Equal(expectation, questionnaire.GetQuestion(new Guid(questionId)) != null);
+        }
+
+
 
         [Fact]
         public void AddUniqueCannotAddSameElementTwice()

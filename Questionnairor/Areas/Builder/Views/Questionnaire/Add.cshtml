@@ -31,10 +31,11 @@
     <br />
     <div>
         <input type="submit" value="Add Questionnaire" />
+        <a href="@Url.Action("Index", "Questionnaire")"><input type="button" value="Cancel Add" /></a>
     </div>
 }
 <hr />
 <div>
-    @Html.ActionLink("Back to List", "Index", "Home")
+    @Html.ActionLink("Back", "Index", "Questionnaire")
 </div>
 

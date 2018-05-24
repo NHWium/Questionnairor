@@ -30,10 +30,14 @@
     <br />
     <div>
         <input type="submit" value="Edit Response" />
+        <a href="@Url.Action("Remove", "Response", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id })"><input type="button" value="Delete Response" /></a>
+        <a href="@Url.Action("Add", "Response", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })"><input type="button" value="Add New Response" /></a>
     </div>
 }
 <hr />
 <div>
-    @Html.ActionLink("Back to List", "Edit", "Choice", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })
+    @Html.ActionLink("Back to Questionnaire", "Edit", "Questionnaire")
+    @Html.ActionLink("Back to Question", "Edit", "Question", new { questionId = ViewData["QuestionId"] })
+    @Html.ActionLink("Back to Choice", "Edit", "Choice", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })
 </div>
 

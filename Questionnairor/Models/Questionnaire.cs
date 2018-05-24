@@ -98,6 +98,34 @@ namespace Questionnairor.Models
         {
             return (Id.GetHashCode() ^ 3 + Title.GetHashCode() ^ 5 + Introduction.GetHashCode() ^ 7 + Questions.GetHashCode() + 6277) * 2287;
         }
+
+        /// <summary>
+        /// Get a specific question based on id.
+        /// </summary>
+        /// <param name="questionId">The id of the question to get.</param>
+        /// <returns>The found question or null.</returns>
+        public Question GetQuestion(Guid questionId)
+        {
+            try
+            {
+                //Use First instead of FirstOrDefault in a try,catch - we do not want default value but null if not found.
+                return Questions.First<Question>(q => q.Id == questionId);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public List<Response> GetAvailableResponses(Question currentQuestion)
+        {
+            return Questions.SelectMany(q => 
+                    q.Choices.SelectMany(c => 
+                    c.Responses))
+//                .Except(currentQuestion.Choices.SelectMany(c => 
+//                    c.Responses))
+                .ToList<Response>();
+        }
     }
 
     /**

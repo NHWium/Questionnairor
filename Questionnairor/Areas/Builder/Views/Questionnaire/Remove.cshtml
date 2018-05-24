@@ -5,9 +5,9 @@
 }
 
 <h2>Questionnaire</h2>
-<h4>Remove</h4>
+<h4>Delete</h4>
 <hr />
-@using (Html.BeginForm("Delete", "Questionnaire", new { questionnaireId = Model.Id, confirm = true }, FormMethod.Post))
+@using (Html.BeginForm("Delete", "Questionnaire", FormMethod.Post))
 {
     @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
@@ -28,6 +28,7 @@
     </p>
     <div>
         <input type="submit" value="Delete Questionnaire" />
+        <a href="@Url.Action("Edit", "Questionnaire")"><input type="button" value="Cancel Deletion" /></a>
     </div>
     <hr />
     <h4>Questions</h4>
@@ -35,17 +36,14 @@
     {
         @await Html.PartialAsync("QuestionPartialView", question)
     }
-    @if (Model.Questions.Count == 0)
-    {
-        @Html.HiddenFor(m => m.Questions)
-    }
+    @Html.HiddenFor(m => m.Questions)
     <br />
     <div>
-        <input type="submit" value="Add Question" formaction="@Url.Action("Add", "Question", new { questionnaireId = Model.Id })" />
+        <a href="@Url.Action("Add", "Question")"><input type="button" value="Add New Question" /></a>
     </div>
 }
 <hr />
 <div>
-    @Html.ActionLink("Back to List", "Index", "Home")
+    @Html.ActionLink("Back", "Index", "Questionnaire")
 </div>
 

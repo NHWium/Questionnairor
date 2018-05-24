@@ -1,13 +1,14 @@
 ﻿@model Questionnairor.Models.Question
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Delete";
+    ViewData["QuestionId"] = Model.Id;
 }
 
 <h2>Question</h2>
 <h4>Delete</h4>
 <hr />
-@using (Html.BeginForm("Delete", "Question", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], confirm = true }, FormMethod.Post))
+@using (Html.BeginForm("Delete", "Question", FormMethod.Post))
 {
     @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
@@ -28,6 +29,7 @@
     </p>
     <div>
         <input type="submit" value="Delete Question" />
+        <a href="@Url.Action("Edit", "Question", new { questionId = ViewData["QuestionId"] })"><input type="button" value="Cancel Deletion" /></a>
     </div>
     <hr />
     <h4>Choices</h4>
@@ -35,17 +37,14 @@
     {
         @await Html.PartialAsync("ChoicePartialView", choice)
     }
-    @if (Model.Choices.Count == 0)
-    {
-        @Html.HiddenFor(m => m.Choices)
-    }
+    @Html.HiddenFor(m => m.Choices)
     <br />
     <div>
-        <input type="submit" value="Add Choice" formaction="@Url.Action("Add", "Choice", new { questionnaireId = ViewData["Id"], questionId = Model.Id })" />
+        <a href="@Url.Action("Add", "Choice", new { questionId = ViewData["QuestionId"] })"><input type="button" value="Add New Choice" /></a>
     </div>
 }
 <hr />
 <div>
-    @Html.ActionLink("Back to List", "Edit", "Questionnaire", new { questionnaireId = ViewData["Id"] })
+    @Html.ActionLink("Back to Questionnaire", "Edit", "Questionnaire")
 </div>
 

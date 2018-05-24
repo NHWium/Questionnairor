@@ -13,105 +13,107 @@ namespace Questionnairor.Areas.Builder.Controllers
     [Area("Builder")]
     public class QuestionController : Controller
     {
-        [HttpGet, HttpPost]
-        public IActionResult Add(Guid questionnaireId, [FromServices]IQuestionnaireService service)
+        [HttpGet]
+        public IActionResult Add([FromServices]IQuestionnaireService service)
         {
-            if (!service.ValidId(questionnaireId))
+            if (!service.IsValid())
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Add", questionnaireId, data = "" });
+                if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal questionnaire", controller = "Question", action = "Add", id = "", data = service.Data.ToJson(Formatting.None) });
             }
             Question question = new Question();
-            ViewData["Id"] = questionnaireId;
             return View(question);
         }
 
         [HttpPost]
-        public IActionResult Create(Guid questionnaireId, Question modelData, [FromServices] IQuestionnaireService service)
+        public IActionResult Create(Question modelData, [FromServices] IQuestionnaireService service)
         {
             if (!ModelState.IsValid)
             {
-                ViewData["Id"] = questionnaireId;
                 return View("Add", modelData);
             }
-            if (!service.ValidId(questionnaireId))
+            if (!service.IsValid())
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Add", questionnaireId, data = modelData.ToJson(Formatting.None) });
+                if (modelData == null) modelData = new Question().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal questionnaire", controller = "Question", action = "Create", id = modelData.Id, data = modelData.ToJson(Formatting.None) });
             }
             Question question = new Question().Id(modelData.Id).Title(modelData.Title).Text(modelData.Text);
-            service.QuestionnaireData[questionnaireId].Questions.Add(question);
-            return RedirectToAction("Edit", "Question", new { questionnaireId, questionId = question.Id });
+            service.Data.Questions.Add(question);
+            return RedirectToAction("Edit", "Question", new { questionId = modelData.Id });
         }
 
         [HttpGet]
-        public IActionResult Edit(Guid questionnaireId, Guid questionId, [FromServices]IQuestionnaireService service)
+        public IActionResult Edit(Guid questionId, [FromServices]IQuestionnaireService service)
         {
-            if (!service.ValidId(questionnaireId))
+            if (!service.IsValid())
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Edit", questionnaireId, data = questionId });
+                if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal questionnaire", controller = "Question", action = "Edit", id = questionId, data = service.Data.ToJson(Formatting.None) });
             }
-            Question question = service.GetQuestion(questionnaireId, questionId);
+            Question question = service.Data.GetQuestion(questionId);
             if (question == null)
             {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Question", action = "Edit", questionnaireId, data = questionId });
+                if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal question", controller = "Question", action = "Edit", id = questionId, data = service.Data.ToJson(Formatting.None) });
             }
-            ViewData["Id"] = questionnaireId;
-            ViewData["QuestionId"] = questionId;
             return View(question);
         }
 
         [HttpPost, HttpPatch]
-        public IActionResult Update(Guid questionnaireId, Question modelData, [FromServices]IQuestionnaireService service)
+        public IActionResult Update(Question modelData, [FromServices]IQuestionnaireService service)
         {
             if (!ModelState.IsValid)
             {
-                ViewData["Id"] = questionnaireId;
-                ViewData["QuestionId"] = modelData.Id;
                 return View("Edit", modelData);
             }
-            if (!service.ValidId(questionnaireId))
+            if (!service.IsValid())
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Update", questionnaireId, data = modelData.ToJson(Formatting.None) });
+                if (modelData == null) modelData = new Question().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal questionnaire", controller = "Question", action = "Update", id = modelData.Id, data = modelData.ToJson(Formatting.None) });
             }
-            Question question = service.GetQuestion(questionnaireId, modelData.Id);
+            Question question = service.Data.GetQuestion(modelData.Id);
             if (question == null)
             {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Question", action = "Update", questionnaireId, data = modelData.ToJson(Formatting.None) });
+                if (modelData == null) modelData = new Question().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal question identifier", controller = "Question", action = "Update", id = modelData.Id, data = modelData.ToJson(Formatting.None) });
             }
             question.Title(modelData.Title).Text(modelData.Text);
-            return RedirectToAction("Edit", "Question", new { questionnaireId, questionId = modelData.Id });
+            return RedirectToAction("Edit", "Question", new { questionId = modelData.Id });
         }
 
         [HttpGet]
-        public IActionResult Remove(Guid questionnaireId, Guid questionId, [FromServices]IQuestionnaireService service)
+        public IActionResult Remove(Guid questionId, [FromServices]IQuestionnaireService service)
         {
-            if (!service.ValidId(questionnaireId))
+            if (!service.IsValid())
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Remove", questionnaireId, data = "" });
+                if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal questionnaire", controller = "Question", action = "Remove", id = questionId, data = service.Data.ToJson(Formatting.None) });
             }
-            Question question = service.GetQuestion(questionnaireId, questionId);
+            Question question = service.Data.GetQuestion(questionId);
             if (question == null)
             {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Question", action = "Remove", questionnaireId, data = questionId });
+                if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal question", controller = "Question", action = "Remove", id = questionId, data = service.Data.ToJson(Formatting.None) });
             }
-            ViewData["Id"] = questionnaireId;
-            ViewData["QuestionId"] = questionId;
             return View(question);
         }
 
         [HttpPost, HttpDelete]
-        public IActionResult Delete(Guid questionnaireId, Guid questionId, bool confirm, [FromServices]IQuestionnaireService service)
+        public IActionResult Delete(Question modelData, [FromServices]IQuestionnaireService service)
         {
-            if (!service.ValidId(questionnaireId))
+            if (!service.IsValid())
             {
-                return BadRequest(new { error = "Illegal questionnaire identifier", controller = "Question", action = "Delete", questionnaireId, data = "" });
+                if (modelData == null) modelData = new Question().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal questionnaire", controller = "Question", action = "Delete", id = modelData.Id, data = modelData.ToJson(Formatting.None) });
             }
-            Question question = service.GetQuestion(questionnaireId, questionId);
+            Question question = service.Data.GetQuestion(modelData.Id);
             if (question == null)
             {
-                return BadRequest(new { error = "Illegal question identifier", controller = "Question", action = "Delete", questionnaireId, data = questionId });
+                if (modelData == null) modelData = new Question().Id(Guid.Empty);
+                return BadRequest(new { error = "Illegal question", controller = "Question", action = "Delete", id = modelData.Id, data = modelData.ToJson(Formatting.None) });
             }
-            service.QuestionnaireData[questionnaireId].Questions.Remove(question);
-            return RedirectToAction("Edit", "Questionnaire", new { questionnaireId });
+            service.Data.Questions.Remove(modelData);
+            return RedirectToAction("Edit", "Questionnaire");
         }
     }
 }

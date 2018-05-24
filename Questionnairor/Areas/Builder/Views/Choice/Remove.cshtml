@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit";
+    ViewData["ChoiceValue"] = Model.Value;
 }
 
 <h2>Choice</h2>
@@ -31,9 +32,9 @@
     <p>
         Please confirm permanent deletion of this choice.
     </p>
-    <br />
     <div>
         <input type="submit" value="Delete Choice" />
+        <a href="@Url.Action("Edit", "Choice", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })"><input type="button" value="Cancel Deletion" /></a>
     </div>
     <hr />
     <h4>Responses</h4>
@@ -41,17 +42,15 @@
     {
         @await Html.PartialAsync("ResponsePartialView", response)
     }
-    @if (Model.Responses.Count == 0)
-    {
-        @Html.HiddenFor(m => m.Responses)
-    }
+    @Html.HiddenFor(m => m.Responses)
     <br />
     <div>
-        <input type="submit" value="Add Response" formaction="@Url.Action("Add", "Response", new { id = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })" />
+        <a href="@Url.Action("Add", "Response", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })"><input type="button" value="Add New Response" /></a>
     </div>
 }
 <hr />
 <div>
-    @Html.ActionLink("Back to List", "Edit", "Question", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"] })
+    @Html.ActionLink("Back to Questionnaire", "Edit", "Questionnaire")
+    @Html.ActionLink("Back to Question", "Edit", "Question", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"] })
 </div>
 

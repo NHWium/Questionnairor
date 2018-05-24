@@ -26,13 +26,15 @@
     <p>
         Please confirm permanent deletion of this response.
     </p>
-    <br />
     <div>
         <input type="submit" value="Delete Response" />
+        <a href="@Url.Action("Edit", "Response", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id })"><input type="button" value="Cancel Deletion" /></a>
     </div>
 }
 <hr />
 <div>
-    @Html.ActionLink("Back to List", "Edit", "Choice", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })
+    @Html.ActionLink("Back to Questionnaire", "Edit", "Questionnaire")
+    @Html.ActionLink("Back to Question", "Edit", "Question", new { questionId = ViewData["QuestionId"] })
+    @Html.ActionLink("Back to Choice", "Edit", "Choice", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })
 </div>
 

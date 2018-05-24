@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Questionnairor.Services;
+using Questionnairor.Middlewares;
+using Questionnairor.Extensions;
 
 namespace Questionnairor
 {
@@ -17,7 +19,16 @@ namespace Questionnairor
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddSingleton<IQuestionnaireService, QuestionnaireService>();
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+            });
+            services.AddScoped<IQuestionnaireService, QuestionnaireService>();
+            services.AddScoped<LoadSessionIntoServiceMiddleware>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -27,17 +38,18 @@ namespace Questionnairor
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseSession();
+            app.UseMiddleware<LoadSessionIntoServiceMiddleware>();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "areaRoute",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                    template: "{area:exists}/{controller=Questionnaire}/{action=Index}/{id?}"
                 );
 
                 routes.MapRoute(
                     name: "Default",
-                    template: "{area=Builder}/{controller=Home}/{action=Index}/{id?}"
+                    template: "{area=Builder}/{controller=Questionnaire}/{action=Index}/{id?}"
                 );
             });
         }

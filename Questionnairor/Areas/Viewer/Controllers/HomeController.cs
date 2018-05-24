@@ -13,7 +13,7 @@ namespace Questionnairor.Areas.Viewer.Controllers
         [HttpGet]
         public IActionResult Index([FromServices]IQuestionnaireService service)
         {
-            return View(service.QuestionnaireData);
+            return View(service.Data);
         }
     }
 }

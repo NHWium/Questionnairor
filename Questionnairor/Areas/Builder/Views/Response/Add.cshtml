@@ -30,10 +30,13 @@
     <br />
     <div>
         <input type="submit" value="Add Response" />
+        <a href="@Url.Action("Edit", "Choice", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })"><input type="button" value="Cancel Add" /></a>
     </div>
 }
 <hr />
 <div>
-    @Html.ActionLink("Back to List", "Edit", "Choice", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })
+    @Html.ActionLink("Back to Questionnaire", "Edit", "Questionnaire")
+    @Html.ActionLink("Back to Question", "Edit", "Question", new { questionId = ViewData["QuestionId"] })
+    @Html.ActionLink("Back to Choice", "Edit", "Choice", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })
 </div>
 
