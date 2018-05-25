@@ -49,7 +49,7 @@ namespace Questionnairor
 
                 routes.MapRoute(
                     name: "Default",
-                    template: "{area=Builder}/{controller=Questionnaire}/{action=Index}/{id?}"
+                    template: "{controller=Questionnaire}/{action=Index}/{id?}"
                 );
             });
         }

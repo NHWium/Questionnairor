@@ -1,0 +1,12 @@
+﻿@model Questionnairor.Areas.Viewer.Models.ChoiceWithIndex
+
+<input 
+       type="radio" 
+       id="Questions[@Model.QuestionIndex].Answer"
+       name="Questions[@Model.QuestionIndex].Answer" 
+       value="@Model.Value" 
+       @if (Model.IsDefault)
+       {
+           @: checked = "checked"
+       }
+       />

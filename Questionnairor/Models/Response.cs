@@ -26,8 +26,14 @@ namespace Questionnairor.Models
         /// The text to display as the responce once this triggers.
         /// </summary>
         [BindRequired]
-        [Required, StringLength(1024, MinimumLength = 10)]
+        [Required, StringLength(1024, MinimumLength = 1)]
         public string Feedback { get; set; } = "";
+        /// <summary>
+        /// The text to display when building the responses.
+        /// </summary>
+        [BindRequired]
+        [Required, StringLength(20, MinimumLength = 1)]
+        public string Title { get; set; } = "";
 
         /// <summary>
         /// Create a response from provided json.
@@ -46,6 +52,7 @@ namespace Questionnairor.Models
                 Console.Error.WriteLine(e.Message);
                 Console.Error.WriteLine(e.StackTrace);
                 return new Response()
+                    .Title("Not Loaded")
                     .Feedback("Not Loaded")
                     .Id(Guid.Empty);
             }
@@ -109,6 +116,12 @@ namespace Questionnairor.Models
         public static Response Feedback(this Response o, string value)
         {
             o.Feedback = value;
+            return o;
+        }
+        /// <param name="value">The text to display when building the responses.</param>
+        public static Response Title(this Response o, string value)
+        {
+            o.Title = value;
             return o;
         }
     }

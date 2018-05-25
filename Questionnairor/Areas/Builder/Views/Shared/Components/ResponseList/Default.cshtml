@@ -1,12 +1,7 @@
 ﻿@model ResponseList
 
-@foreach (Response response in Model.Responses)
-{
-    <p>@response.Id - @response.Feedback</p>
-}
-
 @if (Model != null && Model.Responses.Count() > 0)
 {
     <input type="submit" value="Add Shared Response" formaction="@Url.Action("AddShared", "Response", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })" />
-    @Html.DropDownListFor(m => Model.ResponseId, new SelectList(Model.Responses, "Id", "Feedback"), "Select a response shared with another choice........................................")
+    @Html.DropDownListFor(m => Model.ResponseId, new SelectList(Model.Responses, "Id", "Title"), "Select a response shared with another choice........................................")
 }

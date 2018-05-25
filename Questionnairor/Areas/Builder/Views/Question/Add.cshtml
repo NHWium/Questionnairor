@@ -9,14 +9,12 @@
 <hr />
 @using (Html.BeginForm("Create", "Question", FormMethod.Post))
 {
-    @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
     <div class="Editor Left">
         @Html.LabelFor(m => m.Title)
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.Title)
-        <br />
         @Html.ValidationMessageFor(m => m.Title)
     </div>
     <div class="Editor Left">
@@ -24,11 +22,12 @@
     </div>
     <div class="Editor Right">
         @Html.TextAreaFor(m => m.Text)
-        <br />
         @Html.ValidationMessageFor(m => m.Text)
     </div>
     @Html.HiddenFor(m => m.Choices)
-    <br />
+    <p>
+        Add a question to the questionnaire. Afterwards you can add multiple choices.
+    </p>
     <div>
         <input type="submit" value="Add Question" />
         <a href="@Url.Action("Edit", "Questionnaire")"><input type="button" value="Cancel Add" /></a>

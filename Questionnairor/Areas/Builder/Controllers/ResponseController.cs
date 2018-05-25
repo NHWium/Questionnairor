@@ -64,7 +64,7 @@ namespace Questionnairor.Areas.Builder.Controllers
                 if (modelData == null) modelData = new Response().Id(Guid.Empty);
                 return BadRequest(new { error = "Illegal choice", controller = "Response", action = "Create", id = modelData.Id, data = modelData.ToJson(Formatting.None) });
             }
-            Response response = new Response().Feedback(modelData.Feedback).MinimumChoices(modelData.MinimumChoices);
+            Response response = new Response().Title(modelData.Title).Feedback(modelData.Feedback).MinimumChoices(modelData.MinimumChoices);
             choice.Responses.Add(response);
             service.Set(HttpContext);
             return RedirectToAction("Edit", "Response", new { questionId, value, responseId = response.Id });
@@ -133,8 +133,7 @@ namespace Questionnairor.Areas.Builder.Controllers
                 if (modelData == null) modelData = new Response().Id(Guid.Empty);
                 return BadRequest(new { error = "Illegal response", controller = "Response", action = "Update", id = modelData.Id, data = modelData.ToJson(Formatting.None) });
             }
-            response.MinimumChoices(modelData.MinimumChoices).Feedback(modelData.Feedback);
-            service.Set(HttpContext);
+            response.Title(modelData.Title).MinimumChoices(modelData.MinimumChoices).Feedback(modelData.Feedback);
             return RedirectToAction("Edit", "Response", new { questionId, value, responseId = modelData.Id });
         }
 
@@ -219,8 +218,7 @@ namespace Questionnairor.Areas.Builder.Controllers
                 if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);
                 return BadRequest(new { error = "Illegal choice", controller = "Choice", action = "AddShared", id = responseId, data = service.Data.ToJson(Formatting.None) });
             }
-            //TODO: Change this
-            Response response = choice.GetResponse(responseId);
+            Response response = service.Data.GetResponse(responseId);
             if (response == null)
             {
                 if (service.Data == null) service.Data = new Questionnaire().Id(Guid.Empty);

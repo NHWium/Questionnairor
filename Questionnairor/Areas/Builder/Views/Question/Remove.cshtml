@@ -10,7 +10,6 @@
 <hr />
 @using (Html.BeginForm("Delete", "Question", FormMethod.Post))
 {
-    @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
     <div class="Editor Left">
         @Html.LabelFor(m => m.Title)
@@ -24,6 +23,7 @@
     <div class="Editor Right">
         @Html.TextAreaFor(m => m.Text, new { @readonly = "readonly" })
     </div>
+    @Html.HiddenFor(m => m.Choices)
     <p>
         Please confirm permanent deletion of this question.
     </p>
@@ -37,7 +37,6 @@
     {
         @await Html.PartialAsync("ChoicePartialView", choice)
     }
-    @Html.HiddenFor(m => m.Choices)
     <br />
     <div>
         <a href="@Url.Action("Add", "Choice", new { questionId = ViewData["QuestionId"] })"><input type="button" value="Add New Choice" /></a>

@@ -9,11 +9,11 @@ namespace Questionnairor.Models
         /// <summary>
         /// A global id to identify the question answered.
         /// </summary>
-        public Guid QuestionId { get; set; }
+        public Guid QuestionId { get; set; } = Guid.Empty;
         /// <summary>
         /// Value of the answer.
         /// </summary>
-        public int SelectedChoiceValue { get; set; }
+        public int? SelectedChoiceValue { get; set; } = null; 
     }
     /**
      * A extension class, allowing linq-like data building.
@@ -27,7 +27,7 @@ namespace Questionnairor.Models
             return o;
         }
         /// <param name="value">Value of the answer.</param>
-        public static Answer SelectedChoiceValue(this Answer o, int value)
+        public static Answer SelectedChoiceValue(this Answer o, int? value)
         {
             o.SelectedChoiceValue = value;
             return o;

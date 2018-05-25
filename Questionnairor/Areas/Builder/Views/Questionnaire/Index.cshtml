@@ -5,53 +5,20 @@
 }
 
 <h2>Questionnaire</h2>
-@using (Html.BeginForm(FormMethod.Post))
+<p>This app allows you create a custom questionnaire by adding individual multiple-choice questions, and then each choice in these questions.</p>
+<p>Finally you can specify the responses the questionnaire gives to specific questions, including if a response is only given to a combination of choices.</p>
+@if (Model != null && Model.Id != Guid.Empty)
 {
-    <input id="loadButton" name="loadButton" type="submit" value="Load Questionnaire" disabled="disabled" formaction="@Url.Action("Load", "Questionnaire")" />
-    <br />
-    <br />
-    <textarea id="jsonData" name="jsonData"></textarea>
-    <br />
-    <input type="file" name="fileInput" id="fileInput" />
-    <script type="text/javascript">
-        function readFile(event) {
-            var fileName = event.target.files[0];
-
-            if (fileName) {
-                var reader = new FileReader();
-                reader.onload = function (event) {
-                    var data = event.target.result;
-                    document.getElementById('jsonData').value = data;
-                }
-                reader.readAsText(fileName);
-                document.getElementById('loadButton').disabled = false;
-            }
-        }
-        function textEdit(event) {
-            document.getElementById('fileInput').value = "";
-            if (document.getElementById('jsonData').value == "") {
-                document.getElementById('loadButton').disabled = true;
-            }
-            else {
-                document.getElementById('loadButton').disabled = false;
-            }
-        }
-        document.getElementById('fileInput').addEventListener('change', readFile, false);
-        document.getElementById('jsonData').addEventListener('change', textEdit, false);
-    </script>
-    <hr />
+    @await Html.PartialAsync("QuestionnairePartialView", Model)
+}
+<br />
+<div>
+    <a href="@Url.Action("Add", "Questionnaire")"><input type="button" value="Create New Questionnaire" /></a>
+    <a href="@Url.Action("Load", "Questionnaire")"><input type="button" value="Load Questionnaire" /></a>
     @if (Model != null && Model.Id != Guid.Empty)
-    {
-        @await Html.PartialAsync("QuestionnairePartialView", Model)
-    }
-    <br />
-    <div>
-        <a href="@Url.Action("Add", "Questionnaire")"><input type="button" value="Create New Questionnaire" /></a>
-        @if (Model != null && Model.Id != Guid.Empty)
     {
         <a href="@Url.Action("Edit", "Questionnaire")"><input type="button" value="Edit Questionnaire" /></a>
         <a href="@Url.Action("Remove", "Questionnaire")"><input type="button" value="Delete Questionnaire" /></a>
-}
-    </div>
-}
-
+        <a href="@Url.Action("Index", "Questionnaire", new { Area = "Viewer" })"><input type="button" value="View Questionnaire" /></a>
+    }
+</div>

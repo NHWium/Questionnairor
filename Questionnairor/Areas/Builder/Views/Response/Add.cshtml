@@ -9,14 +9,19 @@
 <hr />
 @using (Html.BeginForm("Create", "Response", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] }, FormMethod.Post))
 {
-    @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
+    <div class="Editor Left">
+        @Html.LabelFor(m => m.Title)
+    </div>
+    <div class="Editor Right">
+        @Html.EditorFor(m => m.Title)
+        @Html.ValidationMessageFor(m => m.Title)
+    </div>
     <div class="Editor Left">
         @Html.LabelFor(m => m.Feedback)
     </div>
     <div class="Editor Right">
         @Html.TextAreaFor(m => m.Feedback)
-        <br />
         @Html.ValidationMessageFor(m => m.Feedback)
     </div>
     <div class="Editor Left">
@@ -24,7 +29,6 @@
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.MinimumChoices)
-        <br />
         @Html.ValidationMessageFor(m => m.MinimumChoices)
     </div>
     <br />

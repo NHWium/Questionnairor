@@ -9,14 +9,12 @@
 <hr />
 @using (Html.BeginForm("Update", "Questionnaire", FormMethod.Post))
 {
-    @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
     <div class="Editor Left">
         @Html.LabelFor(m => m.Title)
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.Title)
-        <br />
         @Html.ValidationMessageFor(m => m.Title)
     </div>
     <div class="Editor Left">
@@ -24,10 +22,11 @@
     </div>
     <div class="Editor Right">
         @Html.TextAreaFor(m => m.Introduction)
-        <br />
         @Html.ValidationMessageFor(m => m.Introduction)
     </div>
-    <br />
+    @Html.HiddenFor(m => m.Questions)
+    <p>
+    </p>
     <div>
         <input type="submit" value="Edit Questionnaire" />
         <a href="@Url.Action("Remove", "Questionnaire")"><input type="button" value="Delete Questionnaire" /></a>
@@ -38,7 +37,6 @@
     {
         @await Html.PartialAsync("QuestionPartialView", question)
     }
-    @Html.HiddenFor(m => m.Questions)
     <br />
     <div>
         <a href="@Url.Action("Add", "Question")"><input type="button" value="Add New Question" /></a>

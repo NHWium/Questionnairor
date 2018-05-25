@@ -46,13 +46,15 @@ namespace QuestionnairorUnitTests
         }
 
         [Theory]
-        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"MinimumChoices\":11,\"Feedback\":\"Test\"}", "73129183-ce7b-48ef-820f-b96af9ab82c2", 11, "Test")]
-        public void ResponseToJson(string expected, string id, int minimumChoices, string feedback)
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"MinimumChoices\":11,\"Feedback\":\"Test\",\"Title\":\"\"}", "73129183-ce7b-48ef-820f-b96af9ab82c2", 11, "Test", "")]
+        [InlineData("{\"Id\":\"73129183-ce7b-48ef-820f-b96af9ab82c2\",\"MinimumChoices\":11,\"Feedback\":\"Test\",\"Title\":\"Test\"}", "73129183-ce7b-48ef-820f-b96af9ab82c2", 11, "Test", "Test")]
+        public void ResponseToJson(string expected, string id, int minimumChoices, string feedback, string title)
         {
             Response json = new Response()
                 .Id(new Guid(id))
                 .MinimumChoices(minimumChoices)
-                .Feedback(feedback);
+                .Feedback(feedback)
+                .Title(title);
             Assert.Equal(expected, json.ToJson(Newtonsoft.Json.Formatting.None));
         }
 
@@ -118,11 +120,11 @@ namespace QuestionnairorUnitTests
         }
 
         [Theory]
-        [InlineData("{\"Value\":0,\"Text\":\"Test\",\"IsDefault\":false,\"Responses\":[]}", 0, "Test", false, null, null, null, null, null, null)]
-        [InlineData("{\"Value\":7,\"Text\":\"\",\"IsDefault\":true,\"Responses\":[]}", 7, "", true, null, null, null, null, null, null)]
-        [InlineData("{\"Value\":0,\"Text\":\"Test\",\"IsDefault\":false,\"Responses\":[{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":2,\"Feedback\":\"Test\"}]}", 0, "Test", false, 2, "Test", null, null, null, null)]
-        [InlineData("{\"Value\":5,\"Text\":\"Test\",\"IsDefault\":false,\"Responses\":[{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":1,\"Feedback\":\"Test1\"},{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":2,\"Feedback\":\"Test2\"},{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":3,\"Feedback\":\"Test3\"}]}", 5, "Test", false, 1, "Test1", 2, "Test2", 3, "Test3")]
-        public void ChoiceToJson(string expected, int value, string text, bool isDefault, int? minimumChoices1, string feedback1, int? minimumChoices2, string feedback2, int? minimumChoices3, string feedback3)
+        [InlineData("{\"Value\":0,\"Text\":\"Test\",\"IsDefault\":false,\"Responses\":[]}", 0, "Test", false, null, null, null, null, null, null, null, null, null)]
+        [InlineData("{\"Value\":7,\"Text\":\"\",\"IsDefault\":true,\"Responses\":[]}", 7, "", true, null, null, null, null, null, null, null, null, null)]
+        [InlineData("{\"Value\":0,\"Text\":\"Test\",\"IsDefault\":false,\"Responses\":[{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":2,\"Feedback\":\"Test\",\"Title\":\"\"}]}", 0, "Test", false, 2, "Test", "", null, null, null, null, null, null)]
+        [InlineData("{\"Value\":5,\"Text\":\"Test\",\"IsDefault\":false,\"Responses\":[{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":1,\"Feedback\":\"Test1\",\"Title\":\"Test1\"},{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":2,\"Feedback\":\"Test2\",\"Title\":\"\"},{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MinimumChoices\":3,\"Feedback\":\"Test3\",\"Title\":\"Test3\"}]}", 5, "Test", false, 1, "Test1", "Test1", 2, "Test2", "", 3, "Test3", "Test3")]
+        public void ChoiceToJson(string expected, int value, string text, bool isDefault, int? minimumChoices1, string feedback1, string title1, int? minimumChoices2, string feedback2, string title2, int? minimumChoices3, string feedback3, string title3)
         {
             Choice json = new Choice().Value(value)
                 .Text(text)
@@ -133,7 +135,8 @@ namespace QuestionnairorUnitTests
                 Response r = new Response()
                     .Id(Guid.Empty)
                     .MinimumChoices((int)minimumChoices1)
-                    .Feedback(feedback1);
+                    .Feedback(feedback1)
+                    .Title(title1);
                 l.Add(r);
             }
             if (minimumChoices2 != null && feedback2 != null)
@@ -141,7 +144,8 @@ namespace QuestionnairorUnitTests
                 Response r = new Response()
                     .Id(Guid.Empty)
                     .MinimumChoices((int)minimumChoices2)
-                    .Feedback(feedback2);
+                    .Feedback(feedback2)
+                    .Title(title2);
                 l.Add(r);
             }
             if (minimumChoices3 != null && feedback3 != null)
@@ -149,7 +153,8 @@ namespace QuestionnairorUnitTests
                 Response r = new Response()
                     .Id(Guid.Empty)
                     .MinimumChoices((int)minimumChoices3)
-                    .Feedback(feedback3);
+                    .Feedback(feedback3)
+                    .Title(title3);
                 l.Add(r);
             }
             json.Responses(l);
@@ -265,13 +270,14 @@ namespace QuestionnairorUnitTests
         }
 
         [Theory]
-        [InlineData("{}", "")]
-        [InlineData("Illegal data", "Not Loaded")]
-        [InlineData("{\"Introduction\":\"Test\"}", "Test")]
-        public void QuestionnaireFromJsonWithoutId(string json, string introduction)
+        [InlineData("{}", "", "")]
+        [InlineData("Illegal data", "Not Loaded", "Not Loaded")]
+        [InlineData("{\"Introduction\":\"Test\"}", "Test", "")]
+        public void QuestionnaireFromJsonWithoutId(string json, string introduction, string title)
         {
             Questionnaire expected = new Questionnaire()
                 .Id(Guid.Empty)
+                .Title(title)
                 .Introduction(introduction);
             Assert.Equal<Questionnaire>(expected, Questionnaire.FromJson(json).Id(Guid.Empty));
         }

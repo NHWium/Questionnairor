@@ -10,13 +10,11 @@
 <hr />
 @using (Html.BeginForm("Create", "Choice", new { questionId = ViewData["QuestionId"] }, FormMethod.Post))
 {
-    @Html.ValidationSummary(false)
     <div class="Editor Left">
         @Html.LabelFor(m => m.Value)
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.Value)
-        <br />
         @Html.ValidationMessageFor(m => m.Value)
     </div>
     <div class="Editor Left">
@@ -24,19 +22,17 @@
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.Text)
-        <br />
         @Html.ValidationMessageFor(m => m.Text)
     </div>
     <div class="Editor Left">
         @Html.LabelFor(m => m.IsDefault)
-    </div>
-    <div class="Editor Right">
         @Html.EditorFor(m => m.IsDefault)
-        <br />
         @Html.ValidationMessageFor(m => m.IsDefault)
     </div>
     @Html.HiddenFor(m => m.Responses)
-    <br />
+    <p>
+        Add a choice to the selected question. Values must be unique, and only one can be the default.
+    </p>
     <div>
         <input type="submit" value="Add Choice" />
         <a href="@Url.Action("Edit", "Question", new { questionId = ViewData["QuestionId"] })"><input type="button" value="Cancel Add" /></a>

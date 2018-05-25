@@ -20,7 +20,7 @@ namespace Questionnairor.Areas.Builder.Controllers
         }
 
         [HttpGet]
-        public IActionResult Add([FromServices]IQuestionnaireService service)
+        public IActionResult Add()
         {
             Questionnaire modelData = new Questionnaire();
             return View("Add", modelData);
@@ -37,11 +37,22 @@ namespace Questionnairor.Areas.Builder.Controllers
             return RedirectToAction("Edit", "Questionnaire");
         }
 
+        [HttpGet]
+        public IActionResult Load()
+        {
+            return View();
+        }
+
         [HttpPost]
         public IActionResult Load(string jsonData, [FromServices]IQuestionnaireService service)
         {
             Questionnaire modelData = Questionnaire.FromJson(jsonData);
-            return RedirectToAction("Create", "Questionnaire", modelData);
+            if (!service.IsValid(modelData.Id) && modelData.Title == "Not Loaded")
+            {
+                return BadRequest(new { error = "Illegal json", controller = "Questionnaire", action = "Load", id = "", data = jsonData });
+            }
+            service.Data = modelData;
+            return RedirectToAction("Edit", "Questionnaire");
         }
 
         [HttpGet]
@@ -90,7 +101,7 @@ namespace Questionnairor.Areas.Builder.Controllers
                 if (modelData == null) modelData = new Questionnaire().Id(Guid.Empty);
                 return BadRequest(new { error = "Illegal questionnaire", controller = "Questionnaire", action = "Delete", id = "", data = modelData.ToJson(Formatting.None) });
             }
-            service.Data = null;
+            service.Data = new Questionnaire().Id(Guid.Empty);
             service.Clear(HttpContext);
             return RedirectToAction("Index", "Questionnaire");
         }

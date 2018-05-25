@@ -89,13 +89,15 @@ namespace Questionnairor.Models
             return Equals(obj as Choice);
         }
 
-        // override object.GetHashCode
+        // override object.GetHashCode - using some primes
         public override int GetHashCode()
         {
-            if (IsDefault)
-                return (Text.GetHashCode() ^ Responses.GetHashCode()) ^ (Value + 1) + 7643;
-            else
-                return (Text.GetHashCode() ^ Responses.GetHashCode()) ^ (Value + 1) + 6791;
+            int result = 151;
+            if (Text != null) result ^= Text.GetHashCode();
+            if (Responses != null) result *= Responses.GetHashCode();
+            if (IsDefault) result ^= 29;
+            if (Value != 0) result *= 2399;
+            return result;
         }
 
         /// <summary>

@@ -1,0 +1,29 @@
+﻿@model Questionnaire
+
+@using (Html.BeginForm("Submit", "Questionnaire", FormMethod.Post))
+{
+    @if (Model != null && Model.Id != Guid.Empty)
+    {
+        ViewData["Title"] = Model.Title;
+        <h2>@Model.Title</h2>
+        <p><strong>@Model.Introduction</strong></p>
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.Title)
+        @Html.HiddenFor(m => m.Introduction)
+        @for (var i = 0; i < Model.Questions.Count; i++)
+        {
+            QuestionWithIndex data = new QuestionWithIndex(i, Model.Questions.ElementAt(i));
+            await Html.RenderPartialAsync("QuestionPartialView", data);
+        }
+        @if (Model.Questions.Count == 0)
+        {
+            @Html.Hidden("Questions", Model.Questions)
+        }
+    }
+    <hr />
+    <input type="submit" value="Submit Questionnaire" />
+    <input type="submit" value="Debug" formaction="@Url.Action("Debug", "Questionnaire")" />
+
+}
+
+

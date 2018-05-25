@@ -10,7 +10,6 @@
 <hr />
 @using (Html.BeginForm("Update", "Choice", new { questionId = ViewData["QuestionId"], oldValue = Model.Value }, FormMethod.Post))
 {
-    @Html.ValidationSummary(false)
     <div class="Editor Left">
         @Html.LabelFor(m => m.Value)
     </div>
@@ -28,8 +27,11 @@
     <div class="Editor Left">
         @Html.LabelFor(m => m.IsDefault)
         @Html.EditorFor(m => m.IsDefault)
+        @Html.ValidationMessageFor(m => m.IsDefault)
     </div>
-    <br />
+    @Html.HiddenFor(m => m.Responses)
+    <p>
+    </p>
     <div>
         <input type="submit" value="Edit Choice" />
         <a href="@Url.Action("Remove", "Choice", new { questionId = ViewData["QuestionId"], value = Model.Value })"><input type="button" value="Delete Choice" /></a>
@@ -41,11 +43,10 @@
     {
         @await Html.PartialAsync("ResponsePartialView", response)
     }
-    @Html.HiddenFor(m => m.Responses)
     <br />
     <div>
         <a href="@Url.Action("Add", "Response", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })"><input type="button" value="Add New Response" /></a>
-        @await Component.InvokeAsync("ResponseList", new { questionId = ViewData["QuestionId"] })
+        @await Component.InvokeAsync("ResponseList", new { questionId = ViewData["QuestionId"], value = Model.Value })
     </div>
 }
 <hr />

@@ -17,7 +17,7 @@ namespace Questionnairor.Areas.Builder.ViewComponents
             this.service = service;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(Guid questionId)
+        public async Task<IViewComponentResult> InvokeAsync(Guid questionId, int value)
         {
             await Task.Yield();
             if (service == null || !service.IsValid())
@@ -31,11 +31,16 @@ namespace Questionnairor.Areas.Builder.ViewComponents
                 return Content("..");
                 // return Content("");
             }
-            List<Response> list = service.Data.GetAvailableResponses(question);
-            if (list == null || list.Count == 0)
+            Choice choice = question.GetChoice(value);
+            if (choice == null)
             {
                 return Content(".");
                 // return Content("");
+            }
+            List<Response> list = service.Data.GetAvailableResponses(choice);
+            if (list == null || list.Count == 0)
+            {
+                return Content("");
             }
             ResponseList modelData = new ResponseList();
             modelData.ResponseId = null;

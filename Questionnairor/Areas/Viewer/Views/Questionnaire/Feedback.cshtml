@@ -1,0 +1,12 @@
+﻿@model List<Response>
+
+@using (Html.BeginForm("Index", "Questionnaire", FormMethod.Get))
+{
+    @foreach(Response response in Model)
+    {
+        <p>@response.Feedback</p>
+    }
+    @Model.Count
+}
+
+

@@ -1,0 +1,21 @@
+﻿@model Questionnairor.Areas.Viewer.Models.ChoiceWithIndex
+
+<div>
+    @Html.Hidden($"Questions[{@Model.QuestionIndex}].Choices[{@Model.ChoiceIndex}].Value", Model.Value)
+    @Html.Hidden($"Questions[{@Model.QuestionIndex}].Choices[{@Model.ChoiceIndex}].Text", Model.Text)
+    @Html.Hidden($"Questions[{@Model.QuestionIndex}].Choices[{@Model.ChoiceIndex}].IsDefault", Model.IsDefault)
+    <div>
+        @for (var i = 0; i < Model.Responses.Count; i++)
+        {
+            Response response = Model.Responses.ElementAt(i);
+            @Html.Hidden($"Questions[{@Model.QuestionIndex}].Choices[{@Model.ChoiceIndex}].Responses[{@i}].Id", Model.Responses.ElementAt(i).Id)
+            @Html.Hidden($"Questions[{@Model.QuestionIndex}].Choices[{@Model.ChoiceIndex}].Responses[{@i}].Title", Model.Responses.ElementAt(i).Title)
+            @Html.Hidden($"Questions[{@Model.QuestionIndex}].Choices[{@Model.ChoiceIndex}].Responses[{@i}].MinimumChoices", Model.Responses.ElementAt(i).MinimumChoices)
+            @Html.Hidden($"Questions[{@Model.QuestionIndex}].Choices[{@Model.ChoiceIndex}].Responses[{@i}].Feedback", Model.Responses.ElementAt(i).Feedback)
+        }
+        @if (Model.Responses.Count == 0)
+        {
+            @Html.Hidden($"Questions[{@Model.QuestionIndex}].Choices[{@Model.ChoiceIndex}].Responses", Model.Responses)
+        }
+    </div>
+</div>

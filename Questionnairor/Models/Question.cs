@@ -22,7 +22,7 @@ namespace Questionnairor.Models
         /// A title text.
         /// </summary>
         [BindRequired]
-        [Required, StringLength(60, MinimumLength = 5)]
+        [Required, StringLength(30, MinimumLength = 1)]
         public string Title { get; set; } = "";
         /// <summary>
         /// The text to display.
@@ -34,6 +34,8 @@ namespace Questionnairor.Models
         /// </summary>
         [BindRequired]
         public List<Choice> Choices { get; set; } = new List<Choice>();
+
+        public int? Answer { get; set; } = null;
 
         /// <summary>
         /// Create a question from provided json.
@@ -79,10 +81,13 @@ namespace Questionnairor.Models
             if (Text != null && q.Text == null) return false;
             if (Choices == null && q.Choices != null) return false;
             if (Choices != null && q.Choices == null) return false;
-            return  (Id == null || Id.Equals(q.Id)) && 
+            if (Answer == null && q.Answer != null) return false;
+            if (Answer != null && q.Answer == null) return false;
+            return (Id == null || Id.Equals(q.Id)) && 
                     (Title == null || Title.Equals(q.Title)) && 
                     (Text == null || Text.Equals(q.Text)) && 
-                    (Choices == null || Choices.SequenceEqual(q.Choices));
+                    (Choices == null || Choices.SequenceEqual(q.Choices)) &&
+                    (Answer == null || Answer.Equals(q.Answer));
         }
 
         // override object.Equals
@@ -97,7 +102,13 @@ namespace Questionnairor.Models
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            return (Id.GetHashCode() * 13 + Title.GetHashCode() * 2089 + Text.GetHashCode() * 2617 + Choices.GetHashCode() * 6163) ^ 13;
+            int result = 2063;
+            if (Id != null) result += Id.GetHashCode() * 4297;
+            if (Title != null) result *= Title.GetHashCode() * 3;
+            if (Text != null) result += Text.GetHashCode() + 2053;
+            if (Choices != null) result *= Choices.GetHashCode() * 4057;
+            if (Answer != null) result *= Answer.GetHashCode() * 3413;
+            return result;
         }
 
         /// <summary>

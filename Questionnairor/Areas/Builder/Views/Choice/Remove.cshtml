@@ -10,7 +10,6 @@
 <hr />
 @using (Html.BeginForm("Delete", "Choice", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], confirm = true }, FormMethod.Post))
 {
-    @Html.ValidationSummary(false)
     <div class="Editor Left">
         @Html.LabelFor(m => m.Value)
     </div>
@@ -25,10 +24,9 @@
     </div>
     <div class="Editor Left">
         @Html.LabelFor(m => m.IsDefault)
-    </div>
-    <div class="Editor Right">
         @Html.EditorFor(m => m.IsDefault, new { @readonly = "readonly" })
     </div>
+    @Html.HiddenFor(m => m.Responses)
     <p>
         Please confirm permanent deletion of this choice.
     </p>
@@ -42,7 +40,6 @@
     {
         @await Html.PartialAsync("ResponsePartialView", response)
     }
-    @Html.HiddenFor(m => m.Responses)
     <br />
     <div>
         <a href="@Url.Action("Add", "Response", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })"><input type="button" value="Add New Response" /></a>

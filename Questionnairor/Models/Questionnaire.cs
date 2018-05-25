@@ -22,7 +22,7 @@ namespace Questionnairor.Models
         /// A title text.
         /// </summary>
         [BindRequired]
-        [Required, StringLength(60, MinimumLength = 5)]
+        [Required, StringLength(30, MinimumLength = 1)]
         public string Title { get; set; } = "";
         /// <summary>
         /// General text at the top of page.
@@ -52,6 +52,7 @@ namespace Questionnairor.Models
                 Console.Error.WriteLine(e.Message);
                 Console.Error.WriteLine(e.StackTrace);
                 return new Questionnaire()
+                    .Title("Not Loaded")
                     .Introduction("Not Loaded")
                     .Id(Guid.Empty);
             }
@@ -117,13 +118,53 @@ namespace Questionnairor.Models
             }
         }
 
-        public List<Response> GetAvailableResponses(Question currentQuestion)
+        public Response GetResponse(Guid responseId)
         {
-            return Questions.SelectMany(q => 
-                    q.Choices.SelectMany(c => 
-                    c.Responses))
-//                .Except(currentQuestion.Choices.SelectMany(c => 
-//                    c.Responses))
+            try
+            {
+                //Use First instead of FirstOrDefault in a try,catch - we do not want default value but null if not found.
+                return Questions.SelectMany(q => q.Choices
+                .SelectMany(c => c.Responses))
+                .First<Response>(r => r.Id == responseId);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public List<Response> GetAvailableResponses(Choice currentChoice)
+        {
+            return Questions.SelectMany(q => q.Choices
+                    .SelectMany(c => c.Responses))
+                .Except(currentChoice.Responses)
+                .ToList<Response>();
+        }
+
+        public List<Choice> GetAnswers()
+        {
+            if (Questions == null) return null;
+            return Questions
+                .Where(q1 => q1.Answer != null)
+                .Select(q2 => q2.GetChoice(q2.Answer.Value))
+                .Where(q3 => q3 != null)
+                .ToList<Choice>();
+        }
+
+        public List<Response> GetResponses(List<Choice> answers)
+        {
+            if (answers == null) return null;
+            return answers
+                .Where(c1 => c1.Responses != null)
+                .SelectMany(c2 => c2.Responses)
+                .Where(r1 => 
+                    r1.MinimumChoices <= answers
+                        .Count(c3 =>
+                            c3 != null &&
+                            c3.Responses.Contains(r1)
+                            )
+                    )
+                .Distinct()
                 .ToList<Response>();
         }
     }

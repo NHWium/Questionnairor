@@ -9,14 +9,12 @@
 <hr />
 @using (Html.BeginForm("Create", "Questionnaire", FormMethod.Post))
 {
-    @Html.ValidationSummary(false)
     @Html.HiddenFor(m => m.Id)
     <div class="Editor Left">
         @Html.LabelFor(m => m.Title)
     </div>
     <div class="Editor Right">
         @Html.EditorFor(m => m.Title)
-        <br />
         @Html.ValidationMessageFor(m => m.Title)
     </div>
     <div class="Editor Left">
@@ -24,11 +22,12 @@
     </div>
     <div class="Editor Right">
         @Html.TextAreaFor(m => m.Introduction)
-        <br />
         @Html.ValidationMessageFor(m => m.Introduction)
     </div>
     @Html.HiddenFor(m => m.Questions)
-    <br />
+    <p>
+        Add a new questionnaire. Replaces any existing questionnaires.
+    </p>
     <div>
         <input type="submit" value="Add Questionnaire" />
         <a href="@Url.Action("Index", "Questionnaire")"><input type="button" value="Cancel Add" /></a>
