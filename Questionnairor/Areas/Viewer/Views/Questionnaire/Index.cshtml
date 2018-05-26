@@ -19,6 +19,7 @@
         {
             @Html.Hidden("Questions", Model.Questions)
         }
+        @Html.HiddenFor(m => m.Conclusion)
     }
     <hr />
     <input type="submit" value="Submit Questionnaire" />

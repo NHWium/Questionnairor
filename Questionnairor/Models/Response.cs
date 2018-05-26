@@ -53,7 +53,6 @@ namespace Questionnairor.Models
                 Console.Error.WriteLine(e.StackTrace);
                 return new Response()
                     .Title("Not Loaded")
-                    .Feedback("Not Loaded")
                     .Id(Guid.Empty);
             }
         }
@@ -75,9 +74,12 @@ namespace Questionnairor.Models
             if (Id != null && r.Id == null) return false;
             if (Feedback == null && r.Feedback != null) return false;
             if (Feedback != null && r.Feedback == null) return false;
+            if (Title == null && r.Title != null) return false;
+            if (Title != null && r.Title == null) return false;
             return  (Id == null || Id.Equals(r.Id)) &&
                     (MinimumChoices == r.MinimumChoices) &&
-                    (Feedback == null || Feedback.Equals(r.Feedback));
+                    (Feedback == null || Feedback.Equals(r.Feedback)) &&
+                    (Title == null || Title.Equals(r.Title));
         }
 
         // override object.Equals
@@ -92,12 +94,18 @@ namespace Questionnairor.Models
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            return (Id.GetHashCode() * Feedback.GetHashCode()) ^ (MinimumChoices + 1);
+            int result = 29;
+            if (Id != null) result *= Id.GetHashCode() + 229;
+            if (Feedback != null) result *= Feedback.GetHashCode() * 409;
+            if (Title != null) result *= Title.GetHashCode() * 659;
+            result += MinimumChoices.GetHashCode() + 1013;
+            return result;
         }
     }
-    /**
-     * A extension class, allowing linq-like data building.
-     */
+
+    /// <summary>
+    /// A extension class, allowing linq-like data building.
+    /// </summary>
     public static class ResponseExtension
     {
         /// <param name="value">A global id to identify this response.</param>

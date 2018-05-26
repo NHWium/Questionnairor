@@ -20,7 +20,7 @@ namespace QuestionnairorUnitTests
         }
 
         [Fact]
-        public async Task QuestionnaireIndexReturnsViewWithModel()
+        public void QuestionnaireIndexReturnsViewWithModel()
         {
             HttpContext httpContext = new DefaultHttpContext();
             IQuestionnaireService service = new QuestionnaireService();
@@ -29,8 +29,6 @@ namespace QuestionnairorUnitTests
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal(service.Data, viewResult.Model);
             Assert.IsNotType<RedirectToActionResult>(result);
-            //            Assert.Equal("Questionnaire", redirectToActionResult.ControllerName);
-            //            Assert.Equal("Index", redirectToActionResult.ActionName);
         }
     }
 }

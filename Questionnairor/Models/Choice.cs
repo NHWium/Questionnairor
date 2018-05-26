@@ -118,9 +118,10 @@ namespace Questionnairor.Models
             }
         }
     }
-    /**
-     * A extension class, allowing linq-like data building.
-     */
+
+    /// <summary>
+    /// A extension class, allowing linq-like data building.
+    /// </summary>
     public static class ChoiceExtension
     {
         /// <param name="value">Visual text of choice.</param>

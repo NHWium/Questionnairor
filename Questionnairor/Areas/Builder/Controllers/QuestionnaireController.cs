@@ -78,7 +78,7 @@ namespace Questionnairor.Areas.Builder.Controllers
                 if (modelData == null) modelData = new Questionnaire().Id(Guid.Empty);
                 return BadRequest(new { error = "Illegal questionnaire", controller = "Questionnaire", action = "Update", id = "", data = modelData.ToJson(Formatting.None) });
             }
-            service.Data.Title(modelData.Title).Introduction(modelData.Introduction);
+            service.Data.Title(modelData.Title).Introduction(modelData.Introduction).Conclusion(modelData.Conclusion);
             return RedirectToAction("Edit", "Questionnaire");
         }
 

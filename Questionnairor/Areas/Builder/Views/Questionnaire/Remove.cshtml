@@ -22,6 +22,12 @@
     <div class="Editor Right">
         @Html.TextAreaFor(m => m.Introduction, new { @readonly = "readonly" })
     </div>
+    <div class="Editor Left">
+        @Html.LabelFor(m => m.Conclusion)
+    </div>
+    <div class="Editor Right">
+        @Html.TextAreaFor(m => m.Conclusion, new { @readonly = "readonly" })
+    </div>
     @Html.HiddenFor(m => m.Questions)
     <p>
         Please confirm permanent deletion of this questionnaire.

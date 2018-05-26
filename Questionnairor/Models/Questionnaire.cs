@@ -30,6 +30,11 @@ namespace Questionnairor.Models
         [BindRequired]
         public string Introduction { get; set; } = "";
         /// <summary>
+        /// Text at the top of the feedback page.
+        /// </summary>
+        [BindRequired]
+        public string Conclusion { get; set; } = "";
+        /// <summary>
         /// List of questions on this page.
         /// </summary>
         [BindRequired]
@@ -53,7 +58,6 @@ namespace Questionnairor.Models
                 Console.Error.WriteLine(e.StackTrace);
                 return new Questionnaire()
                     .Title("Not Loaded")
-                    .Introduction("Not Loaded")
                     .Id(Guid.Empty);
             }
         }
@@ -77,11 +81,14 @@ namespace Questionnairor.Models
             if (Title != null && q.Title == null) return false;
             if (Introduction == null && q.Introduction != null) return false;
             if (Introduction != null && q.Introduction == null) return false;
+            if (Conclusion == null && q.Conclusion != null) return false;
+            if (Conclusion != null && q.Conclusion == null) return false;
             if (Questions == null && q.Questions != null) return false;
             if (Questions != null && q.Questions == null) return false;
             return (Id == null || Id.Equals(q.Id)) &&
                     (Title == null || Title.Equals(q.Title)) &&
                     (Introduction == null || Introduction.Equals(q.Introduction)) &&
+                    (Conclusion == null || Conclusion.Equals(q.Conclusion)) &&
                     (Questions == null || Questions.SequenceEqual(q.Questions));
         }
 
@@ -97,7 +104,13 @@ namespace Questionnairor.Models
         // override object.GetHashCode
         public override int GetHashCode()
         {
-            return (Id.GetHashCode() ^ 3 + Title.GetHashCode() ^ 5 + Introduction.GetHashCode() ^ 7 + Questions.GetHashCode() + 6277) * 2287;
+            int result = 3581;
+            if (Id != null) result *= Id.GetHashCode() * 3023;
+            if (Title != null) result *= Title.GetHashCode() * 71;
+            if (Introduction != null) result += Introduction.GetHashCode() + 7829;
+            if (Conclusion != null) result *= Conclusion.GetHashCode() + 3049;
+            if (Questions != null) result += Questions.GetHashCode();
+            return result;
         }
 
         /// <summary>
@@ -110,7 +123,7 @@ namespace Questionnairor.Models
             try
             {
                 //Use First instead of FirstOrDefault in a try,catch - we do not want default value but null if not found.
-                return Questions.First<Question>(q => q.Id == questionId);
+                return Questions.First<Question>(question => question.Id == questionId);
             }
             catch (Exception)
             {
@@ -118,14 +131,19 @@ namespace Questionnairor.Models
             }
         }
 
+        /// <summary>
+        /// Get a specific response based on id.
+        /// </summary>
+        /// <param name="questionId">The id of the response to get.</param>
+        /// <returns>The found response or null.</returns>
         public Response GetResponse(Guid responseId)
         {
             try
             {
                 //Use First instead of FirstOrDefault in a try,catch - we do not want default value but null if not found.
-                return Questions.SelectMany(q => q.Choices
-                .SelectMany(c => c.Responses))
-                .First<Response>(r => r.Id == responseId);
+                return Questions.SelectMany(question => question.Choices
+                .SelectMany(choice => choice.Responses))
+                .First<Response>(response => response.Id == responseId);
             }
             catch (Exception)
             {
@@ -133,35 +151,49 @@ namespace Questionnairor.Models
             }
         }
 
+        /// <summary>
+        /// Get all reponses not part of the given choice.
+        /// </summary>
+        /// <param name="currentChoice">The choice to excluse responses from.</param>
+        /// <returns>A list of reponses.</returns>
         public List<Response> GetAvailableResponses(Choice currentChoice)
         {
-            return Questions.SelectMany(q => q.Choices
-                    .SelectMany(c => c.Responses))
+            return Questions.SelectMany(question => question.Choices
+                    .SelectMany(choice => choice.Responses))
                 .Except(currentChoice.Responses)
                 .ToList<Response>();
         }
 
+        /// <summary>
+        /// Get a list of all the answers chosen.
+        /// </summary>
+        /// <returns>All choices selected in all questions.</returns>
         public List<Choice> GetAnswers()
         {
             if (Questions == null) return null;
             return Questions
-                .Where(q1 => q1.Answer != null)
-                .Select(q2 => q2.GetChoice(q2.Answer.Value))
-                .Where(q3 => q3 != null)
+                .Where(question => question.Answer != null)
+                .Select(question => question.GetChoice(question.Answer.Value))
+                .Where(choice => choice != null)
                 .ToList<Choice>();
         }
 
-        public List<Response> GetResponses(List<Choice> answers)
+        /// <summary>
+        /// Get a list of all responses answered the minimum amount of times.
+        /// </summary>
+        /// <param name="answers">A list of answered choices.</param>
+        /// <returns>A list of responses giving feedback.</returns>
+        public List<Response> GetActiveResponses(List<Choice> answers)
         {
             if (answers == null) return null;
             return answers
-                .Where(c1 => c1.Responses != null)
-                .SelectMany(c2 => c2.Responses)
-                .Where(r1 => 
-                    r1.MinimumChoices <= answers
-                        .Count(c3 =>
-                            c3 != null &&
-                            c3.Responses.Contains(r1)
+                .Where(choice => choice.Responses != null)
+                .SelectMany(choice => choice.Responses)
+                .Where(response => 
+                    response.MinimumChoices <= answers
+                        .Count(choice =>
+                            choice != null &&
+                            choice.Responses.Contains(response)
                             )
                     )
                 .Distinct()
@@ -169,9 +201,9 @@ namespace Questionnairor.Models
         }
     }
 
-    /**
-     * A extension class, allowing linq-like data building.
-     */
+    /// <summary>
+    /// A extension class, allowing linq-like data building.
+    /// </summary>
     public static class QuestionnaireExtension
     {
         /// <param name="value">A global id to identify this questionnaire.</param>
@@ -190,6 +222,12 @@ namespace Questionnairor.Models
         public static Questionnaire Introduction(this Questionnaire o, string value)
         {
             o.Introduction = value;
+            return o;
+        }
+        /// <param name="value">Text at the top of the feedback page.</param>
+        public static Questionnaire Conclusion(this Questionnaire o, string value)
+        {
+            o.Conclusion = value;
             return o;
         }
         /// <param name="value">List of questions on this page.</param>

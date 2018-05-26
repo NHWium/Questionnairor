@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Questionnairor.Areas.Viewer.Models;
 using Questionnairor.Models;
 using Questionnairor.Services;
 
@@ -22,7 +23,7 @@ namespace Questionnairor.Areas.Viewer.Controllers
         }
 
         [HttpGet]
-        public IActionResult Feedback(List<Response> modelData)
+        public IActionResult Feedback(FeedbackModel modelData)
         {
             return View(modelData);
         }
@@ -30,15 +31,18 @@ namespace Questionnairor.Areas.Viewer.Controllers
         [HttpPost]
         public IActionResult Submit(Questionnaire modelData)
         {
-            List<Response> responses = modelData.GetResponses(modelData.GetAnswers());
-            return View("Feedback", responses);
+            List<Response> responses = modelData.GetActiveResponses(modelData.GetAnswers());
+            FeedbackModel feedbackData = new FeedbackModel();
+            feedbackData.Answers = modelData;
+            feedbackData.Responses = responses;
+            return View("Feedback", feedbackData);
         }
 
         [HttpPost]
         public IActionResult Debug(Questionnaire modelData)
         {
             string result = modelData.ToJson(Formatting.Indented);
-            List<Response> responses = modelData.GetResponses(modelData.GetAnswers());
+            List<Response> responses = modelData.GetActiveResponses(modelData.GetAnswers());
             result += "\n\nReponses:\n";
             foreach(Response response in responses)
             {

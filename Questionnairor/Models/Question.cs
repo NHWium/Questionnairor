@@ -35,6 +35,9 @@ namespace Questionnairor.Models
         [BindRequired]
         public List<Choice> Choices { get; set; } = new List<Choice>();
 
+        /// <summary>
+        /// The answer to the multiple-choice question. Null if unanswered.
+        /// </summary>
         public int? Answer { get; set; } = null;
 
         /// <summary>
@@ -122,6 +125,15 @@ namespace Questionnairor.Models
         }
 
         /// <summary>
+        /// Is any choice already selected as default?
+        /// </summary>
+        /// <returns>True if a choice IsDefault.</returns>
+        public bool ChoiceDefaultSelected()
+        {
+            return Choices.Any(c => c.IsDefault);
+        }
+
+        /// <summary>
         /// Get a specific choice based on value.
         /// </summary>
         /// <param name="questionId">The id of the choice to get.</param>
@@ -138,11 +150,11 @@ namespace Questionnairor.Models
                 return null;
             }
         }
-
     }
-    /**
-     * A extension class, allowing linq-like data building.
-     */
+
+    /// <summary>
+    /// A extension class, allowing linq-like data building.
+    /// </summary>
     public static class QuestionExtension
     {
         /// <param name="value">A global id to identify this question.</param>
@@ -167,6 +179,12 @@ namespace Questionnairor.Models
         public static Question Choices(this Question o, List<Choice> value)
         {
             o.Choices = value;
+            return o;
+        }
+        /// <param name="value">The answer to the multiple-choice question. Null if unanswered.</param>
+        public static Question Answer(this Question o, int? value)
+        {
+            o.Answer = value;
             return o;
         }
     }

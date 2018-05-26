@@ -19,7 +19,7 @@ namespace Questionnairor.Services
 
         public Questionnaire Get(Microsoft.AspNetCore.Http.HttpContext httpContext)
         {
-            if (httpContext != null)
+            if (httpContext != null && httpContext.Session.IsAvailable)
                 Data = httpContext.Session.Get("QuestionnairorQuestionnaire");
             else
                 Data = new Questionnaire();
@@ -34,7 +34,7 @@ namespace Questionnairor.Services
 
         public void Clear(Microsoft.AspNetCore.Http.HttpContext httpContext)
         {
-            if (httpContext != null)
+            if (httpContext != null && httpContext.Session.IsAvailable)
                 httpContext.Session.Clear();
         }
 
