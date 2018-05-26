@@ -34,6 +34,9 @@
     </div>
 }
 <hr />
+<environment include="Development">
+    @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
+</environment>
 <div>
     @Html.ActionLink("Back to Questionnaire", "Edit", "Questionnaire")
 </div>

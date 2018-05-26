@@ -1,7 +1,7 @@
 ﻿@model Questionnairor.Models.Response
 
 <div>
-    <input type="text" readonly="readonly" value="@Model.Feedback" />
+    <input type="text" readonly="readonly" value="@Model.Title" />
 
     @Html.ActionLink("Edit", "Edit", "Response", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id })
     @Html.ActionLink("Delete", "Remove", "Response", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id })

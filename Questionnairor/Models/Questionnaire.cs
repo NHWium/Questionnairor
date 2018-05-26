@@ -142,13 +142,25 @@ namespace Questionnairor.Models
             {
                 //Use First instead of FirstOrDefault in a try,catch - we do not want default value but null if not found.
                 return Questions.SelectMany(question => question.Choices
-                .SelectMany(choice => choice.Responses))
-                .First<Response>(response => response.Id == responseId);
+                    .SelectMany(choice => choice.Responses))
+                    .First<Response>(response => response.Id.Equals(responseId));
             }
             catch (Exception)
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Get a specific response based on id.
+        /// </summary>
+        /// <param name="questionId">The id of the response to get.</param>
+        /// <returns>The found response or null.</returns>
+        public List<Choice> GetChoicesWithResponse(Response response)
+        {
+            return Questions.SelectMany(question => question.Choices)
+                .Where(choice => choice.Responses.Contains(response))
+                .ToList<Choice>();
         }
 
         /// <summary>

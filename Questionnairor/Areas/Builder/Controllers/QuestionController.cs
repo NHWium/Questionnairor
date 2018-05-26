@@ -77,7 +77,7 @@ namespace Questionnairor.Areas.Builder.Controllers
                 if (modelData == null) modelData = new Question().Id(Guid.Empty);
                 return BadRequest(new { error = "Illegal question identifier", controller = "Question", action = "Update", id = modelData.Id, data = modelData.ToJson(Formatting.None) });
             }
-            question.Title(modelData.Title).Text(modelData.Text);
+            question.Id(modelData.Id).Title(modelData.Title).Text(modelData.Text);
             return RedirectToAction("Edit", "Question", new { questionId = modelData.Id });
         }
 

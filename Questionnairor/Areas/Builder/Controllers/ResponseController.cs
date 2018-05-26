@@ -127,13 +127,17 @@ namespace Questionnairor.Areas.Builder.Controllers
                 if (modelData == null) modelData = new Response().Id(Guid.Empty);
                 return BadRequest(new { error = "Illegal choice", controller = "Response", action = "Update", id = modelData.Id, data = modelData.ToJson(Formatting.None) });
             }
-            Response response = choice.GetResponse(modelData.Id);
+            Response response = service.Data.GetResponse(modelData.Id);
             if (response == null)
             {
                 if (modelData == null) modelData = new Response().Id(Guid.Empty);
                 return BadRequest(new { error = "Illegal response", controller = "Response", action = "Update", id = modelData.Id, data = modelData.ToJson(Formatting.None) });
             }
-            response.Title(modelData.Title).MinimumChoices(modelData.MinimumChoices).Feedback(modelData.Feedback);
+            //Dirty hack warning: for some reason updating just the response instance do not update it elsewhere, but I cannot see/discover why they are different instances. As a workaround, removing the instance all places, and placing the new instance the same places again works.
+            List<Choice> list = service.Data.GetChoicesWithResponse(response);
+            if (list != null) list.ForEach(c1 => c1.Responses.Remove(response));
+            response.Id(modelData.Id).Title(modelData.Title).MinimumChoices(modelData.MinimumChoices).Feedback(modelData.Feedback);
+            if (list != null) list.ForEach(c1 => c1.Responses.Add(response));
             return RedirectToAction("Edit", "Response", new { questionId, value, responseId = modelData.Id });
         }
 

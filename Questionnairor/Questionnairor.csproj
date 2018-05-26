@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Areas\Builder\Views\Question\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Areas\Builder\Data\" />
     <Folder Include="Areas\Viewer\Data\" />
     <Folder Include="Data\" />
@@ -14,6 +18,7 @@
 
   <ItemGroup>
     <None Include="Areas\Builder\Controllers\ChoiceController.cs" />
+    <None Include="Areas\Builder\Views\Question\Edit.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

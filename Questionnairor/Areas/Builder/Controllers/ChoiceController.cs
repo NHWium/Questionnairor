@@ -62,9 +62,15 @@ namespace Questionnairor.Areas.Builder.Controllers
                 ViewData["QuestionId"] = questionId;
                 return View("Add", modelData);
             }
+            if (modelData.IsDefault && question.ChoiceDefaultSelected())
+            {
+                ModelState.AddModelError(nameof(modelData.IsDefault), "Only one choice in a question can be selected as default.");
+                ViewData["QuestionId"] = questionId;
+                return View("Add", modelData);
+            }
             Choice choice = new Choice().Value(modelData.Value).Text(modelData.Text).IsDefault(modelData.IsDefault);
             question.Choices.Add(choice);
-            service.Set(HttpContext);
+//            service.Set(HttpContext);
             return RedirectToAction("Edit", "Choice", new { questionId, value = modelData.Value });
         }
 
