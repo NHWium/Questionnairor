@@ -38,6 +38,7 @@ namespace Questionnairor
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseStaticFiles();
             app.UseSession();
             app.UseMiddleware<LoadSessionIntoServiceMiddleware>();
             app.UseMvc(routes =>

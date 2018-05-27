@@ -229,7 +229,7 @@ namespace Questionnairor.Areas.Builder.Controllers
                 return BadRequest(new { error = "Illegal response", controller = "Response", action = "AddShared", id = responseId, data = service.Data.ToJson(Formatting.None) });
             }
             choice.Responses.Add(response);
-            return RedirectToAction("Edit", "Response", new { questionId, value, responseId });
+            return RedirectToAction("Edit", "Choice", new { questionId, value });
         }
     }
 }

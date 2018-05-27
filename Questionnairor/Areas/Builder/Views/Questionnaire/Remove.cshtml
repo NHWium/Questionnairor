@@ -1,7 +1,7 @@
 ﻿@model Questionnairor.Models.Questionnaire
 
 @{
-    ViewData["Title"] = "Remove";
+    ViewData["Title"] = "Delete";
 }
 
 <h2>Questionnaire</h2>
@@ -52,6 +52,7 @@
     @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
 </environment>
 <div>
-    @Html.ActionLink("Back", "Index", "Questionnaire")
+    @Html.ActionLink("Back", "Edit", "Questionnaire")
 </div>
+
 

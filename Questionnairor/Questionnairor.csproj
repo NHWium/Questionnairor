@@ -12,7 +12,6 @@
     <Folder Include="Areas\Builder\Data\" />
     <Folder Include="Areas\Viewer\Data\" />
     <Folder Include="Data\" />
-    <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\scripts\" />
   </ItemGroup>
 

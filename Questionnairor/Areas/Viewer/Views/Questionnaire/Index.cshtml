@@ -21,10 +21,27 @@
         }
         @Html.HiddenFor(m => m.Conclusion)
     }
+    <br />
+    <div id="submitMessage">
+        @Html.ValidationMessageFor(m => m.Questions)
+    </div>
     <hr />
-    <input type="submit" value="Submit Questionnaire" />
-    <input type="submit" value="Debug" formaction="@Url.Action("Debug", "Questionnaire")" />
-
+    <input type="submit" id="submitButton" disabled="true" value="Submit Questionnaire" />
+    <script type="text/javascript">
+        function answers() {
+            var questionList = document.getElementsByClassName("Question");
+            var answerList = document.getElementsByClassName("Answer");
+            var count = 0;
+            for (var i = 0; i < answerList.length; i++) {
+                if (answerList[i].checked) count++;
+            }
+            if (count < questionList.length) {
+                document.getElementById("submitButton").disabled = true;
+            }
+            else {
+                document.getElementById("submitButton").disabled = false;
+                document.getElementById("submitMessage").style = "display:none;";
+            }
+        }
+    </script>
 }
-
-

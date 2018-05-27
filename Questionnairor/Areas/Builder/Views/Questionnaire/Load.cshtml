@@ -1,8 +1,12 @@
-﻿@{
-    ViewData["Title"] = "Questionnaire";
+﻿@model Questionnaire
+
+@{
+    ViewData["Title"] = "Load";
 }
 
 <h2>Questionnaire</h2>
+<h4>Load</h4>
+<hr />
 <p>Write or copy/paste a valid json questionnaire object to load it, or load from a file.</p>
 @using (Html.BeginForm(FormMethod.Post))
 {
@@ -39,6 +43,28 @@
     <div>
         <input id="loadButton" name="loadButton" type="submit" value="Load Questionnaire From JSON" disabled="disabled" formaction="@Url.Action("Load", "Questionnaire")" />
         <input id="databaseButton" name="databaseButton" type="submit" value="Load Questionnaire From Database" disabled="disabled" formaction="@Url.Action("LoadDB", "Questionnaire")" />
-        <a href="@Url.Action("Index", "Questionnaire")"><input type="button" value="Cancel Load" /></a>
+        @if (Model == null || Model.Id == Guid.Empty)
+        {
+            <a href="@Url.Action("Index", "Questionnaire")"><input type="button" value="Cancel Load" /></a>
+        }
+        else
+        {
+            <a href="@Url.Action("Edit", "Questionnaire")"><input type="button" value="Cancel Load" /></a>
+        }
     </div>
 }
+<hr />
+<div>
+    @if (Model == null || Model.Id == Guid.Empty)
+    {
+        @Html.ActionLink("Back", "Index", "Questionnaire")
+    }
+    else
+    {
+        <environment include="Development">
+            @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
+        </environment>
+        @Html.ActionLink("Back", "Edit", "Questionnaire")
+    }
+</div>
+

@@ -13,12 +13,19 @@
 }
 <br />
 <div>
-    <a href="@Url.Action("Add", "Questionnaire")"><input type="button" value="Create New Questionnaire" /></a>
-    <a href="@Url.Action("Load", "Questionnaire")"><input type="button" value="Load Questionnaire" /></a>
+    @if (Model == null || Model.Id == Guid.Empty)
+    {
+        <a href="@Url.Action("Add", "Questionnaire")"><input type="button" value="Create New Questionnaire" /></a>
+    }
     @if (Model != null && Model.Id != Guid.Empty)
     {
         <a href="@Url.Action("Edit", "Questionnaire")"><input type="button" value="Edit Questionnaire" /></a>
         <a href="@Url.Action("Remove", "Questionnaire")"><input type="button" value="Delete Questionnaire" /></a>
+    }
+    <a href="@Url.Action("Load", "Questionnaire")"><input type="button" value="Load Questionnaire" /></a>
+    @if (Model != null && Model.Id != Guid.Empty)
+    {
+        <a href="@Url.Action("Save", "Questionnaire")"><input type="button" value="Save Questionnaire" /></a>
         <a href="@Url.Action("Index", "Questionnaire", new { Area = "Viewer" })"><input type="button" value="View Questionnaire" /></a>
     }
 </div>

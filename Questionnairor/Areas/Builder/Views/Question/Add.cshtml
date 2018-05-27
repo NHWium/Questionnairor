@@ -25,6 +25,7 @@
         @Html.ValidationMessageFor(m => m.Text)
     </div>
     @Html.HiddenFor(m => m.Choices)
+    @Html.HiddenFor(m => m.Answer)
     <p>
         Add a question to the questionnaire. Afterwards you can add multiple choices.
     </p>
@@ -37,7 +38,5 @@
 <environment include="Development">
     @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
 </environment>
-<div>
-    @Html.ActionLink("Back to Questionnaire", "Edit", "Questionnaire")
-</div>
+@await Html.PartialAsync("FooterPartialView", new FooterModel(null, null))
 

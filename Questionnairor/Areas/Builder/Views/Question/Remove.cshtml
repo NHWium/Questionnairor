@@ -24,6 +24,7 @@
         @Html.TextAreaFor(m => m.Text, new { @readonly = "readonly" })
     </div>
     @Html.HiddenFor(m => m.Choices)
+    @Html.HiddenFor(m => m.Answer)
     <p>
         Please confirm permanent deletion of this question.
     </p>
@@ -46,7 +47,5 @@
 <environment include="Development">
     @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
 </environment>
-<div>
-    @Html.ActionLink("Back to Questionnaire", "Edit", "Questionnaire")
-</div>
+@await Html.PartialAsync("FooterPartialView", new FooterModel(null, null))
 

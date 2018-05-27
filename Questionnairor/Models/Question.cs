@@ -38,6 +38,7 @@ namespace Questionnairor.Models
         /// <summary>
         /// The answer to the multiple-choice question. Null if unanswered.
         /// </summary>
+        [BindRequired]
         public int? Answer { get; set; } = null;
 
         /// <summary>

@@ -37,6 +37,8 @@
     <div>
         <input type="submit" value="Edit Questionnaire" />
         <a href="@Url.Action("Remove", "Questionnaire")"><input type="button" value="Delete Questionnaire" /></a>
+        <a href="@Url.Action("Load", "Questionnaire")"><input type="button" value="Load Questionnaire" /></a>
+        <a href="@Url.Action("Save", "Questionnaire")"><input type="button" value="Save Questionnaire" /></a>
     </div>
     <hr />
     <h4>Questions</h4>
@@ -54,6 +56,7 @@
     @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
 </environment>
 <div>
+    @Html.ActionLink("View Questionnaire", "Index", "Questionnaire", new { Area = "Viewer" })
     @Html.ActionLink("Back", "Index", "Questionnaire")
 </div>
 

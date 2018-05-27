@@ -1,0 +1,11 @@
+﻿body {
+}
+
+.centered {
+    text-align: center;
+    font-weight: lighter;
+}
+
+.field-validation-error {
+    color: red;
+}

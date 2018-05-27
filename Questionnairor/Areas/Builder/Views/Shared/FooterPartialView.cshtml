@@ -1,0 +1,13 @@
+﻿@model FooterModel
+<div>
+    @Html.ActionLink("View Questionnaire", "Index", "Questionnaire", new { Area = "Viewer" })
+    @Html.ActionLink("Back to Questionnaire", "Edit", "Questionnaire")
+    @if (Model.QuestionId != null && Model.QuestionId != "")
+    {
+        @Html.ActionLink("Back to Question", "Edit", "Question", new { questionId = Model.QuestionId })
+    }
+    @if (Model.QuestionId != null && Model.QuestionId != "" && Model.Value != null && Model.Value != "")
+    {
+        @Html.ActionLink("Back to Choice", "Edit", "Choice", new { questionId = Model.QuestionId, value = Model.Value })
+    }
+</div>

@@ -1,0 +1,18 @@
+﻿@model Questionnaire
+
+@{
+    ViewData["Title"] = "Save";
+}
+
+<h2>Questionnaire</h2>
+<h4>Save</h4>
+<hr />
+
+
+<hr />
+<environment include="Development">
+    @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
+</environment>
+<div>
+    @Html.ActionLink("Back", "Edit", "Questionnaire")
+</div>

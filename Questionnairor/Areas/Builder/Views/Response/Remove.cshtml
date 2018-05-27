@@ -1,7 +1,7 @@
 ﻿@model Questionnairor.Models.Response
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Delete";
 }
 
 <h2>Response</h2>
@@ -40,9 +40,5 @@
 <environment include="Development">
     @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
 </environment>
-<div>
-    @Html.ActionLink("Back to Questionnaire", "Edit", "Questionnaire")
-    @Html.ActionLink("Back to Question", "Edit", "Question", new { questionId = ViewData["QuestionId"] })
-    @Html.ActionLink("Back to Choice", "Edit", "Choice", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })
-</div>
+@await Html.PartialAsync("FooterPartialView", new FooterModel(ViewData["QuestionId"], ViewData["ChoiceValue"]))
 

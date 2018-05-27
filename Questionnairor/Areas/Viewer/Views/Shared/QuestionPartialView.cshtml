@@ -3,16 +3,26 @@
 <div>
     <h4>@Model.Title</h4>
     <p>@Model.Text</p>
-    @Html.Hidden($"Questions[{@Model.QuestionIndex}].Id", Model.Id)
+    @Html.Hidden($"Questions[{@Model.QuestionIndex}].Id", Model.Id, new { @class = "Question" })
     @Html.Hidden($"Questions[{@Model.QuestionIndex}].Title", Model.Title)
     @Html.Hidden($"Questions[{@Model.QuestionIndex}].Text", Model.Text)
-    <div>
+    <table>
+        <tr>
         @for (var i = 0; i < Model.Choices.Count; i++)
         {
             ChoiceWithIndex data = new ChoiceWithIndex(Model.QuestionIndex, i, Model.Choices.ElementAt(i));
             await Html.RenderPartialAsync("ChoiceRadioPartialView", data);
         }
-    </div>
+        </tr>
+        <tr>
+        @for (var i = 0; i < Model.Choices.Count; i++)
+        {
+            <td class="centered">
+                @Model.Choices.ElementAt(i).Text
+            </td>
+        }
+        </tr>
+    </table>
     @for (var i = 0; i < Model.Choices.Count; i++)
     {
         ChoiceWithIndex data = new ChoiceWithIndex(Model.QuestionIndex, i, Model.Choices.ElementAt(i));

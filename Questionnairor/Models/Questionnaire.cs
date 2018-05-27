@@ -191,6 +191,17 @@ namespace Questionnairor.Models
         }
 
         /// <summary>
+        /// If all questions are answered or not.
+        /// </summary>
+        /// <returns>True if all questions have answers.</returns>
+        public bool IsAllAnswered()
+        {
+            if (Questions == null) return false;
+            return !Questions
+                .Any(question => question.Answer == null);
+        }
+
+        /// <summary>
         /// Get a list of all responses answered the minimum amount of times.
         /// </summary>
         /// <param name="answers">A list of answered choices.</param>
