@@ -19,9 +19,16 @@ namespace Questionnairor.Middlewares
 
         public async Task InvokeAsync(HttpContext httpContext, RequestDelegate next)
         {
-            service.Get(httpContext);
-            await next(httpContext);
-            service.Set(httpContext);
+            try
+            {
+                service.Get(httpContext);
+                await next(httpContext);
+                service.Set(httpContext);
+            }
+            catch (Exception)
+            {
+                await next(httpContext);
+            }
         }
     }
 }

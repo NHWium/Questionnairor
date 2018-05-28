@@ -4,7 +4,7 @@
 {
     <h2>@Model.Answers.Title</h2>
     <p>@Model.Answers.Conclusion</p>
-    @foreach(Response response in Model.Responses)
+    @foreach (Response response in Model.Responses)
     {
         <p>@response.Feedback</p>
     }
@@ -12,5 +12,8 @@
 <div>
     <a href="@Url.Action("Index", "Questionnaire", new { Area = "" })"><input type="button" value="Finish Questionnaire" /></a>
 </div>
+<environment include="Development">
+    @Html.Hidden("DebugJson", Model.Answers.ToJson(Newtonsoft.Json.Formatting.Indented))
+</environment>
 
 

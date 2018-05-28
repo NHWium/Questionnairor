@@ -70,7 +70,6 @@ namespace Questionnairor.Areas.Builder.Controllers
             }
             Choice choice = new Choice().Value(modelData.Value).Text(modelData.Text).IsDefault(modelData.IsDefault);
             question.Choices.Add(choice);
-//            service.Set(HttpContext);
             return RedirectToAction("Edit", "Choice", new { questionId, value = modelData.Value });
         }
 

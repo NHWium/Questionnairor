@@ -42,7 +42,14 @@
     <hr />
     <div>
         <input id="loadButton" name="loadButton" type="submit" value="Load Questionnaire From JSON" disabled="disabled" formaction="@Url.Action("Load", "Questionnaire")" />
-        <input id="databaseButton" name="databaseButton" type="submit" value="Load Questionnaire From Database" disabled="disabled" formaction="@Url.Action("LoadDB", "Questionnaire")" />
+        @if (ViewData["DB"].Equals("True") || true)
+        {
+            <input id="databaseButton" name="databaseButton" type="submit" value="Load Questionnaire From Database" formaction="@Url.Action("LoadDB", "Questionnaire")" />
+        }
+        else
+        {
+            <input id="databaseButton" name="databaseButton" type="submit" value="Load Questionnaire From Database" disabled="disabled" formaction="@Url.Action("LoadDB", "Questionnaire")" />
+        }
         @if (Model == null || Model.Id == Guid.Empty)
         {
             <a href="@Url.Action("Index", "Questionnaire")"><input type="button" value="Cancel Load" /></a>

@@ -9,15 +9,31 @@ using Microsoft.Extensions.DependencyInjection;
 using Questionnairor.Services;
 using Questionnairor.Middlewares;
 using Questionnairor.Extensions;
+using Questionnairor.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Questionnairor
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            this.Configuration = configuration;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<QuestionnaireDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                    .EnableSensitiveDataLogging(true)
+            );
+            services.AddScoped<IDatabaseService, DatabaseService>();
+
             services.AddMvc();
 
             services.AddDistributedMemoryCache();

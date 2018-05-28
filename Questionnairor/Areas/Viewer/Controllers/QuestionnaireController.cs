@@ -30,10 +30,7 @@ namespace Questionnairor.Areas.Viewer.Controllers
         {
             if (modelData == null || !modelData.IsAllAnswered())
                 return RedirectToAction("Index", "Questionnaire");
-            List<Response> responses = modelData.GetActiveResponses(modelData.GetAnswers());
-            FeedbackModel feedbackData = new FeedbackModel();
-            feedbackData.Answers = modelData;
-            feedbackData.Responses = responses;
+            FeedbackModel feedbackData = new FeedbackModel(modelData);
             return View("Feedback", feedbackData);
         }
     }

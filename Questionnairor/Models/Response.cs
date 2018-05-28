@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Questionnairor.Models
@@ -15,6 +16,7 @@ namespace Questionnairor.Models
         /// <summary>
         /// A global id to identify this response.
         /// </summary>
+        [Key]
         [BindRequired]
         public Guid Id { get; set; } = Guid.NewGuid();
         /// <summary>
@@ -34,6 +36,10 @@ namespace Questionnairor.Models
         [BindRequired]
         [Required, StringLength(20, MinimumLength = 1)]
         public string Title { get; set; } = "";
+
+        public Response()
+        {
+        }
 
         /// <summary>
         /// Create a response from provided json.

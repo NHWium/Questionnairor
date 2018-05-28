@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
@@ -16,6 +17,8 @@ namespace Questionnairor.Models
         /// <summary>
         /// A global id to identify this questionnaire.
         /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [BindRequired]
         public Guid Id { get; set; } = Guid.NewGuid();
         /// <summary>
@@ -39,6 +42,10 @@ namespace Questionnairor.Models
         /// </summary>
         [BindRequired]
         public List<Question> Questions { get; set; } = new List<Question>();
+
+        public Questionnaire()
+        {
+        }
 
         /// <summary>
         /// Create a questionnaire from provided json.
@@ -150,6 +157,18 @@ namespace Questionnairor.Models
                 return null;
             }
         }
+
+        /// <summary>
+        /// Get all responses.
+        /// </summary>
+        /// <returns>All responses.</returns>
+        public List<Response> GetResponses()
+        {
+            return Questions.SelectMany(question => question.Choices
+                .SelectMany(choice => choice.Responses))
+                .ToList<Response>();
+        }
+
 
         /// <summary>
         /// Get a specific response based on id.

@@ -7,8 +7,24 @@
 <h2>Questionnaire</h2>
 <h4>Save</h4>
 <hr />
+@using (Html.BeginForm(FormMethod.Post))
+{
+    @Html.TextArea("jsonData", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
+    <br />
+    <input type="file" name="fileInput" id="fileInput" />
+    <hr />
+    <input id="saveButton" name="saveButton" type="submit" value="Save Questionnaire To JSON" disabled="disabled" formaction="@Url.Action("Save", "Questionnaire")" />
+    @if (ViewData["DB"].Equals("True")||true)
+    {
+        <input id="databaseButton" name="databaseButton" type="submit" value="Save Questionnaire To Database" formaction="@Url.Action("SaveDB", "Questionnaire")" />
+    }
+    else
+    {
+        <input id="databaseButton" name="databaseButton" type="submit" value="Save Questionnaire To Database" disabled="disabled" formaction="@Url.Action("SaveDB", "Questionnaire")" />
+    }
 
 
+}
 <hr />
 <environment include="Development">
     @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))

@@ -38,8 +38,9 @@ namespace Questionnairor.Areas.Builder.Controllers
         }
 
         [HttpGet]
-        public IActionResult Load([FromServices]IQuestionnaireService service)
+        public IActionResult Load([FromServices]IQuestionnaireService service, [FromServices]IDatabaseService db)
         {
+            ViewData["DB"] = db.IsValid();
             Questionnaire modelData = service.Get(HttpContext);
             return View(modelData);
         }
@@ -48,7 +49,7 @@ namespace Questionnairor.Areas.Builder.Controllers
         public IActionResult Load(string jsonData, [FromServices]IQuestionnaireService service)
         {
             Questionnaire modelData = Questionnaire.FromJson(jsonData);
-            if (!service.IsValid(modelData.Id) && modelData.Title == "Not Loaded")
+            if (modelData == null || modelData.Id == Guid.Empty || modelData.Title == "Not Loaded")
             {
                 return BadRequest(new { error = "Illegal json", controller = "Questionnaire", action = "Load", id = "", data = jsonData });
             }
@@ -57,18 +58,41 @@ namespace Questionnairor.Areas.Builder.Controllers
         }
 
         [HttpGet]
-        public IActionResult Save([FromServices]IQuestionnaireService service)
+        public IActionResult Save([FromServices]IQuestionnaireService service, [FromServices]IDatabaseService db)
         {
+            ViewData["DB"] = db.IsValid();
             Questionnaire modelData = service.Get(HttpContext);
-            if (!service.IsValid() && !service.IsValid(modelData.Id))
+            if (!service.IsValid() || !service.IsValid(modelData.Id))
             {
                 if (modelData == null) modelData = new Questionnaire().Id(Guid.Empty);
                 return BadRequest(new { error = "Illegal questionnaire", controller = "Questionnaire", action = "Save", id = "", data = modelData.ToJson(Formatting.None) });
             }
-            string result = modelData.ToJson(Formatting.Indented);
-            return Ok(result);
-//            return View(modelData);
+            return View(modelData);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> LoadDB([FromServices]IDatabaseService db)
+        {
+            Questionnaire modelData = await db.Load();
+            if (modelData == null || modelData.Id == null | modelData.Id == Guid.Empty)
+            {
+                return BadRequest(new { error = "Could not load from database", controller = "Questionnaire", action = "LoadDB", id = "", data = "" });
+            }
+            return RedirectToAction("Edit", "Questionnaire");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveDB(string jsonData, [FromServices]IDatabaseService db)
+        {
+            Questionnaire modelData = Questionnaire.FromJson(jsonData);
+            if (modelData == null || modelData.Id == Guid.Empty || modelData.Title == "Not Loaded")
+            {
+                return BadRequest(new { error = "Illegal json", controller = "Questionnaire", action = "Load", id = "", data = jsonData });
+            }
+            await db.Save(modelData);
+            return Ok(modelData);
+        }
+
 
         [HttpGet]
         public IActionResult Edit([FromServices]IQuestionnaireService service)
@@ -88,7 +112,7 @@ namespace Questionnairor.Areas.Builder.Controllers
             {
                 return View("Edit", modelData);
             }
-            if (!service.IsValid() && !service.IsValid(modelData.Id))
+            if (!service.IsValid() || !service.IsValid(modelData.Id))
             {
                 if (modelData == null) modelData = new Questionnaire().Id(Guid.Empty);
                 return BadRequest(new { error = "Illegal questionnaire", controller = "Questionnaire", action = "Update", id = "", data = modelData.ToJson(Formatting.None) });
@@ -111,7 +135,7 @@ namespace Questionnairor.Areas.Builder.Controllers
         [HttpPost, HttpDelete]
         public IActionResult Delete(Questionnaire modelData, [FromServices]IQuestionnaireService service)
         {
-            if (!service.IsValid() && !service.IsValid(modelData.Id))
+            if (!service.IsValid() || !service.IsValid(modelData.Id))
             {
                 if (modelData == null) modelData = new Questionnaire().Id(Guid.Empty);
                 return BadRequest(new { error = "Illegal questionnaire", controller = "Questionnaire", action = "Delete", id = "", data = modelData.ToJson(Formatting.None) });

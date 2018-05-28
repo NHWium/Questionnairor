@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Questionnairor.Models;
 using Questionnairor.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Questionnairor.Data;
 
 namespace Questionnairor.Services
 {
