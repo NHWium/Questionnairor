@@ -4,23 +4,25 @@
     ViewData["Title"] = "Add";
 }
 
-<h2>Question</h2>
-<h4>Add</h4>
-<hr />
-@using (Html.BeginForm("Create", "Question", FormMethod.Post))
+<div class="header">
+    <h2>Question</h2>
+    <h4>Add</h4>
+    <hr />
+</div>
+@using (Html.BeginForm("Create", "Question", FormMethod.Post, new { @class = "center" }))
 {
     @Html.HiddenFor(m => m.Id)
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.Title)
     </div>
-    <div class="Editor Right">
+    <div class="editor right">
         @Html.EditorFor(m => m.Title)
         @Html.ValidationMessageFor(m => m.Title)
     </div>
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.Text)
     </div>
-    <div class="Editor Right">
+    <div class="editor right">
         @Html.TextAreaFor(m => m.Text)
         @Html.ValidationMessageFor(m => m.Text)
     </div>
@@ -34,7 +36,6 @@
         <a href="@Url.Action("Edit", "Questionnaire")"><input type="button" value="Cancel Add" /></a>
     </div>
 }
-<hr />
 <environment include="Development">
     @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
 </environment>

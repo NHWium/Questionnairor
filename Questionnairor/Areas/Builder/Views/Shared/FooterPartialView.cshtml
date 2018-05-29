@@ -1,5 +1,6 @@
 ﻿@model FooterModel
-<div>
+<div class="footer">
+    <hr />
     @Html.ActionLink("View Questionnaire", "Index", "Questionnaire", new { Area = "Viewer" })
     @Html.ActionLink("Back to Questionnaire", "Edit", "Questionnaire")
     @if (Model.QuestionId != null && Model.QuestionId != "")

@@ -1,12 +1,17 @@
 ﻿@model Questionnaire
 
-@using (Html.BeginForm("Submit", "Questionnaire", FormMethod.Post))
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="header">
+    <h2>@Model.Title</h2>
+</div>
+@using (Html.BeginForm("Submit", "Questionnaire", FormMethod.Post, new { @class = "center" }))
 {
+    <p><strong>@Model.Introduction</strong></p>
     @if (Model != null && Model.Id != Guid.Empty)
     {
-        ViewData["Title"] = Model.Title;
-        <h2>@Model.Title</h2>
-        <p><strong>@Model.Introduction</strong></p>
         @Html.HiddenFor(m => m.Id)
         @Html.HiddenFor(m => m.Title)
         @Html.HiddenFor(m => m.Introduction)
@@ -43,6 +48,7 @@
                 document.getElementById("submitMessage").style = "display:none;";
             }
         }
+        answers();
     </script>
     <environment include="Development">
         @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))

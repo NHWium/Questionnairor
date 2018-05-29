@@ -58,13 +58,13 @@ namespace Questionnairor.Areas.Builder.Controllers
             }
             if (question.ChoiceValueExists(modelData.Value))
             {
-                ModelState.AddModelError(nameof(modelData.Value), "Each choice in a question must have an unique value.");
+                ModelState.AddModelError(nameof(modelData.Value), "Each choice must have an unique value.");
                 ViewData["QuestionId"] = questionId;
                 return View("Add", modelData);
             }
             if (modelData.IsDefault && question.ChoiceDefaultSelected())
             {
-                ModelState.AddModelError(nameof(modelData.IsDefault), "Only one choice in a question can be selected as default.");
+                ModelState.AddModelError(nameof(modelData.IsDefault), "Only one choice can be selected as default.");
                 ViewData["QuestionId"] = questionId;
                 return View("Add", modelData);
             }
@@ -113,7 +113,7 @@ namespace Questionnairor.Areas.Builder.Controllers
             }
             if (oldValue != modelData.Value && question.ChoiceValueExists(modelData.Value))
             {
-                ModelState.AddModelError(nameof(modelData.Value), "Each choice in a question must have an unique value.");
+                ModelState.AddModelError(nameof(modelData.Value), "Each choice in must have an unique value.");
                 ViewData["QuestionId"] = questionId;
                 return View("Add", modelData);
             }

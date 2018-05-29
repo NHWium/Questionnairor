@@ -5,22 +5,24 @@
     ViewData["QuestionId"] = Model.Id;
 }
 
-<h2>Question</h2>
-<h4>Delete</h4>
-<hr />
-@using (Html.BeginForm("Delete", "Question", FormMethod.Post))
+<div class="header">
+    <h2>Question</h2>
+    <h4>Delete</h4>
+    <hr />
+</div>
+@using (Html.BeginForm("Delete", "Question", FormMethod.Post, new { @class = "center" }))
 {
     @Html.HiddenFor(m => m.Id)
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.Title)
     </div>
-    <div class="Editor Right">
+    <div class="editor right">
         @Html.EditorFor(m => m.Title, new { @readonly = "readonly" })
     </div>
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.Text)
     </div>
-    <div class="Editor Right">
+    <div class="editor right">
         @Html.TextAreaFor(m => m.Text, new { @readonly = "readonly" })
     </div>
     @Html.HiddenFor(m => m.Choices)
@@ -43,7 +45,6 @@
         <a href="@Url.Action("Add", "Choice", new { questionId = ViewData["QuestionId"] })"><input type="button" value="Add New Choice" /></a>
     </div>
 }
-<hr />
 <environment include="Development">
     @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
 </environment>

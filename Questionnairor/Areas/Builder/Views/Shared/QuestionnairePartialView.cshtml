@@ -1,9 +1,7 @@
 ﻿@model Questionnairor.Models.Questionnaire
 
-<div>
-    <input type="text" readonly="readonly" value="@Model.Title" />
-    <input type="text" readonly="readonly" value="Includes @Model.Questions.Count questions." />
+<input type="text" readonly="readonly" value="@Model.Title" />
+<input type="text" readonly="readonly" value="Includes @Model.Questions.Count questions." />
 
-    @Html.ActionLink("Edit", "Edit", "Questionnaire")
-    @Html.ActionLink("Delete", "Remove", "Questionnaire")
-</div>
+@Html.ActionLink("Edit", "Edit", "Questionnaire")
+@Html.ActionLink("Delete", "Remove", "Questionnaire")

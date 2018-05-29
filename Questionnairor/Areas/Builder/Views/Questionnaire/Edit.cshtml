@@ -4,30 +4,32 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Questionnaire</h2>
-<h4>Edit</h4>
-<hr />
-@using (Html.BeginForm("Update", "Questionnaire", FormMethod.Post))
+<div class="header">
+    <h2>Questionnaire</h2>
+    <h4>Edit</h4>
+    <hr />
+</div>
+@using (Html.BeginForm("Update", "Questionnaire", FormMethod.Post, new { @class = "center" }))
 {
     @Html.HiddenFor(m => m.Id)
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.Title)
     </div>
-    <div class="Editor Right">
+    <div class="editor right">
         @Html.EditorFor(m => m.Title)
         @Html.ValidationMessageFor(m => m.Title)
     </div>
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.Introduction)
     </div>
-    <div class="Editor Right">
+    <div class="editor right">
         @Html.TextAreaFor(m => m.Introduction)
         @Html.ValidationMessageFor(m => m.Introduction)
     </div>
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.Conclusion)
     </div>
-    <div class="Editor Right">
+    <div class="editor right">
         @Html.TextAreaFor(m => m.Conclusion)
         @Html.ValidationMessageFor(m => m.Conclusion)
     </div>
@@ -51,11 +53,11 @@
         <a href="@Url.Action("Add", "Question")"><input type="button" value="Add New Question" /></a>
     </div>
 }
-<hr />
 <environment include="Development">
     @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
 </environment>
-<div>
+<div class="footer">
+    <hr />
     @Html.ActionLink("View Questionnaire", "Index", "Questionnaire", new { Area = "Viewer" })
     @Html.ActionLink("Back", "Index", "Questionnaire")
 </div>

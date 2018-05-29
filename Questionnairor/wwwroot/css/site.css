@@ -1,4 +1,77 @@
 ﻿body {
+    background-color: #b3d9ff;
+    color: black;
+    font-family: 'Roboto',sans-serif;
+}
+
+input[type="text"], input[type="number"], input[type="file"], textarea, select {
+    background-color: #e6f2ff;
+    border-color: #99ccff;
+}
+
+input[type="button"], input[type="submit"] {
+    min-width: 19%;
+    background-color: #80bfff;
+    border-color: #99ccff;
+}
+
+input[type="button"]:hover, input[type="submit"]:hover {
+    background-color: #66b3ff;
+}
+
+input[type="text"], input[type="number"] {
+    width: 57%;
+}
+
+input[readonly*="readonly"] {
+    width: 19%;
+    background-color: #cce6ff;
+}
+
+textarea {
+    width: 57%;
+    height: 33px;
+    min-height: 33px;
+    max-width: 95%;
+}
+
+hr {
+    border-color: #cce6ff;
+}
+
+a:link {
+    color: #0080ff;
+}
+
+a:visited {
+    color: #0066cc;
+}
+
+a:hover {
+    color: #004d99;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr minmax(min-content, 2fr) minmax(min-content, 2fr) 1fr;
+    grid-template-rows: 1fr minmax(min-content, 1ft) minmax(min-content, 9fr) 1fr;
+    grid-gap: 0em 1em;
+    grid-template-areas: "topborder  topborder topborder topborder" "leftborder header    header    rightborder" "leftborder center    center    rightborder" "leftborder footer    footer    rightborder";
+}
+
+.header {
+    grid-column: header;
+    grid-row: header;
+}
+
+.center {
+    grid-column: center;
+    grid-row: center;
+}
+
+.footer {
+    grid-column: footer;
+    grid-row: footer;
 }
 
 .centered {
@@ -8,4 +81,9 @@
 
 .field-validation-error {
     color: red;
+}
+
+.json {
+    height: 333px;
+    width: 95%;
 }

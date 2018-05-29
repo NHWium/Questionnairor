@@ -4,15 +4,21 @@
     ViewData["Title"] = "Questionnaire";
 }
 
-<h2>Questionnaire</h2>
-<p>This app allows you create a custom questionnaire by adding individual multiple-choice questions, and then each choice in these questions.</p>
-<p>Finally you can specify the responses the questionnaire gives to specific questions, including if a response is only given to a combination of choices.</p>
-@if (Model != null && Model.Id != Guid.Empty)
-{
-    @await Html.PartialAsync("QuestionnairePartialView", Model)
-}
-<br />
-<div>
+<div class="header">
+    <h2>Questionnaire</h2>
+    <hr />
+    <p>This app allows you create a custom questionnaire by adding individual multiple-choice questions, and then each choice in these questions.</p>
+    <p>Finally you can specify the responses the questionnaire gives to specific questions, including if a response is only given to a combination of choices.</p>
+    <br />
+</div>
+<div class="center">
+    @if (Model != null && Model.Id != Guid.Empty)
+    {
+        @await Html.PartialAsync("QuestionnairePartialView", Model)
+    }
+</div>
+<div class="footer">
+    <hr />
     @if (Model == null || Model.Id == Guid.Empty)
     {
         <a href="@Url.Action("Add", "Questionnaire")"><input type="button" value="Create New Questionnaire" /></a>

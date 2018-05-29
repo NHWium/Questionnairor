@@ -5,24 +5,26 @@
     ViewData["ChoiceValue"] = Model.Value;
 }
 
-<h2>Choice</h2>
-<h4>Delete</h4>
-<hr />
-@using (Html.BeginForm("Delete", "Choice", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], confirm = true }, FormMethod.Post))
+<div class="header">
+    <h2>Choice</h2>
+    <h4>Delete</h4>
+    <hr />
+</div>
+@using (Html.BeginForm("Delete", "Choice", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], confirm = true }, FormMethod.Post, true, new { @class = "center" }))
 {
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.Value)
     </div>
-    <div class="Editor Right">
+    <div class="editor right">
         @Html.EditorFor(m => m.Value, new { @readonly = "readonly" })
     </div>
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.Text)
     </div>
-    <div class="Editor Right">
+    <div class="editor right">
         @Html.EditorFor(m => m.Text, new { @readonly = "readonly" })
     </div>
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.IsDefault)
         @Html.EditorFor(m => m.IsDefault, new { @readonly = "readonly" })
     </div>
@@ -45,7 +47,6 @@
         <a href="@Url.Action("Add", "Response", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"] })"><input type="button" value="Add New Response" /></a>
     </div>
 }
-<hr />
 <environment include="Development">
     @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
 </environment>

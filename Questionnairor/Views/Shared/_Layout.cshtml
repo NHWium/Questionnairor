@@ -4,21 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <environment include="Development">
-        <link rel="stylesheet" href="~/css/site.css" />
-        <script src="~/script/script.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-        <script src="~/script/script.js"></script>
-    </environment>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.9/jquery.validate.unobtrusive.min.js"></script>
+    <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    @RenderBody()
-
+    <div class="container">
+        @RenderBody()
+    </div>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

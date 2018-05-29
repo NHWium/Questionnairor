@@ -5,26 +5,28 @@
     ViewData["ChoiceValue"] = Model.Value;
 }
 
-<h2>Choice</h2>
-<h4>Edit</h4>
-<hr />
-@using (Html.BeginForm("Update", "Choice", new { questionId = ViewData["QuestionId"], oldValue = Model.Value }, FormMethod.Post))
+<div class="header">
+    <h2>Choice</h2>
+    <h4>Edit</h4>
+    <hr />
+</div>
+@using (Html.BeginForm("Update", "Choice", new { questionId = ViewData["QuestionId"], oldValue = Model.Value }, FormMethod.Post, true, new { @class = "center" }))
 {
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.Value)
     </div>
-    <div class="Editor Right">
+    <div class="editor right">
         @Html.EditorFor(m => m.Value)
         @Html.ValidationMessageFor(m => m.Value)
     </div>
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.Text)
     </div>
-    <div class="Editor Right">
+    <div class="editor right">
         @Html.EditorFor(m => m.Text)
         @Html.ValidationMessageFor(m => m.Text)
     </div>
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.IsDefault)
         @Html.EditorFor(m => m.IsDefault)
         @Html.ValidationMessageFor(m => m.IsDefault)
@@ -49,7 +51,6 @@
         @await Component.InvokeAsync("ResponseList", new { questionId = ViewData["QuestionId"], value = Model.Value })
     </div>
 }
-<hr />
 <environment include="Development">
     @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
 </environment>

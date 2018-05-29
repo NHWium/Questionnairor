@@ -1,15 +1,18 @@
 ﻿@model FeedbackModel
 
-@using (Html.BeginForm("Index", "Questionnaire", FormMethod.Get))
-{
+<div class="header">
     <h2>@Model.Answers.Title</h2>
+</div>
+@using (Html.BeginForm("Index", "Questionnaire", FormMethod.Get, new { @class = "center" }))
+{
     <p>@Model.Answers.Conclusion</p>
     @foreach (Response response in Model.Responses)
     {
         <p>@response.Feedback</p>
     }
 }
-<div>
+<div class="footer">
+    <hr />
     <a href="@Url.Action("Index", "Questionnaire", new { Area = "" })"><input type="button" value="Finish Questionnaire" /></a>
 </div>
 <environment include="Development">

@@ -4,13 +4,15 @@
     ViewData["Title"] = "Load";
 }
 
-<h2>Questionnaire</h2>
-<h4>Load</h4>
-<hr />
-<p>Write or copy/paste a valid json questionnaire object to load it, or load from a file.</p>
-@using (Html.BeginForm(FormMethod.Post))
+<div class="header">
+    <h2>Questionnaire</h2>
+    <h4>Load</h4>
+    <hr />
+    <p>Write or copy/paste a valid json questionnaire object to load it, or load from a file.</p>
+</div>
+@using (Html.BeginForm(FormMethod.Post, new { @class = "center" }))
 {
-    <textarea id="jsonData" name="jsonData"></textarea>
+    <textarea id="jsonData" name="jsonData" class="json"></textarea>
     <br />
     <input type="file" name="fileInput" id="fileInput" />
     <script type="text/javascript">
@@ -42,7 +44,7 @@
     <hr />
     <div>
         <input id="loadButton" name="loadButton" type="submit" value="Load Questionnaire From JSON" disabled="disabled" formaction="@Url.Action("Load", "Questionnaire")" />
-        @if (ViewData["DB"].Equals("True") || true)
+        @if (ViewData["DB"].Equals("True"))
         {
             <input id="databaseButton" name="databaseButton" type="submit" value="Load Questionnaire From Database" formaction="@Url.Action("LoadDB", "Questionnaire")" />
         }
@@ -60,8 +62,8 @@
         }
     </div>
 }
-<hr />
-<div>
+<div class="footer">
+    <hr />
     @if (Model == null || Model.Id == Guid.Empty)
     {
         @Html.ActionLink("Back", "Index", "Questionnaire")

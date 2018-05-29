@@ -4,28 +4,30 @@
     ViewData["Title"] = "Delete";
 }
 
-<h2>Response</h2>
-<h4>Delete</h4>
-<hr />
-@using (Html.BeginForm("Delete", "Response", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id }, FormMethod.Post))
+<div class="header">
+    <h2>Response</h2>
+    <h4>Delete</h4>
+    <hr />
+</div>
+@using (Html.BeginForm("Delete", "Response", new { questionnaireId = ViewData["Id"], questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id }, FormMethod.Post, true, new { @class = "center" }))
 {
     @Html.HiddenFor(m => m.Id)
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.Title)
     </div>
-    <div class="Editor Right">
+    <div class="editor right">
         @Html.EditorFor(m => m.Title)
     </div>
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.Feedback)
     </div>
-    <div class="Editor Right">
+    <div class="editor right">
         @Html.TextAreaFor(m => m.Feedback, new { @readonly = "readonly" })
     </div>
-    <div class="Editor Left">
+    <div class="editor left">
         @Html.LabelFor(m => m.MinimumChoices)
     </div>
-    <div class="Editor Right">
+    <div class="editor right">
         @Html.EditorFor(m => m.MinimumChoices, new { @readonly = "readonly" })
     </div>
     <p>
@@ -36,7 +38,6 @@
         <a href="@Url.Action("Edit", "Response", new { questionId = ViewData["QuestionId"], value = ViewData["ChoiceValue"], responseId = Model.Id })"><input type="button" value="Cancel Deletion" /></a>
     </div>
 }
-<hr />
 <environment include="Development">
     @Html.Hidden("DebugJson", Model.ToJson(Newtonsoft.Json.Formatting.Indented))
 </environment>
