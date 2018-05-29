@@ -1,0 +1,181 @@
+{
+  "Id": "7d756cf7-8038-4900-a278-8ac0c954f0ae",
+  "Title": "Hotel Eclair",
+  "Introduction": "Vi er glade for at have haft dig på besøg.\r\nFor at vi fortsat kan forbedre os vil vi gerne stille dig et par spørgsmål.",
+  "Conclusion": "Tak for at du brugte tid på at give os din mening.",
+  "Questions": [
+    {
+      "Id": "1b095257-3bb2-420f-ab87-6a7be41b6204",
+      "Title": "Check-in processen",
+      "Text": "Vælg hvor tilfreds du er på en skala fra 1 til 5.",
+      "Choices": [
+        {
+          "Value": 1,
+          "Text": "1",
+          "IsDefault": false,
+          "Responses": []
+        },
+        {
+          "Value": 2,
+          "Text": "2",
+          "IsDefault": false,
+          "Responses": []
+        },
+        {
+          "Value": 3,
+          "Text": "3",
+          "IsDefault": false,
+          "Responses": []
+        },
+        {
+          "Value": 4,
+          "Text": "4",
+          "IsDefault": false,
+          "Responses": [
+            {
+              "Id": "35d24670-967f-449b-abc5-3f3c8041639b",
+              "MinimumChoices": 1,
+              "Feedback": "Vi er glad for, at du har været tilfreds med processen, og giver din ros videre til den medarbejder, som betjente dig",
+              "Title": "Tilfreds Check-in"
+            }
+          ]
+        },
+        {
+          "Value": 5,
+          "Text": "5",
+          "IsDefault": false,
+          "Responses": [
+            {
+              "Id": "35d24670-967f-449b-abc5-3f3c8041639b",
+              "MinimumChoices": 1,
+              "Feedback": "Vi er glad for, at du har været tilfreds med processen, og giver din ros videre til den medarbejder, som betjente dig",
+              "Title": "Tilfreds Check-in"
+            }
+          ]
+        }
+      ],
+      "Answer": null
+    },
+    {
+      "Id": "490e7213-283e-47dd-9746-010dd6804e23",
+      "Title": "Værelsets komfort",
+      "Text": "Vælg hvor tilfreds du er på en skala fra 1 til 5.",
+      "Choices": [
+        {
+          "Value": 1,
+          "Text": "1",
+          "IsDefault": false,
+          "Responses": [
+            {
+              "Id": "04cf54b3-8eb7-4a9b-a769-415bc245f19b",
+              "MinimumChoices": 1,
+              "Feedback": "Vi er kede af, at du ikke er tilfreds med værelsets komfort; vi opgraderer løbende vores værelser, så du forhåbentlig får en bedre oplevelse næste gang",
+              "Title": "Utilfreds komfort"
+            }
+          ]
+        },
+        {
+          "Value": 2,
+          "Text": "2",
+          "IsDefault": false,
+          "Responses": []
+        },
+        {
+          "Value": 3,
+          "Text": "3",
+          "IsDefault": false,
+          "Responses": []
+        },
+        {
+          "Value": 4,
+          "Text": "4",
+          "IsDefault": false,
+          "Responses": []
+        },
+        {
+          "Value": 5,
+          "Text": "5",
+          "IsDefault": false,
+          "Responses": []
+        }
+      ],
+      "Answer": null
+    },
+    {
+      "Id": "fd7cf895-1dd6-42db-bf57-e783e4a807d3",
+      "Title": "Værelsets renlighed",
+      "Text": "Vælg hvor tilfreds du er på en skala fra 1 til 5.",
+      "Choices": [
+        {
+          "Value": 1,
+          "Text": "1",
+          "IsDefault": false,
+          "Responses": []
+        },
+        {
+          "Value": 2,
+          "Text": "2",
+          "IsDefault": false,
+          "Responses": []
+        },
+        {
+          "Value": 3,
+          "Text": "3",
+          "IsDefault": false,
+          "Responses": []
+        },
+        {
+          "Value": 4,
+          "Text": "4",
+          "IsDefault": false,
+          "Responses": []
+        },
+        {
+          "Value": 5,
+          "Text": "5",
+          "IsDefault": false,
+          "Responses": []
+        }
+      ],
+      "Answer": null
+    },
+    {
+      "Id": "cf0216e8-d215-4edf-a651-cfcb7aad63ee",
+      "Title": "Udvalg i minibaren",
+      "Text": "Vælg hvor tilfreds du er på en skala fra 1 til 5.",
+      "Choices": [
+        {
+          "Value": 0,
+          "Text": "1",
+          "IsDefault": false,
+          "Responses": []
+        },
+        {
+          "Value": 1,
+          "Text": "2",
+          "IsDefault": false,
+          "Responses": []
+        },
+        {
+          "Value": 2,
+          "Text": "3",
+          "IsDefault": false,
+          "Responses": []
+        },
+        {
+          "Value": 3,
+          "Text": "4",
+          "IsDefault": false,
+          "Responses": []
+        },
+        {
+          "Value": 4,
+          "Text": "5",
+          "IsDefault": false,
+          "Responses": []
+        }
+      ],
+      "Answer": null
+    }
+  ]
+}
